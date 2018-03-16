@@ -1,0 +1,21 @@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Quelle zu Shape opt?
+%Andere Ansätze als direkt Shape opt, zb splines, ffd etc
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Einführung in die Formoptimierung}
+
+In diesem Kapitel möchten wir eine Einführung in die Theorie der Formoptimierung geben.
+Die Formoptimierung ist der Bereich des Optimal Control, welcher sich mit der Wahl einer, in gewisser Hinsicht, optimalen Form beschäftigt. Anders als in der klassischen PDE-constrained Optimization ist hier die Steuerung somit keine Funktion, sondern eine Form. Für die Theorie entscheidend ist der Fakt, dass Formen keine kanonische Vektorraumstruktur besitzen. Damit kommt die theoretische Frage nach der zugrundeliegenden Struktur der Menge aller Formen auf. Diese Frage möchten wir im Rahmen dieser Arbeit weitestgehend unbeantwortet lassen, und bedienen uns zur Einführung lediglich einiger grundlegender Begriffe aus \cite{shape_space}.
+
+Die Güte einer Form ist, wie üblich, gegeben durch den skalaren Wert bei Auswertung eines sogenannten Form Funktionals.
+
+\begin{defi}[Formfunktional] %\label{Formfunktional}
+Seien $\mathcal{D}\subset \mathbb{R}^d$ und $2^{\mathcal{D}} := \{ \mathcal{O} \subseteq \mathbb{R}^d \vert \mathcal{O} \subseteq \mathcal{D}\}$ die zugehörige Potenzmenge. Weiterhin sei $\mathcal{A} \subseteq 2^{\mathcal{D}}$ eine Teilmenge der Potenzmenge. Dann heißt die Abbildung 
+\begin{align*}
+\mathcal{J}: \mathcal{A} \rightarrow \mathbb{R}, \Omega \rightarrow \mathcal{J}(\Omega)
+\end{align*}
+\textit{Formfunktional}.
+\end{defi}
