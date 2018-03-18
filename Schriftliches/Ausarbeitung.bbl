@@ -1,8 +1,55 @@
 \begin{thebibliography}{1}
 
+\bibitem{b-spline}
+B.~Zhong P.A. Sherar{,} C.P.Thompson{,} B.~Xu.
+\newblock An optimization method based on b-spline shape functions \& the knot
+  insertion algorithm.
+\newblock {\em Proceedings of the World Congress on Engineering}, II, 2007.
+
+\bibitem{riemann}
+Volker Schulz.
+\newblock A riemannian view on shape optimization.
+\newblock {\em Foundations of computational Mathematics}, 14:483-501, 2014.
+
+\bibitem{bfgs1}
+Volker Schulz{,}~Martin Siebenborn.
+\newblock Computational comparison of surface metrics for pde constrained shape
+  optimization.
+\newblock {\em Comput. Methods Appl. Math 2016}, 2016.
+
+\bibitem{Shape_diff}
+Kevin Sturm.
+\newblock {\em On shape optimization with non-linear partial differential
+  equations}.
+\newblock PhD thesis, Technische Universität Berlin, 2015.
+
 \bibitem{shape_space}
 Kathrin Welker.
 \newblock {\em Efficient PDE Constrained Shape Optimization in Shape Spaces}.
 \newblock PhD thesis, Universität Trier, 2016.
+
+\bibitem{LagrangeNewton}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Towards a lagrange-newton approach for constrained shape
+  optimization.
+\newblock {\em arXiv: 1405.3266v2}, 2014.
+
+\bibitem{riemann2}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Pde constrained shape optimization as optimization on shape
+  manifolds.
+\newblock {\em Geometric Science of Information{,} Lecture Notes in Computer
+  Science}, 9389:pp. 499--508, 2015.
+
+\bibitem{bfgs2}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Efficient pde constrained shape optimization based on
+  steklov-poincaré-type metrics.
+\newblock {\em SIAM J. OPTIM.}, Vol. 26, No. 4, pp. 2800-2819, 2016.
+
+\bibitem{Nocedal}
+Jorge Nocedal{,} Stephen~J. Wright.
+\newblock {\em Numerical Optimization{,} Second Edition}.
+\newblock Springer, 2006.
 
 \end{thebibliography}
