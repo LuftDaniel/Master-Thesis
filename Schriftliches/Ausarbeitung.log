@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  18 MAR 2018 09:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  18 MAR 2018 12:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1451,15 +1451,24 @@ ML/lmm/m/it/12 ; \U/msb/m/n/12 R[]\OT1/lmr/m/n/12 )$
 
 )
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 123.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 123.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 123.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 123.
  [6]
 Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 126.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 126.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 126.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 126.
+ [7]
+Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 128.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 128.
@@ -1471,7 +1480,7 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 136.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 136.
- [7] (./Ausarbeitung.bbl
+ [8] (./Ausarbeitung.bbl
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1485,7 +1494,7 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 141.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 141.
- [8]
+ [9]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
  (./Ausarbeitung.aux)
@@ -1496,30 +1505,31 @@ Package rerunfilecheck Info: File `Ausarbeitung.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
- 30127 strings out of 493029
- 691289 string characters out of 6136233
- 1061116 words of memory out of 5000000
- 33081 multiletter control sequences out of 15000+600000
+ 30130 strings out of 493029
+ 691318 string characters out of 6136233
+ 1062116 words of memory out of 5000000
+ 33082 multiletter control sequences out of 15000+600000
  56550 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,11n,81p,1003b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
-hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm
-/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texm
-f/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi
-8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts
-/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.pfb></
-usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/pu
-blic/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/share
-/texmf/fonts/type1/public/lm/lmro12.pfb></usr/share/texmf/fonts/type1/public/lm
-/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/te
-xmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/symbols/msbm10.pfb>
-Output written on Ausarbeitung.pdf (8 pages, 270301 bytes).
+ 64i,11n,81p,997b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/en
+c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
+hare/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/l
+m/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmex
+10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fon
+ts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb>
+</usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/sha
+re/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm
+/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmro12.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
+sy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Ausarbeitung.pdf (9 pages, 276240 bytes).
 PDF statistics:
- 164 PDF objects out of 1000 (max. 8388607)
- 137 compressed objects within 2 object streams
- 27 named destinations out of 1000 (max. 500000)
+ 175 PDF objects out of 1000 (max. 8388607)
+ 146 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
  37 words of extra memory for PDF output out of 10000 (max. 10000000)
 

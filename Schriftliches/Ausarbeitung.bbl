@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{b-spline}
 B.~Zhong P.A. Sherar{,} C.P.Thompson{,} B.~Xu.
@@ -51,5 +51,11 @@ Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
 Jorge Nocedal{,} Stephen~J. Wright.
 \newblock {\em Numerical Optimization{,} Second Edition}.
 \newblock Springer, 2006.
+
+\bibitem{shapeopt}
+M.~C. Delfour{,} J.~P. Zolésio.
+\newblock {\em Shapes and Geometries: Metrics, Analysis, Differential Calculus,
+  and Optimization, 2nd ed.}
+\newblock SIAM Advances in Design and Control, 2011.
 
 \end{thebibliography}
