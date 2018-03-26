@@ -48,6 +48,34 @@ class MeshData:
         self.indNotIntBoundary = ind
 
 
+class bfgs_memory:
+
+    # Objekt mit gespeicherten Gradienten und Deformationen der letzten l Schritte
+    def __init__(self, gradient, deformation, length):
+
+        # Liste von Gradientenvektorfeldern
+        if (len(gradient) == length): self.gradient = gradient
+        else: raise SystemExit("Fehler: Anzahl der Gradienten passt nicht zur Memorylaenge!")
+
+        # Liste von Deformationsvektorfeldern
+        if (len(deformation) == length): self.deformation = deformation
+        else: raise SystemExit("Fehler: Anzahl der Deformationen passt nicht zur Memorylaenge!")
+
+        # Anzahl der gespeicherten letzten Schritte
+        self.length = length
+
+    # macht ein Update der Memory; neueste Elemente bekommen Index 0
+    def update(self, upd_grad, upd_defo):
+
+        for i in range(self.length-1):
+
+            self.gradient[-(i+1)]    = self.gradient[-(i+2)]
+            self.deformation[-(i+1)] = self.deformation[-(i+2)]
+
+        self.gradient[0]    = upd_grad
+        self.deformation[0] = upd_defo
+
+
 def load_mesh(name):
 
     # Pfad zur speziellen Gitter Datei
@@ -497,3 +525,38 @@ def bilin_a(meshData, U, V, mu_elas):
     value = assemble(a)
 
     return value
+
+
+def bfgs_step(meshData, memory, mu_elas):
+    """
+    berechnet aus einer BFGS-memory eine Mesh-Deformation q mittels double-loop-L-BFGS-Verfahren
+    Transporte der Gradienten und Deformationen sind vereinfacht, lediglich Fußpunkte sind retracted
+    benötigt memory.grad[0] als aktuellen Gradienten
+    """
+    if isinstance(memory, bfgs_memory): pass
+    else: raise SystemExit("bfgs_step benoetigt eine BFGS-Memory als input!")
+
+    q = memory.gradient[0]
+    alpha = np.zeros(memory.length)
+
+    for i in range(memory.length-1):
+        # Vorwärtsschleife
+        i = i+1
+        diff_grad = memory.gradient[i-1] - memory.gradient[i]
+        alpha[i] = bilin_a(meshData, memory.deformation[i], q, mu_elas) / bilin_a(meshData, diff_grad, memory.deformation[i], mu_elas)
+        q = q - alpha[i]*diff_grad
+
+    # Reskalierung von q
+    first_diff_grad = memory.gradient[0] - memory.gradient[1]
+    gamma = bilin_a(meshData, first_diff_grad, memory.deformation[1], mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
+    q = gamma*q
+
+    for i in range(memory.length-1):
+        # Rückwärtsschleife
+        i = i+1
+        diff_grad = memory.gradient[-i-1] - memory.gradient[-i]
+        beta = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.deformation[-i], mu_elas)
+        q = q + (alpha[-i] - beta)*diff_grad
+
+    return q
+
