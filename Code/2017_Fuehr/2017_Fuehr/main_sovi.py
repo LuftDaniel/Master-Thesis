@@ -97,9 +97,12 @@ psi_values = Constant(psi_parsed) # Expression(psi_string, degree=2)
 c       = 5.0
 tol_ssn = 1.e-3
 
+# Parameter fuer L-BFGS Algorithmus
+length = 5
+
 # Parameter fuer den Formoptimierungsalgorithmus
 nu        = 0.01
-tol_shopt = 8.e-4
+tol_shopt = 8.e-1
 
 # Keine Ausgabe von FEniCS Funktionen in der Konsole
 set_log_active(False)
@@ -297,6 +300,7 @@ while nrm_f_elas > tol_shopt:
 # ----------------------- #
 #          FERTIG         #
 # ----------------------- #
+
 
 
     # ----------------------- #

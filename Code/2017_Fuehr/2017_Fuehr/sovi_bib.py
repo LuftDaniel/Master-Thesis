@@ -3,6 +3,7 @@ import os
 import errno
 from datetime import datetime
 from copy import copy
+import numpy as np
 
 __this_files_path = os.path.realpath(__file__)
 __this_files_dir  = os.path.dirname(__this_files_path)
@@ -50,8 +51,14 @@ class MeshData:
 
 class bfgs_memory:
 
-    # Objekt mit gespeicherten Gradienten und Deformationen der letzten l Schritte
-    def __init__(self, gradient, deformation, length):
+    """
+    Schreibe zwei Funktionen, die Gradienten und Deformationen bei verschobenen Meshes
+    neu als Fenics Functions initialisieren, indem sie Meshes nehmen und die Nummer
+    des Gradienten/Defo.
+    """
+
+    # Objekt mit gespeicherten Gradienten und Deformationen der letzten l Schritte in Form von Arrays
+    def __init__(self, gradient, deformation, length, step_nr):
 
         # Liste von Gradientenvektorfeldern
         if (len(gradient) == length): self.gradient = gradient
@@ -64,16 +71,45 @@ class bfgs_memory:
         # Anzahl der gespeicherten letzten Schritte
         self.length = length
 
+        # Anzahl der bereits ausgefuehrten l-BFGS-Schritte
+        self.step_nr = step_nr
+
     # macht ein Update der Memory; neueste Elemente bekommen Index 0
-    def update(self, upd_grad, upd_defo):
+    def update_grad(self, upd_grad):
 
-        for i in range(self.length-1):
+        for i in range(self.length-1): self.gradient[-(i+1)]    = self.gradient[-(i+2)]
 
-            self.gradient[-(i+1)]    = self.gradient[-(i+2)]
-            self.deformation[-(i+1)] = self.deformation[-(i+2)]
+        self.gradient[0] = upd_grad
 
-        self.gradient[0]    = upd_grad
+    def update_defo(self, upd_defo):
+
+        for i in range(self.length-1): self.deformation[-(i+1)] = self.deformation[-(i+2)]
+
         self.deformation[0] = upd_defo
+
+    def initialize_grad(self, meshData, i):
+        # erzeugt eine FEniCS-Funktion des Gradientenfeldes i auf einem Mesh aus den gespeicherten Arrays
+        # ermoeglicht dadurch Transport; i entspricht Index in Speichermatrix self.gradient, aufsteigend im Alter
+
+        if isinstance(meshData, MeshData): pass
+        else: raise SystemExit("initialize_grad benoetigt Objekt der MeshData-Klasse als Input!")
+
+        V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+        f = Function(V)
+        f.vector()[:] = self.gradient[i]
+        return f
+
+    def initialize_defo(self, meshData, i):
+        # erzeugt eine FEniCS-Funktion des Deformationsfeldes i auf einem Mesh aus den gespeicherten Arrays
+        # ermoeglicht dadurch Transport; i entspricht Index in Speichermatrix self.deformation, aufsteigend im Alter
+
+        if isinstance(meshData, MeshData): pass
+        else: raise SystemExit("initialize_defo benoetigt Objekt der MeshData-Klasse als Input!")
+
+        V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+        f = Function(V)
+        f.vector()[:] = self.deformation[i]
+        return f
 
 
 def load_mesh(name):
@@ -327,7 +363,7 @@ def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu):
     Loest lineare Elastizitaetsgleichung ohne Variationsungleichung
     """
 
-    # Funktionen Raum
+    # Funktionenraum
     V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
 
     # Randbedingungen
@@ -528,35 +564,50 @@ def bilin_a(meshData, U, V, mu_elas):
 
 
 def bfgs_step(meshData, memory, mu_elas):
-    """
-    berechnet aus einer BFGS-memory eine Mesh-Deformation q mittels double-loop-L-BFGS-Verfahren
-    Transporte der Gradienten und Deformationen sind vereinfacht, lediglich Fußpunkte sind retracted
-    benötigt memory.grad[0] als aktuellen Gradienten
-    """
-    if isinstance(memory, bfgs_memory): pass
-    else: raise SystemExit("bfgs_step benoetigt eine BFGS-Memory als input!")
 
-    q = memory.gradient[0]
+    """
+    schreibe die Gradienten und Deformationen um zu den Funktionen zur Initialisierung von
+    Fenics Funktionen als Gradient und Defo aus der BFGS-Memory-Klasse
+    """
+
+
+    """
+    berechnet aus einer BFGS-memory eine Mesh-Deformation q mittels double-loop-L-BFGS-Verfahren, welche zu memory.grad[0] gehoert
+    benoetigt memory.grad[0] als aktuellen Gradienten, memory.deformation[0] als aktuell neueste Deformation
+    """
+    if isinstance(meshData, MeshData): pass
+    else: raise SystemExit("bfgs_step benoetigt Objekt der MeshData-Klasse als Input!")
+
+    if isinstance(memory, bfgs_memory): pass
+    else: raise SystemExit("bfgs_step benoetigt Objekt der  BFGS-Memory-Klasse als Input!")
+
+    q     = memory.initialize_grad(meshData, 0)
     alpha = np.zeros(memory.length)
 
+    V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+
     for i in range(memory.length-1):
-        # Vorwärtsschleife
-        i = i+1
-        diff_grad = memory.gradient[i-1] - memory.gradient[i]
-        alpha[i] = bilin_a(meshData, memory.deformation[i], q, mu_elas) / bilin_a(meshData, diff_grad, memory.deformation[i], mu_elas)
-        q = q - alpha[i]*diff_grad
+        # Vorwaertsschleife
+        i         = i+1
+
+        diff_grad = Function(V)
+        diff_grad.vector()[:] = memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector()
+        alpha[i]  = bilin_a(meshData, memory.initialize_defo(meshData, i-1), q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, i-1), mu_elas)
+        q.vector()[:]         = q.vector() - float(alpha[i])*diff_grad.vector()
 
     # Reskalierung von q
-    first_diff_grad = memory.gradient[0] - memory.gradient[1]
-    gamma = bilin_a(meshData, first_diff_grad, memory.deformation[1], mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
-    q = gamma*q
+    first_diff_grad = Function(V)
+    first_diff_grad.vector()[:] = memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector()
+    gamma           = bilin_a(meshData, first_diff_grad, memory.initialize_defo(meshData, 0), mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
+    q.vector()[:]               = gamma*q.vector()
 
     for i in range(memory.length-1):
-        # Rückwärtsschleife
-        i = i+1
-        diff_grad = memory.gradient[-i-1] - memory.gradient[-i]
-        beta = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.deformation[-i], mu_elas)
-        q = q + (alpha[-i] - beta)*diff_grad
+        # Rueckwaertsschleife
+        i         = i+1
+        diff_grad = Function(V)
+        diff_grad.vector()[:] = memory.initialize_grad(meshData, -(i+1)).vector() - memory.initialize_grad(meshData, -i).vector()
+        beta      = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, -(i+1)), mu_elas)
+        q.vector()[:]         = q.vector() + (float(alpha[-i]) - beta)*diff_grad.vector()
 
     return q
 
