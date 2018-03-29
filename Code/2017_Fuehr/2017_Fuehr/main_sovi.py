@@ -98,11 +98,11 @@ c       = 5.0
 tol_ssn = 1.e-3
 
 # Parameter fuer L-BFGS Algorithmus
-length = 5
+memory_length = 3
 
 # Parameter fuer den Formoptimierungsalgorithmus
 nu        = 0.01
-tol_shopt = 8.e-1
+tol_shopt = 2.e-4
 
 # Keine Ausgabe von FEniCS Funktionen in der Konsole
 set_log_active(False)
@@ -201,6 +201,10 @@ file_bound_start << MeshData.boundaries
 
 # file_mesh << MeshData.mesh
 
+# BFGS-memory initialisieren
+bfgs_memory   = sovi.bfgs_memory(np.zeros([memory_length, 2 * MeshData.mesh.num_vertices()]),
+                                 np.zeros([memory_length, 2 * MeshData.mesh.num_vertices()]), memory_length, 0)
+
 # Lame-Parameter berechnen und speichern
 mu_elas = sovi.calc_lame_par(MeshData, mu_min, mu_max)
 
@@ -262,6 +266,13 @@ while nrm_f_elas > tol_shopt:
     # Ohne Variationsungleichung
     U , nrm_f_elas = sovi.solve_linelas(MeshData, p, y, z, f_values, mu_elas_projected, nu)
 
+    # L-BFGS Schritt mit Memory-Updates
+    bfgs_memory.update_grad(U.vector().get_local())
+    S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected)
+
+    bfgs_memory.update_defo(S.vector().get_local())
+    bfgs_memory.step_nr = bfgs_memory.step_nr + 1
+
     # Norm des Deformationsvektorfeldes berechnen
     V           = FunctionSpace(MeshData.mesh, 'P', 1)
     U_magnitude = sqrt(dot(U, U))
@@ -295,13 +306,11 @@ while nrm_f_elas > tol_shopt:
     #      DEFORMATION        #
     # ----------------------- #
 
-    ALE.move(MeshData.mesh, U)
+    ALE.move(MeshData.mesh, S)
 
 # ----------------------- #
 #          FERTIG         #
 # ----------------------- #
-
-
 
     # ----------------------- #
     #         OUTPUT          #
