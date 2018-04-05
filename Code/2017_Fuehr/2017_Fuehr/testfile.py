@@ -9,7 +9,7 @@ defo = [3.0, 2.0, 1.0]
 
 zero = np.zeros([3,3])
 
-mem = sovi.bfgs_memory(zero, zero, 3, 0)
+mem = sovi.bfgs_memory(zero, zero, 3, 1)
 shit = range(100)
 
 #stuff i used
@@ -42,7 +42,7 @@ print(sovi.bilin_a(MeshData, testfunc, U, 2.0))
 
 
 # test der BFGS_step Funktion
-
+"""
 mesh = RectangleMesh(Point(0,0), Point(1, 1), 10, 10, "right")
 positions = mesh.coordinates()
 
@@ -65,7 +65,9 @@ b = inner(2*u,u)*dx
 print(assemble(a))
 print(assemble(b))
 
-
+grill.vector()[[2]] = 0.
+print(grill.vector().array())
+"""
 
 
 

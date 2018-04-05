@@ -72,7 +72,8 @@ class bfgs_memory:
         self.length = length
 
         # Anzahl der bereits ausgefuehrten l-BFGS-Schritte
-        self.step_nr = step_nr
+        if (step_nr >= 0 and isinstance(step_nr, int)): self.step_nr = step_nr
+        else: raise SystemExit("Fehler: step_nr muss Integer groesser gleich 0 sein!")
 
     # macht ein Update der Memory; neueste Elemente bekommen Index 0
     def update_grad(self, upd_grad):
@@ -564,17 +565,12 @@ def bilin_a(meshData, U, V, mu_elas):
 
 
 def bfgs_step(meshData, memory, mu_elas):
-
-    """
-    schreibe die Gradienten und Deformationen um zu den Funktionen zur Initialisierung von
-    Fenics Funktionen als Gradient und Defo aus der BFGS-Memory-Klasse
-    """
-
-
     """
     berechnet aus einer BFGS-memory eine Mesh-Deformation q mittels double-loop-L-BFGS-Verfahren, welche zu memory.grad[0] gehoert
     benoetigt memory.grad[0] als aktuellen Gradienten, memory.deformation[0] als aktuell neueste Deformation
+    Output q ist eine Fenics-Funktion der Art Function(V), V=VectorFunctionSpace(mesh, "P", 1, dim=2)
     """
+
     if isinstance(meshData, MeshData): pass
     else: raise SystemExit("bfgs_step benoetigt Objekt der MeshData-Klasse als Input!")
 
@@ -585,29 +581,60 @@ def bfgs_step(meshData, memory, mu_elas):
     alpha = np.zeros(memory.length)
 
     V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
-
-    for i in range(memory.length-1):
-        # Vorwaertsschleife
-        i         = i+1
-
-        diff_grad = Function(V)
-        diff_grad.vector()[:] = memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector()
-        alpha[i]  = bilin_a(meshData, memory.initialize_defo(meshData, i-1), q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, i-1), mu_elas)
-        q.vector()[:]         = q.vector() - float(alpha[i])*diff_grad.vector()
-
-    # Reskalierung von q
+    diff_grad = Function(V)
     first_diff_grad = Function(V)
-    first_diff_grad.vector()[:] = memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector()
-    gamma           = bilin_a(meshData, first_diff_grad, memory.initialize_defo(meshData, 0), mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
-    q.vector()[:]               = gamma*q.vector()
 
-    for i in range(memory.length-1):
-        # Rueckwaertsschleife
-        i         = i+1
-        diff_grad = Function(V)
-        diff_grad.vector()[:] = memory.initialize_grad(meshData, -(i+1)).vector() - memory.initialize_grad(meshData, -i).vector()
-        beta      = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, -(i+1)), mu_elas)
-        q.vector()[:]         = q.vector() + (float(alpha[-i]) - beta)*diff_grad.vector()
 
+    if(memory.step_nr + 1 >= memory.length):
+        # bei voll besetzter memory werden alle Eintraege verwendet
+
+        for i in range(memory.length-1):
+            # Vorwaertsschleife
+            i         = i+1
+            diff_grad.vector()[:] = memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector()
+            alpha[i]              = bilin_a(meshData, memory.initialize_defo(meshData, i-1), q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, i-1), mu_elas)
+            q.vector()[:]         = q.vector() - float(alpha[i])*diff_grad.vector()
+
+        # Reskalierung von q
+        first_diff_grad.vector()[:] = memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector()
+        gamma                       = bilin_a(meshData, first_diff_grad, memory.initialize_defo(meshData, 0), mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
+        q.vector()[:]               = gamma*q.vector()
+
+        for i in range(memory.length-1):
+            # Rueckwaertsschleife
+            i                     = i+1
+            diff_grad.vector()[:] = memory.initialize_grad(meshData, -(i+1)).vector() - memory.initialize_grad(meshData, -i).vector()
+            beta                  = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, -(i+1)), mu_elas)
+            q.vector()[:]         = q.vector() + (float(alpha[-i]) - beta)*memory.initialize_defo(meshData, -(i+1)).vector()
+
+    elif(memory.step_nr == 0):
+            # der erste BFGS-Schritt ist ein Gradientenschritt
+            q.vector()[:] = -1.*q.vector()
+            return q
+
+    else:
+        # bei nicht voll besetzter memory werden lediglich die besetzten Eintraege verwendet
+
+        for i in range(memory.step_nr):
+            # Vorwaertsschleife
+            i         = i+1
+            diff_grad.vector()[:] = memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector()
+            alpha[i]              = bilin_a(meshData, memory.initialize_defo(meshData, i-1), q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, i-1), mu_elas)
+            q.vector()[:]         = q.vector() - float(alpha[i])*diff_grad.vector()
+
+        # Reskalierung von q
+        first_diff_grad.vector()[:] = memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector()
+        gamma                       = bilin_a(meshData, first_diff_grad, memory.initialize_defo(meshData, 0), mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
+        q.vector()[:]               = gamma*q.vector()
+
+        for i in range(memory.step_nr):
+            # Rueckwaertsschleife
+            shift = (memory.length-1) - memory.step_nr
+            i                     = i+1
+            diff_grad.vector()[:] = memory.initialize_grad(meshData, -(i+1)-shift).vector() - memory.initialize_grad(meshData, -i-shift).vector()
+            beta                  = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, -(i+1)-shift), mu_elas)
+            q.vector()[:]         = q.vector() + (float(alpha[-i-shift]) - beta)*memory.initialize_defo(meshData, -(i+1)-shift).vector()
+
+    q.vector()[:] = -1. * q.vector()
     return q
 
