@@ -1,0 +1,287 @@
+\documentclass[bibliography=totoc,12pt,a4paper]{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}% schicke Nummerierung
+\usepackage{graphicx}
+\usepackage[english, ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{bigdelim}
+\usepackage{multirow}
+\usepackage{dsfont}
+\usepackage[colorlinks=true,linkcolor=black, citecolor=black]{hyperref}
+\usepackage{cite}
+\usepackage[nottoc]{tocbibind}
+\usepackage{empheq}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{lipsum}
+\usepackage{tikz,pgfplots}
+\usepackage{nicefrac}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{matrix}
+\geometry{a4paper,left=40mm,right=30mm, top=5cm, bottom=5cm} 
+
+\def\@biblabel#1{\textcolor{red}{[#1]}}
+
+\newtheoremstyle{linebreak}   % name
+{3pt}                         % Space above
+{3pt}                         % Space below
+{}                            % Body font
+{}                            % Indent amount 1
+{\bfseries}                   % Theorem head font
+{\newline}                    % Punctuation after theorem head
+{.5em}                        % Space after theorem head 2
+{}                            % Theorem head spec (can be left empty, meaning ‘normal’)
+%\theoremstyle{linebreak}
+\newtheoremstyle{exampstyle}
+  {\topsep} % Space above
+  {\topsep} % Space below
+  {} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {} % Theorem head spec (can be left empty, meaning `normal')
+\theoremstyle{exampstyle}
+\newtheorem{defi}{Definition}%[chapter]
+\newtheorem{satz}[defi]{Satz}
+\newtheorem{theorem}[defi]{Theorem}
+\newtheorem{propo}[defi]{Proposition}
+\newtheorem{lemma}[defi]{Lemma}
+\newtheorem{cor}[defi]{Korollar}
+\newtheorem{bem}[defi]{Bemerkung}
+\newtheorem{bsp}[defi]{Beispiel}
+\newtheorem{folg}[defi]{Folgerung}
+%bemerkungen oder Fließtext???
+\numberwithin{equation}{section} 
+ \newcommand{\newln}{\\&\quad\quad{}}
+ \setlength\parindent{0pt}
+
+\renewenvironment{abstract}
+ {\small
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{%
+    \setlength{\leftmargin}{12mm}% <---------- CHANGE HERE
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \item\relax}
+ {\endlist}
+
+
+
+
+\begin{document}
+
+\title{Quasi-Newton Methoden in der Formoptimierung}
+
+\author{Daniel Luft \\ Prof. Dr. V. Schulz}
+
+  \pagestyle{empty}
+
+  % Ab sofort Seitenzahlen in der Kopfzeile anzeigen
+  \pagestyle{headings}
+  
+\selectlanguage{ngerman}
+
+\section{BFGS-Algorithmus in der Formoptimierung}
+
+\colorbox{red}{habe ich sicher das Kapitel zu Rn BFGS? falls nicht korrigiere text}
+
+Nachdem wir in die Grundlagen der Formoptimierung und des BFGS-Algorithmus im endlich-dimensionalen eingeführt haben, möchten wir nun in diesem Abschnitt beide Bereiche zusammenführen und die endlich-dimensionalen BFGS-Updates in den Kontext von Formen abstrahieren. Dies ist nicht ohne weiteres möglich, da a priori nicht klar ist, wie Gradienten von Formen definiert werden sollen, insbesondere deshalb, weil wir uns in unendlich-dimensionalen Shape-space befinden. Erschwert wird dies weiter dadurch, dass, wie eingangs bemerkt, keine natürliche Vektorraumstruktur auf dem betrachteten Shape-space vorhanden ist. Ziel dieses Abschnittes wird es sein zunächst die Wahl eine geeigneten Metrik im Sinne der Riemannschen Geometrie zu wählen, wodurch die Definition eines Gradienten überhaupt erst möglich wird. Im Abschnitt über BFGS-Methoden im $\mathbb{R}^n$ haben wir zur Darstellung solcher Gradienten stets stillschweigend die euklidische Metrik vorausgesetzt. Diese lässt sich offensichtlich nicht einfach im Shape-setting verwenden. Anschließend übertragen wir den BFGS-Algorithmus in das Shape-setting. In diesem Abschnitt halten wir uns vorallem an \cite{bfgs1}, sowie an \cite{shape_space} und \cite{bfgs2}.
+
+Zunächst definieren wir, was wir unter dem Raum aller Formen verstehen, vgl. \cite{bfgs1}. Hierzu bleiben wir in zwei Dimensionen, da hier schon die wesentlichen Elemente und Zusammenhänge klar werden. Prinzipiell ist ein betrachten von höherdimensionalen Objekten auch möglich, sofern die zugrundeliegende Topologie der Formen beachtet wird.
+
+\begin{defi}[Shape-space für den $\mathbb{R}^2$]
+Bezeichne mit $\text{Emb}(S^1, \mathbb{R}^2)$ die Menge aller $C^\infty$ Einbettungen von $S^1$ in den $\mathbb{R}^2$, und mit $\text{Diff}(S^1)$ die Menge aller Diffeomorphismen von $S^1$ in sich selber. Dann heißt der Quotientenraum
+\begin{align*}
+	B_e(S^1,\mathbb{R}^2) := \text{Emb}(S^1, \mathbb{R}^2) / \text{Diff}(S^1)
+\end{align*}
+\textit{Shape-space} für den $\mathbb{R}^2$.
+\end{defi}
+
+Man sieht, dass die Elemente von $B_e(S^1,\mathbb{R}^2)$ Äquivalenzklassen sind. In ihnen sind jeweils unter anderem Umparametrisierungen der selben geschlossenen $C^\infty$-Kurven $c: \mathbb{R} \rightarrow \mathbb{R}^2$ enthalten. Das bedeutet, dass ein Punkt in $B_e(S^1,\mathbb{R}^2)$ als eine geschlossene, geometrische Kurve im $\mathbb{R}^2$ interpretiert werden kann. Betrachtet man nun eine über eine beschränkte Menge $\Omega\subset\mathbb{R}^2$ mit Lipschitz-Rand definierte Hold-all-Domain, so lassen sich Ränder $\partial\Omega_2$ von kompakten, beschränkten, zusammenhängenden Mengen $\Omega_2\subset \Omega$ mit $C^\infty$-Rand genau mit solchen geschlossenen Kurven identifizieren. Zudem gilt außerdem, dass $B_e(S^1,\mathbb{R}^2)$ eine Mannigfaltigkeit bildet, siehe \cite{bfgs1}, was wesentlich von der Glattheit der Einbettungen abhängt.
+
+Wir fahren fort mit unserer Konstruktion, und geben hier eine Darstellung des Tangentialbündels auf $B_e(S^1,\mathbb{R}^2)$. Da wir hier explizit die Strukturen des $\mathbb{R}^2$ und $B_e(S^1,\mathbb{R}^2)$ für die Darstellung der Tangentialräume verwenden, handelt es sich bei unserer Definition um zu den üblichen Tangentialräumen der Differentialgeometrie isomorphe Objekte. Für eine Definition der klassischen Tangentialräume, sowie eine tiefgreifende Einführung in die Differentialgeometrie, empfehlen wir \cite{LeeDGEO}, Kapitel 3.
+
+\begin{defi}[Tangentialbündel]\label{Tangentialvektor}
+Sei $B_e(S^1, \mathbb{R}^2)$ der Shape-space für den $\mathbb{R}^2$. Betrachte einen Repräsentant $c: S^1 \rightarrow \mathbb{R}^2$ eines Punktes in $B_e(S^1, \mathbb{R}^2)$, sowie das zugehörige äußere Normalenvektorfeld $n$ der mit $c$ identifizierten Form $\partial\Omega_2$. Dann gilt für den \textit{Tangentialraum} $T_cB_e$
+\begin{align*}
+	T_cB_e \cong \{h : h = \alpha n \text{ für } \alpha \in C^\infty(\Omega_2,\mathbb{R})\}.
+\end{align*}
+
+\end{defi}
+
+Diese Darstellung gilt, da die Quotientenstruktur von $B_e$ die Isomorphie der Immersionen von $S^1$ nach $\mathbb{R}^2$ mit den $C^\infty$-Funktionen von $S^1$ nach $\mathbb{R}^2$ vererbt, für Details siehe \cite{shape_space}, Kapitel 3.
+Somit ermöglicht diese isomorphe Darstellung es uns, Tangentialvektoren $v \in T_cB_e$ mit Hilfe von $C^\infty(\Omega_2, \mathbb{R})$-Funktionen zu beschreiben. Das nutzen wir aus, um auf $B_e$ eine geeignete riemannsche Metrik zu definieren.
+
+\colorbox{red}{Diagramm ??}
+
+Es gibt verschieden Möglichkeiten riemannsche Metriken auf dem Raum $B_e$ zu definieren, je nachdem auf welche künftige Anwendung man abziehlt. Laut \cite{shape_space} scheint eine Sobolev-Metrik, definiert mittels des Laplace-Beltrami-Operators, natürlich zu erscheinen. Der Nachteil ist, das erheblicher Rechenaufwand beim Ermitteln des Gradienten aus einer Formableitung entsteht. Aus diesem Grund führen die Autoren von \cite{bfgs1} eine riemannsche Metrik auf Grundlage der sogenannten Dirichlet-zu-Neumann Abbildung ein, weshalb wir uns Ausführungen zu Sobolev-Metriken an dieser Stelle sparen, und verweisen für diese auf \cite{bfgs1} und \cite{shape_space}. Im Folgenden führen wir eine sogenannte Stekolov-Poincaré-Metrik ein, und verweisen für die hierzu nötigen Grundlagen bei Differentialgleichungen und Sobolev-Slobodeckij-Räumen auf \colorbox{red}{REF SLOBODECKIJ UND PDE}. Zunächst definieren wir die nötigen Abbildungen, vgl. \cite{bfgs1}.
+
+\begin{defi}[Verallgemeinerte Spurabbildung]\label{Sproperatoren}
+Sei $\Omega \subset \mathbb{R}^n$ eine beschränktes, offenes Gebiet. Sei $\Omega_2 \subset \Omega$ zusammenhängend, offen und habe einen Lipschitzrand, und $\partial \Omega_2$ sei eine Form in diesem Gebiet. Dann heißt die Abbildung
+\begin{align*}
+	\gamma: H^{1}_0(\Omega, \mathbb{R}^n) \rightarrow H^{1/2}(\Omega, \mathbb{R}^n)\times H^{-1/2}(\Omega, \mathbb{R}^n) \\
+	U \mapsto 
+	\left(\begin{matrix}
+	\gamma_0 U \\ \gamma_1 U
+	\end{matrix}\right)
+	:= \left(\begin{matrix}
+	U_{\vert \partial\Omega_2} \\ \partial_n U_{\vert \partial\Omega_2}
+	\end{matrix}\right),
+\end{align*}
+\textit{verallgemeinerte Spurabbildung}, wobei $\partial_n U_{\vert\partial\Omega_2}$ die Ableitung von $U$ auf der Form $\partial \Omega_2$ in Richtung des äußeren Normalenvektorfeldes $n$ ist.
+\end{defi}
+
+Wir erinnern an dieser Stelle, das diese Abbildung wohldefiniert ist, siehe \colorbox{red}{REFERENZ SPURSÄTZE}. Nun geben wir uns eine symmetrische, koerzive Bilinearform $a: H^1(\Omega, \mathbb{R}^n)\times H^1(\Omega, \mathbb{R}^n) \rightarrow \mathbb{R}$ vor. Diese werden wir später gemeinsam mit der zu definierenden Riemannschen Metrik verwenden, um aus gegebenen Formableitungen Gradienten zu konstruieren. Gegeben einer solchen Bilinearform $a$ definieren wir die zugehörigen Lösungsoperatoren zu folgendem Variationsproblem.
+
+\colorbox{red}{Notation: alpha oder u ???!!! n den folgenden Definitionen}
+
+\begin{defi}[Lösungsoperatoren]\label{Llsgsoperatoren}
+Sei $\Omega\subset\mathbb{R}^n$ offen, zusammenhängend, beschränkt, und sei $\Omega_2\subset \Omega$ offen, zusammenhängend und habe einen $C^\infty$-Rand $\partial\Omega_2$.
+Weiterhin sei $a: H^1(\Omega, \mathbb{R}^n)\times H^1(\Omega, \mathbb{R}^n) \rightarrow \mathbb{R}$ eine koerzive, symmetrische und \colorbox{red}{stetige}  Bilinearform. Dann heißt der Operator 
+\begin{align*}
+	E_N: H^{-1/2}(\partial\Omega_2, \mathbb{R}^n) &\rightarrow H^{1}_0(\Omega, \mathbb{R}^n) \\
+	u &\mapsto U,
+\end{align*}
+\textit{Neumann-Lösungsoperator}, wobei $U$ die Lösung des Problems
+\begin{align*}
+	a(U,V) = \underset{\partial\Omega_2}{\int}u^T(\gamma_0 V)ds \quad \forall V \in H^1_0(\Omega,\mathbb{R}^n)
+\end{align*}
+ist, wobei $u^T(\gamma_0 V)$ eine duale Paarung meint. Außerdem heißt der Operator
+\begin{align*}
+	E_D: H^{1/2}(\partial\Omega_2, \mathbb{R}^n) &\rightarrow H^{1}_0(\Omega, \mathbb{R}^n) \\
+	u &\mapsto U,
+\end{align*}
+\textit{Dirichlet-Lösungsoperator}, wobei $U$ die Lösung des Problems
+\begin{align*}
+	\begin{matrix} a(U,V) = 0 \\
+	\text{unter } U_{\vert \partial\Omega_2} = u 
+	\end{matrix} \quad\; \forall V \in H^1_0(\Omega,\mathbb{R}^n),
+\end{align*}
+ist.
+\end{defi}
+
+Wir fahren fort und definieren die projezierten Neumann-zu-Dirichlet und Dirichlet-zu-Neumann-Operatoren, welche wir zur konstruktion der Riemann'schen Metrik benötigen, siehe \cite{bfgs1}.
+
+\colorbox{red}{sind die Namen richtig?, soll ich den unnötigen Operator nicht definieren?}
+
+\begin{defi}[projezierte Randwertoperatoren]\label{Randoperatoren}
+Seien die Voraussetzungen von \ref{Sproperatoren} und \ref{Llsgsoperatoren} gegeben. Dann heißt der Operator
+\begin{align*}
+	S^p: H^{-1/2}(\partial\Omega_2) &\rightarrow H^{-1/2}(\partial\Omega_2, \mathbb{R}^n) \rightarrow H^1_0(\Omega,\mathbb{R}^n) \rightarrow H^{1/2}(\partial\Omega_2, \mathbb{R}^n) \rightarrow H^{1/2}(\partial\Omega_2) \\
+	\alpha &\mapsto n^T[\gamma_0 \circ E_N(\alpha \cdot n)]
+\end{align*}
+\textit{projezierter Neumann-zu-Dirichlet-Operator}, wobei $n^T$ eine duale Paarung meint.
+\colorbox{red}{ist es richtig, wie linearformen und normale abbildungen miteinander verkettet werden. gibt es duale operatoren zu H(omega, Rn)?? ist oben  }
+Der Operator
+\begin{align*}
+	T^p: H^{1/2}(\partial\Omega_2) &\rightarrow H^{1/2}(\partial\Omega_2,\mathbb{R}^n) \rightarrow H^1_0(\Omega,\mathbb{R}^n) \rightarrow H^{-1/2}(\partial\Omega_2,\mathbb{R}^n) \rightarrow H^{-1/2}(\partial\Omega_2) \\
+	\alpha &\mapsto n^T[\gamma_1 \circ E_D(\alpha \cdot n)]
+\end{align*}
+heißt \textit{projezierter Dirichlet-zu-Neumann-Operator}.
+\end{defi}
+
+
+%Randwertoperatoren eigenschaften aus dem Paper zitieren, auf dortige Quelle verweisen.
+
+Die hier definierten Operatoren sind nicht die klassischen Dirichlet-zu-Neumann-Operatoren, welche auch \textit{Stekolov-Poincaré-Operatoren} genannt werden, da diese nicht in projezierter Variante definiert werden. Wir haben diese so definiert, da wir die Identifikation der Tangentialvektoren, für welche die Riemann'sche Metrik definiert wird, mit Skalarfeldern $\alpha$ auf dem Rand $\partial\Omega_2$ nach Auswertung über äußere Normalenvektorfelder ausnutzen. Zur Erinnerung, siehe \ref{Tangentialvektor}. Was die Operatoren im wesentlichen tun, ist für gegebene Dirichlet- bzw. Neumann-Bedingungen die Lösung des durch die Bilinearform $a$ definierten Problems zu finden, und die entsprechenden anderen, automatisch konsistenten, Neumann- bzw. Dirichlet-Bedingungen zurückzugeben. Das heißt, für gegebene Dirichlet-Bedingungen liefert der projezierte Dirichlet-zu-Neumann-Operator die Neumann-Bedingungen, welche die selbe Lösung erzeugt, und vice versa.
+
+Die klassischen Stekolov-Poincaré-Operatoren sind zueinander invers und vererben die Koerzivität, Stetigkeit und Symmetrie in dualer Paarung, \colorbox{red}{aufgrund der Koerzivität und Symmetrie der Bilinearform $a$,} siehe die Quellen bei \cite{bfgs1}, Def. 3.1. Die projezierten Operatoren besitzen weiterhin alle genannten Eigenschaften, bis auf die des Inversen. Um Rechenaufwand einzusparen, und Glättungseigenschaften auszunutzen, fällt die Wahl des Operators zur Definition des Skalarproduktes auf den Tangentialräumen auf $(S^p)^{-1}$, für Details, unter anderem zu spektraler Äquivalenz der Kanditaten, siehe \cite{bfgs1} und die dort genannten Quellen. Wir kommen nun zu unserem Ziel, eine Riemann'sche Metrik auf dem Shape-space für den $\mathbb{R}^2$ zu definieren, vgl. \cite{bfgs1}.
+
+\colorbox{red}{Zitat Schulz und Jahr, for the credit :)}
+
+\begin{defi}[Stekolov-Poincaré-Metrik]\label{Stek-Poi-metrik}
+Seien die Voraussetzungen wie in \ref{Randoperatoren}. Dann heißt das Skalarprodukt
+\begin{align*}
+	g^S: H^{1/2}(\partial \Omega_2) \times H^{1/2}(\partial \Omega_2) \rightarrow \mathbb{R} \\
+	(\alpha,\beta) \mapsto \langle \alpha, (S^p)^{-1}\beta \rangle = \underset{\partial \Omega_2}{\int} \alpha(s)\cdot((S^p)^{-1}\beta)(s)ds,
+\end{align*}
+\textit{Stekolov-Poincaré-Metrik}, wobei die Produkte auf der rechten Seite als duale Paarungen zu verstehen sind. 
+\end{defi}
+
+Das so definierte Skalarprodukt ist auf allgemeinen Sobolev-Slobodeckij-Räumen definiert, da Lösungen der Zustandsgleichung bei Auswertung auf dem Rand in der Regel Ordnung $1/2$ besitzen, siehe \colorbox{red}{Referenz auf PDE kapitel}. Diese Räume enthalten, wie wir in der Einführung zu Differentialgleichungen gezeigt haben, die $C^\infty$-Funktionen auf dem Rand. Somit ist das Skalarprodukt für Tangentialvektoren aller Formen aus $B_e(S^1, \mathbb{R}^2)$ wohldefiniert, da wir erneut Tangentialvektoren mit den Koeffizientenfeldern der äußeren Normalenvektorfelder identifizieren. Für den Beweis, dass $g^S$ eine Riemann'sche Metrik bildet, und $(B_e(S^1,\mathbb{R}^2),g^S)$ somit eine Riemann'sche Mannigfaltigkeit ist, siehe \colorbox{red}{zitiere Welker}.
+
+Wir kommen nun zu dem Zusammenhang des in \colorbox{red}{zitiere shape calc} definierten Formkalküls und der soeben konstruierten Riemann'schen Mannigfaltigkeit $(B_e(S^1,\mathbb{R}^2),g^S)$.
+Für die in dieser Arbeit genutzten Algorithmen ist die Gewinnung von Gradienten, welche wir Generierung von Deformationen nutzen wollen, aus der Formableitung eines Zielfunktionals von zentraler Bedeutung. Das Skalarprodukt $g^S$ bietet genau hierzu das geeignete Mittel.
+
+\colorbox{red}{Definition von Formen mit Omega im shape kapitel, hier mit partialOmega2, irgendwie komisch und vllt unpassend, besser einheitliche notation}
+
+\begin{defi}[Formgradient]\label{Formgradientdefi}
+Seien die Voraussetzungen wie in \ref{Sproperatoren} und \ref{Llsgsoperatoren}.
+Sei $\mathcal{J}$ ein formdifferenzierbares Formfunktional und die zugehörige Formableitung $D\mathcal{J}$. Betrachte die zu $c\in B_e(S^1,\mathbb{R}^2)$ gehörige Form $\partial\Omega_2$, mit Tangentialraum $T_cB_e$. Dann heißt der Tangentialvektor $h\in T_cB_e$ \textit{Formgradient von} $\mathcal{J}$ \textit{in c}, falls seine Darstellung $\alpha_h$ als Skalarvektorfeld, gemäß \ref{Tangentialvektor},
+
+\begin{align}\label{Gradientengleichung}
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\partial \Omega_2)[V] \quad \forall V\in C^\infty(\Omega,\mathbb{R}^2)
+\end{align}
+erfüllt, wobei $\alpha_V = \langle V_{\vert \partial\Omega_2}, n\rangle$ das Koeffizientenfeld des äußeren Normalenanteils $n$ von $V$ auf dem Rand $\partial \Omega_2$ ist.
+
+\end{defi}
+
+Die hier gemachte Definition ist als eine duale Repräsentation der Formableitung $D\mathcal{J}$ in dem Skalarprodukt $g^S$ zu sehen. Damit folgen wir nicht der typischen Definition eines gewöhnlichen Gradienten, wie diese oft in Analysisvorlesungen stattfindet, sondern betrachten diese in Anlehnung an den  Riesz'schen Darstellungssatzes. Der Aufwand bis zur Definition des Formgradienten macht auch deutlich, wie wesentlich die Art des Gradienten vom zugrunde liegenden Skalarprodukt abhängt, ganz im Gegenteil zur Formableitung, für welche kein zugrunde liegendes Skalarprodukt benötigt wird. Somit ergeben sich für die selbe Formableitung, je nachdem welche Metrik man für den Shape-space verwendet, andere Gradienten und somit andere numerische Verfahren. Für eine Auswahl weiterer Alternativen, siehe \cite{shape_space}, Kapitel 3.2.
+
+Es fällt weiterhin auf, dass die hier geforderte Gleichung \ref{Gradientengleichung} nicht in dualer Paarung mit Skalarfeldern, welche in die Ableitung $D\mathcal{J}$ einfließen, sondern in deren Koeffizientenfeldern der Normalenkomponente auf der Form berücksichtigt werden. Dies lässt sich mit dem Hadamard'schen Darstellungssatz begründen:
+\begin{align*}
+	D\mathcal{J}(\partial\Omega_2)[V] &= \underset{\partial\Omega_2}{\int}f(s)\langle V(s),n(s)\rangle ds \\
+	&=\underset{\partial\Omega_2}{\int}f(s) \alpha_V(s)\langle n(s),n(s)\rangle ds \\
+	&=\underset{\partial\Omega_2}{\int}f(s) \alpha_V(s) ds \\
+	&= (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega_2)}
+\end{align*}
+Damit wird klar, dass Vektorfelder $V\in C^\infty(\Omega,\mathbb{R}^2)$ mit gleichen Werten in äußerer Normalenrichtung $n$ auf $\partial\Omega_2$ auch den selben Wert bei Ableitung erhalten, und somit lediglich die Koeffizientenfelder $\alpha$ relevant sind. Die Identifikation mit diesen ist auch nötig, da wir das Skalarprodukt $g^S$ für gerade diese Funktionen definiert haben, und nicht bezüglich der echten Tangentialvektoren, welche Vektorfelder sind.
+
+\colorbox{red}{Erklärung, warum das alles ok ist mit dem Koeffizientenfeld, und das Cinfty R2 nicht so stark ist, sondern nur Rand relevant wegen hadamard, dann überleitung als Satz für Darstellung mit bilinform a }
+
+Mit diesem Zusammenhang lässt sich auch leicht der Bezug zu auf ganz $\Omega$ definierten Vektorfeldern $U,V$ und der Bilinearform $a$, welche $g^S$ zu Grunde liegt, beschreiben.
+
+\begin{theorem}[Formgradienten und Deformationsfelder]
+Seien die Voraussetzungen wie in \ref{Formgradientdefi}. Sei $a$ eine koerzive, beschränkte Bilinearform, und $g^S$ die zugehörige Stekolov-Poincaré-Metrik. Weiterhin sei $h$ der zu einer Form $\partial\Omega_2$ und Formfunktional $\mathcal{J}$ gehörige Formgradient. Dann existiert ein zu $h$ gehöriges Vektorfeld $H \in H^1_0(\Omega, \mathbb{R}^n)$, so dass gilt
+\begin{align*}
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\partial\Omega_2)[V] = a(H,V) \quad \forall C^\infty(\Omega,\mathbb{R}^2)
+\end{align*}
+und, mit Notation aus \ref{Sproperatoren},
+\begin{align*}
+	(\gamma_0\circ H)^T n = \alpha_h.
+\end{align*}
+\end{theorem}
+
+\colorbox{red}{ sicher das hier Omega = R2 sein kann?? muss ich nicht zuerst eine Hold-all-domain definieren.... weil sonst ja Randbedingungen keinen Sinn machen.. vllt ist auch auf Omega2 das H definiert? weil dirrandbedingunen ja partialOmega2 sind}
+
+\begin{proof}
+Seien die Voraussetzungen wie oben. Nach der zuvor geführten Rechnung gilt
+\begin{align*}
+	g^S(\alpha_h, \alpha_V) = (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega_2)},
+\end{align*}
+wobei $f$ aus der Randdarstellung von $D\mathcal{J}$ mittels Hadamard'schem Darstellungssatz stammt. Verwendet man die Definition \ref{Stek-Poi-metrik} von $g^S$, so erhält man
+\begin{align*}
+	\underset{\partial\Omega_2}{\int} \alpha_h (S^p)^{-1}(\alpha_V)ds = 				\underset{\partial\Omega_2}{\int} f \alpha_V ds
+\end{align*}
+für beliebige Vektorfelder $V\in C^\infty(\Omega, \mathbb{R}^2)$. Wegen der Invertierbarkeit von $S^P$, welche wegen \colorbox{red}{Stetigkeit} und Koerzivität der Bilinearform $a$ und Regularität des Randes \colorbox{red}{ mit dem Lemma von Lax-Milgram,sicher auch für neumann??, REFERNZ} gilt, sowie der Symmetrie von $g^S$, folgt mit dem Fundamentallemma der Variationsrechnung
+\begin{align*}
+	S^p(f) = \alpha_h.
+\end{align*}
+Nun folgt mit der Definition von $S^p$, siehe \ref{Llsgsoperatoren}, und mit der \colorbox{red}{Stetigkeit} und Symmetrie von $a$, dass ein $H \in H^1_0(\Omega,\mathbb{R}^2$ \colorbox{red}{checke ob wirklich auf Omega, oder nur Omega2} existiert, so dass gilt
+\begin{align*}
+	a(H,V) = \underset{\partial\Omega_2}{\int} f \alpha_V ds \quad \forall V\in C^\infty(\Omega,\mathbb{R}^2),
+\end{align*}
+woraus insgesamt die erste Gleichung \colorbox{red}{vllt ref? label?} folgt. Die zweite Gleichung folgt direkt aus der Definition des projezierten Operators $S^p$ , siehe \ref{Randoperatoren}, und des Neumann-Lösungsoperators $E_N$, denn
+\begin{align*}
+	\alpha_h = S^p(f) = n^T(\gamma_0\circ E_N(f\cdot n)) = n^T(\gamma_0 \circ H)
+\end{align*}
+\end{proof}
+
+
+
+%Transporte!!!! und exponentialabbildung
+
+\colorbox{red}{Erklärung}
+
+
+\newpage
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{papers}
+
+\end{document}
