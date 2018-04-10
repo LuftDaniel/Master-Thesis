@@ -4,6 +4,7 @@ import time
 import argparse
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 parameters['allow_extrapolation'] = True
 
@@ -98,11 +99,11 @@ c       = 5.0
 tol_ssn = 1.e-3
 
 # Parameter fuer L-BFGS Algorithmus
-memory_length = 3
+memory_length = 7
 
 # Parameter fuer den Formoptimierungsalgorithmus
 nu        = 0.01
-tol_shopt = 2.e-4
+tol_shopt = 8.e-5
 
 # Keine Ausgabe von FEniCS Funktionen in der Konsole
 set_log_active(False)
@@ -197,7 +198,7 @@ print('\nSchritt 2/2: Formoptimierung')
 
 # Gitter laden und speichern
 MeshData = sovi.load_mesh(startMesh_file)
-file_bound_start << MeshData.boundaries
+file_bound_start << MeshData.boundaries, 0
 
 # file_mesh << MeshData.mesh
 
@@ -216,6 +217,9 @@ counter = 0
 
 # Startzeit zum Zeitmessen
 start_time = time.time()
+
+# Outputgraph
+file_output = open(os.path.join(outputfolder, 'outputdata.txt'),'a')
 
 # Start der Optimierungsschritte
 print("\nIteration " + "  ||f_elas||_L2 " + "  J = j + j_reg " + "  ||U||_L2\n")
@@ -302,11 +306,22 @@ while nrm_f_elas > tol_shopt:
                    str(J).replace(".", ",") + ";" +
                    str(nrm_U_mag).replace(".", ",")   + "\n")
 
+    file_output.write(str(counter)       +";"+
+                      str(nrm_f_elas)  + "\n")
     # ----------------------- #
     #      DEFORMATION        #
     # ----------------------- #
 
     ALE.move(MeshData.mesh, S)
+
+    # ----------------------- #
+    #     GITTER SPEICHERN    #
+    # ----------------------- #
+
+    file_bound_increment = File(os.path.join(outputfolder,
+                                         'BoundaryData', 'bound_{}.pvd'.format(counter)))
+    #MeshData.boundaries.rename("bound_{}".format(counter), "bound_{}".format(counter))
+    file_bound_increment << MeshData.boundaries, counter
 
 # ----------------------- #
 #          FERTIG         #
@@ -324,7 +339,7 @@ file_def_u     << U
 file_lame      << mu_elas_projected
 file_bound_end << MeshData.boundaries
 
-
+file_output.close()
 
 # Zeitmessung
 elapsed_time = time.time() - start_time
@@ -342,3 +357,12 @@ print("Iterationen:            {0:0d}".format(counter))
 print("Dauer der Berechnungen: {0:.0f} min".format(int(elapsed_time)/60))
 print("Ergebnisse in:          '{0:s}/'".format(outputfolder))
 print("\n-------------------------------------------------\n")
+
+# Konvergenzgraph printen
+
+with open(os.path.join(outputfolder, 'outputdata.txt')) as output:
+    items  = (map(float, line.split(";")) for line in output)
+    xs, ys = zip(*items)
+
+plt.plot(xs, ys)
+plt.show()
