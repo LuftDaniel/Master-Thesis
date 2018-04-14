@@ -89,7 +89,8 @@
 \section{BFGS-Algorithmus in der Formoptimierung}
 
 \colorbox{red}{habe ich sicher das Kapitel zu Rn BFGS? falls nicht korrigiere text}
-
+\colorbox{red}{soll ich 2 dimensional oder beliebig dimensional machen? habe hier bisschen von beidem...}
+\colorbox{red}{ statt jedes mal die voraussetzunge zu überprüfen, also zsmhgd, beschr,... nutze lieber vllt einfach die Definition von regulärem Gebiet aus anderem Chapter?}
 Nachdem wir in die Grundlagen der Formoptimierung und des BFGS-Algorithmus im endlich-dimensionalen eingeführt haben, möchten wir nun in diesem Abschnitt beide Bereiche zusammenführen und die endlich-dimensionalen BFGS-Updates in den Kontext von Formen abstrahieren. Dies ist nicht ohne weiteres möglich, da a priori nicht klar ist, wie Gradienten von Formen definiert werden sollen, insbesondere deshalb, weil wir uns in unendlich-dimensionalen Shape-space befinden. Erschwert wird dies weiter dadurch, dass, wie eingangs bemerkt, keine natürliche Vektorraumstruktur auf dem betrachteten Shape-space vorhanden ist. Ziel dieses Abschnittes wird es sein zunächst die Wahl eine geeigneten Metrik im Sinne der Riemannschen Geometrie zu wählen, wodurch die Definition eines Gradienten überhaupt erst möglich wird. Im Abschnitt über BFGS-Methoden im $\mathbb{R}^n$ haben wir zur Darstellung solcher Gradienten stets stillschweigend die euklidische Metrik vorausgesetzt. Diese lässt sich offensichtlich nicht einfach im Shape-setting verwenden. Anschließend übertragen wir den BFGS-Algorithmus in das Shape-setting. In diesem Abschnitt halten wir uns vorallem an \cite{bfgs1}, sowie an \cite{shape_space} und \cite{bfgs2}.
 
 Zunächst definieren wir, was wir unter dem Raum aller Formen verstehen, vgl. \cite{bfgs1}. Hierzu bleiben wir in zwei Dimensionen, da hier schon die wesentlichen Elemente und Zusammenhänge klar werden. Prinzipiell ist ein betrachten von höherdimensionalen Objekten auch möglich, sofern die zugrundeliegende Topologie der Formen beachtet wird.
@@ -214,6 +215,8 @@ Für die in dieser Arbeit genutzten Algorithmen ist die Gewinnung von Gradienten
 Seien die Voraussetzungen wie in \ref{Sproperatoren} und \ref{Llsgsoperatoren}.
 Sei $\mathcal{J}$ ein formdifferenzierbares Formfunktional und die zugehörige Formableitung $D\mathcal{J}$. Betrachte die zu $c\in B_e(S^1,\mathbb{R}^2)$ gehörige Form $\partial\Omega_2$, mit Tangentialraum $T_cB_e$. Dann heißt der Tangentialvektor $h\in T_cB_e$ \textit{Formgradient von} $\mathcal{J}$ \textit{in c}, falls seine Darstellung $\alpha_h$ als Skalarvektorfeld, gemäß \ref{Tangentialvektor},
 
+\colorbox{red}{stimmt hier für alle Cinfty V? eigentlich H10, aber das ersteres dicht liegt und gS bzw a stetig sind, egal?}
+
 \begin{align}\label{Gradientengleichung}
 	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\partial \Omega_2)[V] \quad \forall V\in C^\infty(\Omega,\mathbb{R}^2)
 \end{align}
@@ -234,13 +237,15 @@ Damit wird klar, dass Vektorfelder $V\in C^\infty(\Omega,\mathbb{R}^2)$ mit glei
 
 \colorbox{red}{Erklärung, warum das alles ok ist mit dem Koeffizientenfeld, und das Cinfty R2 nicht so stark ist, sondern nur Rand relevant wegen hadamard, dann überleitung als Satz für Darstellung mit bilinform a }
 
-Mit diesem Zusammenhang lässt sich auch leicht der Bezug zu auf ganz $\Omega$ definierten Vektorfeldern $U,V$ und der Bilinearform $a$, welche $g^S$ zu Grunde liegt, beschreiben.
+Mit diesem Zusammenhang lässt sich auch leicht der Bezug zu auf ganz $\Omega$ definierten Vektorfeldern $U,V$, und der Bilinearform $a$, welche $g^S$ zu Grunde liegt, beschreiben. Wir formulieren die Zusammenhänge aus \cite{bfgs1} für unsere Situation und Notation als Satz um, und geben einen Beweis. 
+
+\colorbox{red}{vielleicht h = grad J nenne?}
 
 \begin{theorem}[Formgradienten und Deformationsfelder]
-Seien die Voraussetzungen wie in \ref{Formgradientdefi}. Sei $a$ eine koerzive, beschränkte Bilinearform, und $g^S$ die zugehörige Stekolov-Poincaré-Metrik. Weiterhin sei $h$ der zu einer Form $\partial\Omega_2$ und Formfunktional $\mathcal{J}$ gehörige Formgradient. Dann existiert ein zu $h$ gehöriges Vektorfeld $H \in H^1_0(\Omega, \mathbb{R}^n)$, so dass gilt
-\begin{align*}
+Seien die Voraussetzungen wie in \ref{Formgradientdefi}. Sei $a$ eine koerzive, beschränkte, symmetrische Bilinearform, und $g^S$ die zugehörige Stekolov-Poincaré-Metrik. Weiterhin sei $h$ der zu einer Form $\partial\Omega_2$ und Formfunktional $\mathcal{J}$ gehörige Formgradient. Dann existiert ein zu $h$ gehöriges Vektorfeld $H \in H^1_0(\Omega, \mathbb{R}^n)$, so dass gilt
+\begin{align}\label{zentraleDeformation}
 	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\partial\Omega_2)[V] = a(H,V) \quad \forall C^\infty(\Omega,\mathbb{R}^2)
-\end{align*}
+\end{align}
 und, mit Notation aus \ref{Sproperatoren},
 \begin{align*}
 	(\gamma_0\circ H)^T n = \alpha_h.
@@ -271,6 +276,14 @@ woraus insgesamt die erste Gleichung \colorbox{red}{vllt ref? label?} folgt. Die
 	\alpha_h = S^p(f) = n^T(\gamma_0\circ E_N(f\cdot n)) = n^T(\gamma_0 \circ H)
 \end{align*}
 \end{proof}
+
+Mit diesem Resultat haben wir nun mehrere Möglichkeiten, aus gegebener Formableitung $D\mathcal{J}$ eine Deformation einer Form $\partial\Omega_2$ zu erzeugen. Zum einen besteht die Möglichkeit, auf dem Rand $\partial\Omega_2$ zu agieren, indem man ein Normalenvektorfeld $h = \alpha_h \cdot n$ auf diesem mittels des Variationsproblems \ref{zentraleDeformation} auf Basis der linken Gleichheit erzeugt. Zu beachten ist, dass die so erzeugte Deformation lediglich auf dem Rand definiert ist, womit dann in der Anwendung das Gitter im Inneren und Äußeren nicht bewegt wird. Aus diesem Grund bezeichnen wir diese Art der Deformationsgewinnung \textit{Randformulierung}. Die andere Variante ist, eine Deformation auf dem gesamten Gebiet $\Omega$ zu gewinnen, indem man das Variationsproblem \ref{zentraleDeformation} auf Basis der rechten Gleichung mittels der Bilinearform 
+$a$ zu erzeugen. Im Gegensatz zur ersten Variante können hier potentiell alle Punkte des Gitters verschoben werden, trotz dessen, dass lediglich die Randpunkte zur Änderung des Zielfunktionals beitragen. Diese Variante bezeichnen wir als \textit{Volumenformulierung}, angelehnt an die Arten der Darstellung der Formableitung \colorbox{red}{REFERENZ Kapitel}. Beide Varianten verwenden als zur Erzeugung des Gradienten die Ableitungsinformation, welche physikalische als Kraft interpretierbar ist. Wählt man als Beispiel für die Bilinearform $a$ die lineare Elastizitätsgleichung, so wird diese Interpretation noch deutlicher. Genau diese Bilinearform werden wir in der später \colorbox{red}{wirklich später oder wann? lage anschauen, wo Definiere ich mal diese lineare Elastizität? vllt als beispiel einer bilinearform direkt nach Definition?} folgenden praktischen Implementierung wählen, um in Volumenformulierung Formgradienten zu erzeugen.
+
+Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{zentraleDeformation} erzeugte Deformationen $h$ im Allgemeinen nicht in $C^\infty(\Omega,\mathbb{R}^2)$ sind, siehe \cite{bfgs1}. Dies liegt daran, dass im Allgemeinen je nach Wahl der Bilinearform $a$, welche den Operator $S^p$ und somit das Skalarprodukt $g^S$ erzeugt, sowie der rechten Seite der Gleichung und der Regularität des Gebietes auf der diese definiert sind, lediglich eine Lösung in $H^1_0(\Omega,\mathbb{R}^2)$ existiert. Aus diesem Grunde ist nach unserer Definition \ref{Tangentialvektor} $h$ nicht immer Element des Tangentialraums $T_cB_e$, was Probleme theoretischer Natur macht. Unter anderem deshalb besteht an dieser Stelle der Bedarf eines allgemeineren Formraumes. Beispielsweise wäre eine Möglichkeit, Formen mit $H^{1/2}$-Rändern zuzulassen, was in \cite{shape_space}, Kapitel 7, kurz erläutert wird. Hierbei entstehen allerdings neue Schwierigkeiten theoretischer Natur, welche noch nicht völlig ausgeforscht sind.
+
+
+
 
 
 

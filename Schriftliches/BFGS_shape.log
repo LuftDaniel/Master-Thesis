@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  10 APR 2018 10:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  10 APR 2018 19:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1389,9 +1389,14 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 93.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (14.00578pt too wide) in paragraph at lines 93--94
-[]\T1/lmr/m/n/12 Nachdem wir in die Grund-la-gen der For-m-op-ti-mie-rung und d
-es BFGS-Algorithmus
+Overfull \hbox (425.16864pt too wide) in paragraph at lines 91--94
+[][][][][][] [][][][][][]
+ []
+
+
+Overfull \hbox (14.00578pt too wide) in paragraph at lines 91--94
+\T1/lmr/m/n/12 Nach-dem wir in die Grund-la-gen der For-m-op-ti-mie-rung und de
+s BFGS-Algorithmus
  []
 
 Package babel Info: Redefining ngerman shorthand "|
@@ -1479,6 +1484,11 @@ Overfull \hbox (350.91411pt too wide) in paragraph at lines 211--212
 [][][][][][][] 
  []
 
+
+Overfull \hbox (151.15392pt too wide) in paragraph at lines 217--218
+[][][][][][][] 
+ []
+
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 221.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1488,30 +1498,30 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 221.
 [5]
-Overfull \hbox (649.81264pt too wide) in paragraph at lines 235--236
+Overfull \hbox (649.81264pt too wide) in paragraph at lines 237--238
 [][][][][][][] 
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 239.
+(babel)             in language  on input line 240.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 239.
+(babel)             in language  on input line 240.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 239.
+(babel)             in language  on input line 240.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 239.
+(babel)             in language  on input line 240.
 [6]
-Overfull \hbox (844.73213pt too wide) in paragraph at lines 250--251
+Overfull \hbox (844.73213pt too wide) in paragraph at lines 252--253
 [][][][][][][] 
  []
 
 
-Overfull \hbox (53.35419pt too wide) in paragraph at lines 260--262
+Overfull \hbox (53.35419pt too wide) in paragraph at lines 262--264
 \T1/lmr/m/n/12 des Ran-des [][][][][][]
  []
 
 
-Overfull \hbox (42.52895pt too wide) in paragraph at lines 264--266
+Overfull \hbox (42.52895pt too wide) in paragraph at lines 266--268
 \T1/lmr/m/n/12 me-trie von $\OML/lmm/m/it/12 a$\T1/lmr/m/n/12 , dass ein $\OML/
 lmm/m/it/12 H \OMS/lmsy/m/n/12 2 \OML/lmm/m/it/12 H[]\OT1/lmr/m/n/12 (
 \OML/lmm/m/it/12 ; \U/msb/m/n/12 R[]$ [][][][][][]
@@ -1526,15 +1536,28 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 272.
 [7]
+Overfull \hbox (366.7379pt too wide) in paragraph at lines 277--279
+[][][][][][]
+ []
+
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 277.
+(babel)             in language  on input line 281.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 277.
+(babel)             in language  on input line 281.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 277.
+(babel)             in language  on input line 281.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 277.
- [8] (./BFGS_shape.bbl
+(babel)             in language  on input line 281.
+[8]
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 292.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 292.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 292.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 292.
+ [9] (./BFGS_shape.bbl
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1547,30 +1570,30 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 78.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 78.
- [9])
+ [10])
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 282.
+(babel)             in language  on input line 297.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 282.
+(babel)             in language  on input line 297.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 282.
+(babel)             in language  on input line 297.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 282.
- [10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 282.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 282.
+(babel)             in language  on input line 297.
+ [11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 297.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 297.
  (./BFGS_shape.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 282.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 282.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 297.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 297.
 Package rerunfilecheck Info: File `BFGS_shape.out' has not changed.
 (rerunfilecheck)             Checksum: 3FB2870C5C8C0AC093FCF904FED4655A;119.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 282.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 297.
  ) 
 Here is how much of TeX's memory you used:
- 30119 strings out of 493029
- 690941 string characters out of 6136233
+ 30122 strings out of 493029
+ 690981 string characters out of 6136233
  1062116 words of memory out of 5000000
- 33071 multiletter control sequences out of 15000+600000
+ 33072 multiletter control sequences out of 15000+600000
  44551 words of font info for 41 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,15n,81p,1378b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1586,10 +1609,10 @@ blic/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmro12.pfb></usr/sha
 re/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/publi
 c/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BFGS_shape.pdf (10 pages, 228533 bytes).
+Output written on BFGS_shape.pdf (11 pages, 232697 bytes).
 PDF statistics:
- 187 PDF objects out of 1000 (max. 8388607)
- 160 compressed objects within 2 object streams
- 38 named destinations out of 1000 (max. 500000)
+ 199 PDF objects out of 1000 (max. 8388607)
+ 171 compressed objects within 2 object streams
+ 40 named destinations out of 1000 (max. 500000)
  29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

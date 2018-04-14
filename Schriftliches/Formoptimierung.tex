@@ -11,6 +11,10 @@
 
 \section{Einführung in die Formoptimierung}
 
+\colorbox{red}{zuerst pde kapitel!}
+\colorbox{red}{überlege, ob man vllt grundgebiet anders nennt, und dann formen partialOmega statt partialOmega2 nennt... vllt einfacher Gamma int und Omega int}
+\colorbox{red}{ sollte man Zieltfktnl J als Abbildung der formen partial Omega oder der Inneren der Formen Omega auffassen, eigentlich egal, aber was wäre schöner? achte auf konsistenz der sprache, z.b. bei erklärung nach designgleichung}
+
 In diesem Kapitel möchten wir eine Einführung in die Theorie der Formoptimierung geben.
 Die Formoptimierung ist der Bereich des Optimal Control, welcher sich mit der Wahl einer, in gewisser Hinsicht, optimalen Form beschäftigt. Anders als in der klassischen PDE-constrained Optimization ist hier die Steuerung somit keine Funktion, sondern eine Form.
 Zu dem Umgang mit Optimierungsproblemen von Formen gibt es in der Literatur verschiedene Ansätze. \newline
@@ -48,14 +52,15 @@ Dann heißt $\Omega$ reguläres Gebiet.
 
 Anschaulich bedeutet die erste Forderung an Regularität, dass sich $\partial\Omega$ lokal so parametrisieren lässt, dass durch hinzufügen einer weiteren Koordinate $x_d$ der umgebende Raum mit parametrisiert wird und anhand des Vorzeichens von $x_d$ erkennbar ist, ob sich der zugehörige Punkt $h(x,x_d)$ im Inneren oder außerhalb von $\Omega$ befindet.
 
-Nun möchten wir die Problemstellung der Formoptimierung im Rahmen dieser Arbeit definieren, in Analogie zu \colorbox{red}{Vorlesung schulz}:
+Nun möchten wir die Problemstellung der Formoptimierung im Rahmen dieser Arbeit definieren, in Analogie zu \cite{LagrangeNewton}.
 
-\begin{defi}[Problem der Formoptimierung]
-Sei $\mathcal{D}$ die Menge aller zulässigen Gebiete einer hold-all-domain $\mathcal{O}\subseteq\mathbb{R}^d$ und $\mathcal{J}$ ein auf dieser Menge beschränktes, wohldefiniertes Formfunktional. Weiterhin seien $Y,Z$ Banachräume und $c: Y\times \mathcal{D} \rightarrow Z$ eine Abbildung. Dann heißt das Problem
+\colorbox{red}{sollte ich das so nennen? in Banachräumen}
+\begin{defi}[Abstraktes Formoptimierungsproblem]
+Sei $\mathcal{D}$ die Menge aller zulässigen Gebiete einer hold-all-domain $\mathcal{O}\subseteq\mathbb{R}^d$ und $\mathcal{J}$ ein auf dieser Menge beschränktes, wohldefiniertes Formfunktional. Weiterhin seien $Y,Z$ Banachräume und $c: Y\times \mathcal{D} \rightarrow Z$ eine hinreichend glatte Abbildung. Dann heißt das Problem
 
 \begin{align*}
 	\underset{(y,\Omega) \in Y \times \mathcal{D}}{\min} \mathcal{J}(y,\Omega) \\
-	\text{unter } c(y, \Omega) = 0
+	\text{s.t. } c(y, \Omega) = 0
 \end{align*}
 \textit{Problem der Formoptimierung}.
 \end{defi}
@@ -82,6 +87,8 @@ Die Deformationen der \textit{Velocity method} sind definiert durch den Fluss $T
 
 Für den Rest dieser Arbeit werden wir die Pertubation of Identity verwenden. Mit Hilfe der eingeführten Deformationen können wir nun die Formableitung nach \cite{bfgs2} definieren. 
 
+\colorbox{red}{Eigenschaften der Formableitung? z.b. linearität etc, oder bei materialableitung? falls überhaupt, siehe design gleichung, da benutzen wir linearität}
+
 \begin{defi}[Formableitung]
 Sei $\Omega \in \mathcal{D}$ eine zulässige Form, $V\in C^2(\mathbb{R}^d,\mathbb{R}^d)$ ein differenzierbares Vektorfeld, und $\mathcal{J}: \mathcal{D} \rightarrow \mathbb{R}$ ein Formfunktional. Falls der Grenzwert
 \begin{align*}
@@ -100,9 +107,96 @@ Die Formableitung besitzt zwei äquivalente Formulierungen, die sogenannte \text
 \begin{align*}
 	dJ_\Omega(\Omega)[V] &= \underset{\Omega}{\int}F(x)V(x)dx\\
 	\vspace{0.5cm}
-	dJ_\Gamma(\Omega)[V] &= \underset{\Gamma}{\int}f(s)V(s)^Tn(s)ds,
+	dJ_\Gamma(\Omega)[V] &= \underset{\Gamma}{\int}f(s)\langle V(s),n(s)\rangle ds,
 \end{align*}
 
-wobei $F(x)$ ein (differential) Operator ist, welcher linear auf das Richtungsvektorfeld $V$ wirkt, sowie einer Funktion $f: \Gamma \rightarrow \mathbb{R}$. Die Äquivalenz dieser Formulierungen ist gesichert durch den Hadamard'schen Darstellungssatz, wobei der dortige Zusammenhang geringfügig komplexer ist.
+wobei $F(x)$ ein (differential) Operator ist, welcher linear auf das Richtungsvektorfeld $V$ wirkt, sowie einer Funktion $f: \Gamma \rightarrow \mathbb{R}$. Die Existenz einer zur Volumenform äquivalenten Randformulierung ist gesichert durch den Hadamard'schen Darstellungssatz. Dieser liefert im Allgemeinen die Existenz einer Distribution $f$, so dass Volumen- und Randformulierung der  Formableitung äquivalent sind, für die genaue Aussage, siehe \cite{shape_space}, Theorem 4.7. Wir werden in dieser Arbeit stets voraussetzen, dass genügend Regularität vorhanden ist, so dass $dJ$ in der Tat mittels einer Funktion $f$ auf dem Rand darstellbar ist.
+
+\colorbox{red}{ dJ oder dmathcal J??? konsistenz checken}
 
 Die hier definierte Formableitung ist im Englischen auch bekannt als \textit{Eulerian Semiderivative} oder \textit{Lie Semiderivative}. Es gibt weitere äquivalente Varianten die Formableitung zu definieren, hierzu siehe \cite{Shape_diff}. Oft von zentraler Schwierigkeit in der theoretischen Behandlung von Formoptimierungsproblemen ist der Nachweis der Formdifferenzierbarkeit eines Formfunktionals. Hierzu gibt es eine Vielzahl von verschiedenen Techniken, beispielsweise der Min-Max Formulierung von Correa und Seeger, Céa's klassischer Lagrange-Methode oder der Methoden mittels Materialableitung. Erneut verweisen wir auf \cite{Shape_diff}, wo diese Methoden in einheitlicher Notation geordnet zusammengetragen sind.
+
+\colorbox{red}{Rechenregeln? Materialableitung?}
+
+Wir kommen nun zu einer, zwar immernoch abstrakt gehaltenen, jedoch konkreter anwendungsbezogenen Formulierung von Formoptimierungsproblemen.
+
+\colorbox{red}{mit Bündeldefinition oder ohne? siehe paper lagrange-newton, außerdem im widerspruch zur definition eines formfunktionals oben??}
+\begin{defi}[PDE beschränktes Formoptimierungsproblem]\label{Pde constrained shape}
+Sei $\mathcal{J}$ ein Formfunktional, sei $\Omega_2 \in \mathcal{D}$ eine zulässige Fläche einer Hold-all-Domain $\mathcal{D}$. Weiterhin sei $y\in H(\Omega_2)$ eine Funktion aus dem von $\Omega_2$ abhängigen \colorbox{red}{Hilbertraum (oder Banachraum)} $H(\Omega_2)$. Betrachte eine von $\Omega_2$ abhängige Bilinearform $a_{\Omega_2}: H(\Omega_2) \times H(\Omega_2) \rightarrow \mathbb{R}$ und eine ebenso von $\Omega_2$ abhängige Linearform $b_{\Omega_2}: H(\Omega_2) \rightarrow \mathbb{R}$. Dann heißt das beschränkte Minimierungsproblem
+\begin{equation}\label{PDE constrained equation}
+	\begin{aligned}
+	&\underset{y,\Omega_2}{\min}\;\mathcal{J}(y,\Omega_2) \\
+	\text{s.t. } a_{\Omega_2}&(y,p) = b_{\Omega_2}(p) \quad \forall p\in H(\Omega_2)
+	\end{aligned}
+\end{equation}
+\textit{PDE beschränktes Formoptimierungsproblem} (engl.\textit{PDE-constrained shape-optimization}).
+\end{defi}
+
+Wir haben hier direkt die partielle Differentialgleichung in Variationsformulierung als Gleichungsnebenbedingung formuliert. Das wird uns bequemer ermöglichen, weitere Definitionen und Techniken entsprechend anzugeben, womit wir direkt beginnen.
+
+\begin{defi}[Lagrangefunktion]\label{lagrangefunction}
+Betrachte ein PDE beschränktes Formoptimierungsproblem. Sei $\partial\Omega_2$ eine reguläre Form, $H(\Omega_2)$ ein von dieser Form abhängiger \colorbox{red}{Hilbertraum / Banachraum}. Weiterhin seien $y,p\in H(\Omega_2)$. Dann heißt die Funktion
+\colorbox{red}{ich unterschlage hier mutwillig die bündelgeschichte, soll ich die noch aufführen? kann man, wird korrekter, aber länger}.
+\begin{align*}
+	\mathcal{L}(y,\Omega_2, p) := \mathcal{J}(y,\Omega_2) + a_{\Omega_2}(y,p) - b_{\Omega_2}(p)
+\end{align*}
+\textit{Lagrangefunktion} für das gegebene PDE beschränkte Formoptimierungsproblem.
+\end{defi}
+
+Diese Lagrangefunktion ermöglicht es uns, aus formaler Sicht Optimalitätskriterien für das PDE beschränkte Formoptimierungsproblem aufzustellen. Ein problematischer Aspekt des rein formalen Lagrangeansatzes ist, dass die Regularität der Funktionen, für welche die Lagrangefunktion definiert ist, im Vorfeld nicht bekannt sein muss. Aus diesem Grunde ist eine ex-post Analyse der zur konsistenten Beschreibung nötigen Funktionenräume wichtig. \colorbox{red}{vllt eine Quelle?}
+
+Wir fahren fort mit notwendigen Optimalitätskriterien für Lösungen, welche gegeben werden in Form von Variationsformulierungen, siehe \cite{LagrangeNewton}
+
+\begin{defi}[Adjungierte und Design-Gleichung]
+	Betrachte ein PDE beschränktes Formoptimierungsproblem mit differenzierbarem Zielfunktional $\mathcal{J}$. Verwende die Notation von \ref{lagrangefunction} und bezeichne mit $D\mathcal{J}$ die zu $\mathcal{J}$ gehörige Formableitung. Seien $\tilde{y} \in H(\tilde{\Omega}_2)$ und $\tilde{\Omega}_2\in \mathcal{D}$ optimale Lösungen des Problems \ref{PDE constrained equation}. Dann gilt die Variationsgleichung
+\begin{equation}\label{adjoint equation}
+	a_{\tilde{\Omega}_2}(\tilde{y},z) = - \frac{\partial}{\partial y} \mathcal{J}(\tilde{y},\tilde{\Omega}_2)(z) \quad \forall z\in H(\tilde{\Omega}_2),
+\end{equation}
+welche wir als \textit{adjungierte Gleichung} bezeichnen. Sei $\tilde{p} \in H(\tilde{\Omega}_2)$ die Lösung der adjungierten Gleichung \ref{adjoint equation}. Dann gilt weiterhin die Variationsgleichung
+\colorbox{red}{ relativ frei definiert, kriege ich das abgesegnet? Vielleicht lieber Lagrangefunktion?}
+\begin{equation}\label{Design equation}
+	D\left(\mathcal{J}(\tilde{y},\tilde{\Omega}_2) + a_{\tilde{\Omega}_2}(\tilde{y},\tilde{p}) + b_{\tilde{\Omega}_2}(\tilde{p})\right)(\tilde{\Omega}_2)[V] = 0 \quad \forall C^\infty(\tilde{\Omega}_2,\tilde{\Omega}_2),
+\end{equation}
+welche wir als \textit{Design Gleichung} bezeichnen werden.
+\textit{Design Gleichung}. Außerdem gilt
+\begin{equation}
+	a_{\tilde{\Omega}_2}(\tilde{y},p) = b_{\tilde{\Omega}_2}(p) \quad \forall p \in H(\tilde{\Omega}_2),
+\end{equation}
+wobei die Gleichungsnebenbedingung aus \ref{PDE constrained equation} \textit{Zustandsgleichung} genannt wird.
+\end{defi}
+
+Wie man unschwer erkennt, entstehen die notwendigen Bedingungen aus den Ableitungen der Lagrangefunktion \ref{lagrangefunction} nach dem Zustand $y$, der \colorbox{red}{Form} $\partial\Omega_2$ und dem adjungierten Zustand $p$. Fasst man diese Bedingung in einer Gleichung zusammen, so erhält man das KKT-System
+\begin{align*}
+	D\mathcal{L}(\tilde{y},\tilde{\Omega}_2,\tilde{p})\left(
+	\begin{matrix}
+	h_y \\
+	h_{\Omega} \\
+	h_p
+	\end{matrix}\right)	 = 0 \quad \forall h_{\Omega} \in C^{\infty}(\tilde{\Omega}_2,\tilde{\Omega}_2)
+	\forall h_y, h_p \in H(\tilde{\Omega}_2)
+\end{align*}
+als notwenige Bedingung zur Lösung von \ref{PDE constrained equation}, siehe \cite{LagrangeNewton}, wobei wir die dortige Formulierung mit Hilfe von Vektorbündeln auf die hier angepasste Notation übersetzt haben, was aufgrund der Definition des Tangentialbündels mittels von Formen abhängiger Kreuzprodukte von Hilberträumen  möglich ist. An dieser Stelle wäre es möglich einen Lagrange-Newton Ansatz durchzuführen, und ein Verfahren zur Lösung des Problems \ref{PDE constrained equation} mit quadratischer Konvergenz zu gewinnen, was die Autoren von \cite{LagrangeNewton} getan haben. Wir sparen uns an dieser Stelle weitere Ausführungen hierzu, da wir uns auf Quasi-Newton Methoden konzentrieren wollen.
+
+Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehöriger Optimalitätsbedingungen und Ableitungen. Hierzu wählen wir das klassische Poissonproblem, \colorbox{red}{Referenz im anderen Kapitel}, für welches wir ausreichende Theorie in \colorbox{red}{xxx} eingeführt haben. Das Problem findet sich in ähnlicher Art in \cite{shape_space}, 4.2.
+
+\colorbox{red}{sollte ich von irgendwo zitieren? sollte ich (0,1)2 Omega nenne?}
+\colorbox{red}{ wichti: brauche ich Stetigkeitsbedingungen und zugehörige Notation? siehe Führ}
+\begin{defi}[Modellproblem]
+	Sei $(0,1)^2 \subset \mathbb{R}^2$ das Einheitsquadrat im $\mathbb{R}^2$.
+	Weiterhin sei $\Omega_2 \subset (0,1)^2$ ein reguläres Gebiet mit zugehöriger 		Form $\partial\Omega_2$ aus einer Hold-all-Domain $\mathcal{D}$, und eine stückweise konstante Funktion $f \in \mathcal{L}^\infty((0,1)^2)$ von der Form
+	\begin{align*}
+		f(x) &= f_1 \in \mathbb{R} \quad \forall x \in (0,1)^2\setminus \Omega_2 \\
+		f(x) &= f_2 \in \mathbb{R} \quad \forall x \in \Omega_2.
+	\end{align*}
+	Sei $\hat{y} \in H^1_0((0,1)^2)$ und $\mu > 0$. Dann heißt das nun folgende Problem \textit{Modellproblem}:
+	\begin{equation}\label{Modellproblem}
+	\begin{aligned}
+	\underset{\Omega_2}{\min}\; \mathcal{J}(\Omega_2) :&= \frac{1}{2}\underset{\Omega_2}{\int} (y - \hat{y})^2 dx + \mu\underset{\partial\Omega_2}{\int} 1 ds \\
+	\text{s.t.} -\Delta y &= f \quad \text{in } \;\Omega_2 \\
+	y &= 0  \quad \text{auf } \partial\Omega_2.
+	\end{aligned}
+	\end{equation}		
+	
+	\colorbox{red}{adjoint} dann erklärung
+	
+\end{defi}
