@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  14 APR 2018 18:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  10 APR 2018 19:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**Ausarbeitung.tex
-(./Ausarbeitung.tex
+**BFGS_shape.tex
+(./BFGS_shape.tex
 LaTeX2e <2016/02/01>
 Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrartcl.cls
@@ -1232,8 +1232,8 @@ zlibrarymatrix.code.tex
 File: tikzlibrarymatrix.code.tex 2013/07/12 v3.0.1a (rcs-revision 1.4)
 )
 \c@defi=\count151
- (./Ausarbeitung.aux)
-\openout1 = `Ausarbeitung.aux'.
+ (./BFGS_shape.aux)
+\openout1 = `BFGS_shape.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 76.
 LaTeX Font Info:    ... okay on input line 76.
@@ -1297,9 +1297,9 @@ LaTeX Info: Redefining \ref on input line 76.
 LaTeX Info: Redefining \pageref on input line 76.
 LaTeX Info: Redefining \nameref on input line 76.
 
-(./Ausarbeitung.out) (./Ausarbeitung.out)
+(./BFGS_shape.out) (./BFGS_shape.out)
 \@outlinefile=\write4
-\openout4 = `Ausarbeitung.out'.
+\openout4 = `BFGS_shape.out'.
 
 
 *geometry* driver: auto-detecting
@@ -1343,229 +1343,221 @@ ick labels; missing features). Consider writing \pgfplotsset{compat=1.13} into
 your preamble.
  on input line 76.
 
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 105.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 105.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 105.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 105.
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 109.
-
-
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 89.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) (./Ausarbeitung.toc)
-\tf@toc=\write5
-\openout5 = `Ausarbeitung.toc'.
-
+)
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 89.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 111.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 111.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 111.
- [2]
-(./Formoptimierung.tex
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 12.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 12.
+(babel)             in language  on input line 89.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 93.
 
-Overfull \hbox (490.6218pt too wide) in paragraph at lines 14--17
-[][][][][][] [][][][][][]
- []
-
-
-Overfull \hbox (766.32822pt too wide) in paragraph at lines 14--17
-[][][][][][] 
- []
-
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 24.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 24.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 24.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 24.
-[3]
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 28.
- (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
+(/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 28.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 93.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 28.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 93.
 
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 28.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 93.
 
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 28.
+(Font)              <12> on input line 93.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 28.
+(Font)              <8> on input line 93.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 28.
-LaTeX Font Info:    Try loading font information for U+msa on input line 28.
+(Font)              <6> on input line 93.
+LaTeX Font Info:    Try loading font information for U+msa on input line 93.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 28.
+LaTeX Font Info:    Try loading font information for U+msb on input line 93.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+Overfull \hbox (425.16864pt too wide) in paragraph at lines 91--94
+[][][][][][] [][][][][][]
+ []
+
+
+Overfull \hbox (14.00578pt too wide) in paragraph at lines 91--94
+\T1/lmr/m/n/12 Nach-dem wir in die Grund-la-gen der For-m-op-ti-mie-rung und de
+s BFGS-Algorithmus
+ []
+
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 51.
+(babel)             in language  on input line 106.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 51.
+(babel)             in language  on input line 106.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 51.
+(babel)             in language  on input line 106.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 51.
- [4]
+(babel)             in language  on input line 106.
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+]
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 76.
+(babel)             in language  on input line 135.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 76.
+(babel)             in language  on input line 135.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 76.
+(babel)             in language  on input line 135.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 76.
- [5]
-Overfull \hbox (365.46729pt too wide) in paragraph at lines 90--91
+(babel)             in language  on input line 135.
+ [2]
+Overfull \hbox (20.54193pt too wide) in paragraph at lines 168--169
+\T1/lmr/m/n/12 Dirichlet-zu-Neumann-Operatoren, wel-che wir zur kon-struk-ti-on
+ der Rie-mann'schen
+ []
+
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 169.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 169.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 169.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 169.
+[3]
+Overfull \hbox (16.55598pt too wide) in paragraph at lines 177--177
+[] 
+ []
+
+
+Overfull \hbox (10.47792pt too wide) in paragraph at lines 177--181
+\T1/lmr/m/it/12 projezierter Neumann-zu-Dirichlet-Operator\T1/lmr/m/n/12 , wo-b
+ei $\OML/lmm/m/it/12 n[]$ \T1/lmr/m/n/12 ei-ne dua-le Paa-rung meint.
+ []
+
+
+Overfull \hbox (336.9049pt too wide) in paragraph at lines 177--181
+[][][][][][]
+ []
+
+
+Overfull \hbox (17.14972pt too wide) in paragraph at lines 184--184
+[] 
+ []
+
+
+Overfull \hbox (6.63733pt too wide) in paragraph at lines 191--192
+[]\T1/lmr/m/n/12 Die hier de-fi-nier-ten Ope-ra-to-ren sind nicht die klas-si-s
+chen Dirichlet-zu-Neumann-
+ []
+
+
+Overfull \hbox (259.41911pt too wide) in paragraph at lines 193--194
+\T1/lmr/m/n/12 er-ben die Koer-zi-vi-tät, Ste-tig-keit und Sym-me-trie in dua-l
+er Paa-rung, [][][][][][]
+ []
+
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 195.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 195.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 195.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 195.
+[4]
+Overfull \hbox (8.20926pt too wide) in paragraph at lines 206--207
+[]\T1/lmr/m/n/12 Das so de-fi-nier-te Ska-lar-pro-dukt ist auf all-ge-mei-nen S
+obolev-Slobodeckij-Räumen
+ []
+
+
+Overfull \hbox (350.91411pt too wide) in paragraph at lines 211--212
 [][][][][][][] 
  []
 
 
-Overfull \hbox (1.68031pt too wide) in paragraph at lines 93--94
-[][]\T1/lmr/bx/n/12 Definition 5 \T1/lmr/m/n/12 (For-ma-blei-tung)\T1/lmr/bx/n/
-12 . []\T1/lmr/m/n/12 Sei $\OT1/lmr/m/n/12 
- \OMS/lmsy/m/n/12 2 D$ \T1/lmr/m/n/12 ei-ne zu-läs-si-ge Form, $\OML/lmm/m/it/1
-2 V \OMS/lmsy/m/n/12 2 \OML/lmm/m/it/12 C[]\OT1/lmr/m/n/12 (\U/msb/m/n/12 R[]\O
-ML/lmm/m/it/12 ; \U/msb/m/n/12 R[]\OT1/lmr/m/n/12 )$
+Overfull \hbox (151.15392pt too wide) in paragraph at lines 217--218
+[][][][][][][] 
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 221.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 221.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 221.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 221.
+[5]
+Overfull \hbox (649.81264pt too wide) in paragraph at lines 237--238
+[][][][][][][] 
+ []
+
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 240.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 240.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 240.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 240.
 [6]
-Overfull \hbox (288.60677pt too wide) in paragraph at lines 123--124
+Overfull \hbox (844.73213pt too wide) in paragraph at lines 252--253
 [][][][][][][] 
  []
 
 
-Overfull \hbox (2.03923pt too wide) in paragraph at lines 125--126
-[][]\T1/lmr/bx/n/12 Definition 6 \T1/lmr/m/n/12 (PDE be-schränk-tes For-m-op-ti
--mie-rungs-pro-blem)\T1/lmr/bx/n/12 . []\T1/lmr/m/n/12 Sei $\OMS/lmsy/m/n/12 J$
- \T1/lmr/m/n/12 ein Form-
+Overfull \hbox (53.35419pt too wide) in paragraph at lines 262--264
+\T1/lmr/m/n/12 des Ran-des [][][][][][]
  []
 
 
-Overfull \hbox (79.28085pt too wide) in paragraph at lines 125--126
-\T1/lmr/m/n/12 hin sei $\OML/lmm/m/it/12 y \OMS/lmsy/m/n/12 2 \OML/lmm/m/it/12 
-H\OT1/lmr/m/n/12 (
-[])$ \T1/lmr/m/n/12 ei-ne Funk-ti-on aus dem von $\OT1/lmr/m/n/12 
-[]$ \T1/lmr/m/n/12 ab-hän-gi-gen [][][][][][]
- []
-
-
-Overfull \hbox (53.7101pt too wide) in paragraph at lines 131--133
-\T1/lmr/m/it/12 PDE be-schränk-tes For-m-op-ti-mie-rungs-pro-blem \T1/lmr/m/n/1
-2 (engl.\T1/lmr/m/it/12 PDE-constrained shape-optimization\T1/lmr/m/n/12 ). 
+Overfull \hbox (42.52895pt too wide) in paragraph at lines 266--268
+\T1/lmr/m/n/12 me-trie von $\OML/lmm/m/it/12 a$\T1/lmr/m/n/12 , dass ein $\OML/
+lmm/m/it/12 H \OMS/lmsy/m/n/12 2 \OML/lmm/m/it/12 H[]\OT1/lmr/m/n/12 (
+\OML/lmm/m/it/12 ; \U/msb/m/n/12 R[]$ [][][][][][]
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 272.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 272.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 272.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 272.
 [7]
-Overfull \hbox (319.87393pt too wide) in paragraph at lines 138--140
-\T1/lmr/m/n/12 heiÿt die Funk-ti-on [][][][][][]. 
- []
-
-
-Overfull \hbox (3.11867pt too wide) in paragraph at lines 146--147
-\T1/lmr/m/n/12 kon-sis-ten-ten Be-schrei-bung nö-ti-gen Funk-tio-nen-räu-me wic
-h-tig. [][][][][][] 
- []
-
-
-Overfull \hbox (37.47452pt too wide) in paragraph at lines 154--157
-[][][][][][] 
+Overfull \hbox (366.7379pt too wide) in paragraph at lines 277--279
+[][][][][][]
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 166.
+(babel)             in language  on input line 281.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 166.
+(babel)             in language  on input line 281.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 166.
+(babel)             in language  on input line 281.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 166.
+(babel)             in language  on input line 281.
 [8]
-Overfull \hbox (360.93768pt too wide) in paragraph at lines 182--184
-[][][][][][][] [][][][][][] 
- []
-
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 198.
+(babel)             in language  on input line 292.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 198.
+(babel)             in language  on input line 292.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 198.
+(babel)             in language  on input line 292.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 198.
-[9])
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 126.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 126.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 126.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 126.
- [10]
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 128.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 128.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 136.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 136.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 136.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 136.
- [11] (./Ausarbeitung.bbl
+(babel)             in language  on input line 292.
+ [9] (./BFGS_shape.bbl
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1578,51 +1570,49 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 78.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 78.
- [12])
+ [10])
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 141.
+(babel)             in language  on input line 297.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 141.
+(babel)             in language  on input line 297.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 141.
+(babel)             in language  on input line 297.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 141.
- [13]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
- (./Ausarbeitung.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
-Package rerunfilecheck Info: File `Ausarbeitung.out' has not changed.
-(rerunfilecheck)             Checksum: CB5AA9E4A8257D62E12B6E3DEE90D926;180.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
+(babel)             in language  on input line 297.
+ [11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 297.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 297.
+ (./BFGS_shape.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 297.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 297.
+Package rerunfilecheck Info: File `BFGS_shape.out' has not changed.
+(rerunfilecheck)             Checksum: 3FB2870C5C8C0AC093FCF904FED4655A;119.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 297.
  ) 
 Here is how much of TeX's memory you used:
- 30161 strings out of 493029
- 691677 string characters out of 6136233
+ 30122 strings out of 493029
+ 690981 string characters out of 6136233
  1062116 words of memory out of 5000000
- 33094 multiletter control sequences out of 15000+600000
- 56550 words of font info for 45 fonts, out of 8000000 for 9000
+ 33072 multiletter control sequences out of 15000+600000
+ 44551 words of font info for 41 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,14n,81p,997b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/en
-c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
-hare/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/l
-m/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texm
-f/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmex
-10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fon
-ts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb>
-</usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1
-/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/sha
-re/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm
-/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmro12.pfb></usr/share/texm
-f/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
-sy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Ausarbeitung.pdf (13 pages, 305551 bytes).
+ 64i,15n,81p,1378b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
+ips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
+hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
+-mathit.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi
+12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/font
+s/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></
+usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/pu
+blic/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmro12.pfb></usr/sha
+re/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/publi
+c/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on BFGS_shape.pdf (11 pages, 232697 bytes).
 PDF statistics:
- 225 PDF objects out of 1000 (max. 8388607)
- 192 compressed objects within 2 object streams
- 48 named destinations out of 1000 (max. 500000)
- 37 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 199 PDF objects out of 1000 (max. 8388607)
+ 171 compressed objects within 2 object streams
+ 40 named destinations out of 1000 (max. 500000)
+ 29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

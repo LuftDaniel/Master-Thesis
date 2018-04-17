@@ -1,13 +1,13 @@
 This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: Ausarbeitung.aux
+The top-level auxiliary file: BFGS_shape.aux
 The style file: plain.bst
 Database file #1: papers.bib
 Warning--empty journal in brokenSobolev
 Warning--empty journal in tracetheorem
 You've used 16 entries,
             2118 wiz_defined-function locations,
-            580 strings with 6368 characters,
+            580 strings with 6364 characters,
 and the built_in function-call counts, 3466 in all, are:
 = -- 330
 > -- 112
