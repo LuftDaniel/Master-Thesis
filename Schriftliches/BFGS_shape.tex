@@ -134,7 +134,7 @@ Sei $\Omega \subset \mathbb{R}^n$ eine beschränktes, offenes Gebiet. Sei $\Omeg
 	U_{\vert \partial\Omega_2} \\ \partial_n U_{\vert \partial\Omega_2}
 	\end{matrix}\right),
 \end{align*}
-\textit{verallgemeinerte Spurabbildung}, wobei $\partial_n U_{\vert\partial\Omega_2}$ die Ableitung von $U$ auf der Form $\partial \Omega_2$ in Richtung des äußeren Normalenvektorfeldes $n$ ist.
+\textit{verallgemeinerte Spurabbildung}, wobei $\partial_n U_{\vert\partial\Omega_2}$ die Ableitung von $U$ auf der Form $\partial \Omega_2$ in Richtung des äußeren Normalenvektorfeldes $n$ ist. \colorbox{red}{vielleicht einfach die Standard notation...}
 \end{defi}
 
 Wir erinnern an dieser Stelle, das diese Abbildung wohldefiniert ist, siehe \colorbox{red}{REFERENZ SPURSÄTZE}. Nun geben wir uns eine symmetrische, koerzive Bilinearform $a: H^1(\Omega, \mathbb{R}^n)\times H^1(\Omega, \mathbb{R}^n) \rightarrow \mathbb{R}$ vor. Diese werden wir später gemeinsam mit der zu definierenden Riemannschen Metrik verwenden, um aus gegebenen Formableitungen Gradienten zu konstruieren. Gegeben einer solchen Bilinearform $a$ definieren wir die zugehörigen Lösungsoperatoren zu folgendem Variationsproblem.
@@ -280,10 +280,38 @@ woraus insgesamt die erste Gleichung \colorbox{red}{vllt ref? label?} folgt. Die
 Mit diesem Resultat haben wir nun mehrere Möglichkeiten, aus gegebener Formableitung $D\mathcal{J}$ eine Deformation einer Form $\partial\Omega_2$ zu erzeugen. Zum einen besteht die Möglichkeit, auf dem Rand $\partial\Omega_2$ zu agieren, indem man ein Normalenvektorfeld $h = \alpha_h \cdot n$ auf diesem mittels des Variationsproblems \ref{zentraleDeformation} auf Basis der linken Gleichheit erzeugt. Zu beachten ist, dass die so erzeugte Deformation lediglich auf dem Rand definiert ist, womit dann in der Anwendung das Gitter im Inneren und Äußeren nicht bewegt wird. Aus diesem Grund bezeichnen wir diese Art der Deformationsgewinnung \textit{Randformulierung}. Die andere Variante ist, eine Deformation auf dem gesamten Gebiet $\Omega$ zu gewinnen, indem man das Variationsproblem \ref{zentraleDeformation} auf Basis der rechten Gleichung mittels der Bilinearform 
 $a$ zu erzeugen. Im Gegensatz zur ersten Variante können hier potentiell alle Punkte des Gitters verschoben werden, trotz dessen, dass lediglich die Randpunkte zur Änderung des Zielfunktionals beitragen. Diese Variante bezeichnen wir als \textit{Volumenformulierung}, angelehnt an die Arten der Darstellung der Formableitung \colorbox{red}{REFERENZ Kapitel}. Beide Varianten verwenden als zur Erzeugung des Gradienten die Ableitungsinformation, welche physikalische als Kraft interpretierbar ist. Wählt man als Beispiel für die Bilinearform $a$ die lineare Elastizitätsgleichung, so wird diese Interpretation noch deutlicher. Genau diese Bilinearform werden wir in der später \colorbox{red}{wirklich später oder wann? lage anschauen, wo Definiere ich mal diese lineare Elastizität? vllt als beispiel einer bilinearform direkt nach Definition?} folgenden praktischen Implementierung wählen, um in Volumenformulierung Formgradienten zu erzeugen.
 
-Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{zentraleDeformation} erzeugte Deformationen $h$ im Allgemeinen nicht in $C^\infty(\Omega,\mathbb{R}^2)$ sind, siehe \cite{bfgs1}. Dies liegt daran, dass im Allgemeinen je nach Wahl der Bilinearform $a$, welche den Operator $S^p$ und somit das Skalarprodukt $g^S$ erzeugt, sowie der rechten Seite der Gleichung und der Regularität des Gebietes auf der diese definiert sind, lediglich eine Lösung in $H^1_0(\Omega,\mathbb{R}^2)$ existiert. Aus diesem Grunde ist nach unserer Definition \ref{Tangentialvektor} $h$ nicht immer Element des Tangentialraums $T_cB_e$, was Probleme theoretischer Natur macht. Unter anderem deshalb besteht an dieser Stelle der Bedarf eines allgemeineren Formraumes. Beispielsweise wäre eine Möglichkeit, Formen mit $H^{1/2}$-Rändern zuzulassen, was in \cite{shape_space}, Kapitel 7, kurz erläutert wird. Hierbei entstehen allerdings neue Schwierigkeiten theoretischer Natur, welche noch nicht völlig ausgeforscht sind.
+Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{zentraleDeformation} erzeugte Deformationen $h$ im Allgemeinen nicht in $C^\infty(\Omega,\mathbb{R}^2)$ sind, siehe \cite{bfgs1}. Dies liegt daran, dass im Allgemeinen je nach Wahl der Bilinearform $a$, welche den Operator $S^p$ und somit das Skalarprodukt $g^S$ erzeugt, sowie der rechten Seite der Gleichung und der Regularität des Gebietes auf der diese definiert sind, lediglich eine Lösung in $H^1_0(\Omega,\mathbb{R}^2)$ existiert. Aus diesem Grunde ist nach unserer Definition \ref{Tangentialvektor} $h$ nicht immer Element des Tangentialraums $T_cB_e$, was Probleme theoretischer Natur macht. Unter anderem deshalb besteht an dieser Stelle der Bedarf eines allgemeineren Formraumes. Beispielsweise wäre eine Möglichkeit, Formen mit $H^{1/2}$-Rändern zuzulassen, was in \cite{shape_space}, Kapitel 7, kurz erläutert wird. Hierbei entstehen allerdings neue Schwierigkeiten theoretischer Natur, welche noch nicht völlig erforscht sind. Für eine Einführung in diese Thematik und zugehörige Konzepte verweisen wir auf \cite{diffeology}.
 
+Da wir nun mit \ref{zentraleDeformation} verstanden haben, wie Formgradienten mit Hilfe von Metriken $g^S$ und Bilinearformen $a$ erzeugt werden können, möchten wir für dieses ein Beispiel angeben. Die Wahl einer solchen Bilinearform $a$, und damit die einer Metrik $g^S$, ist in der Tat nicht trivial, und mehrere Möglichkeiten mit unterschiedlichen Eigenschaften bestehen hier. Die Wahl hängt unter anderem davon ab, welche \colorbox{red}{Ordnung der Hesse-Operator des betrachteten Problems hat.} Eine mögliche Wahl hierzu, wäre die zur schwachen Formulierung der \textit{biharmonischen Gleichung} gehörende Bilinearform \colorbox{red}{soll ich die konkret angeben? vllt mit Quelle?}. Wir werden für die Gewinnung von Formgradienten im Nachfolgenden die lineare Elastizitätsgleichung verwenden, welche wir nun einführen, wobei wir uns an \cite{bfgs1} und \cite{bfgs2} halten. \colorbox{red}{auf beliebigem gebiet Omega oder auf (0,1)2? und Form dazu definieren?}
 
+\begin{defi}[Lineare Elastizitätsgleichung]
+	Betrachte ein reguläres Gebiet $\Omega \subset \mathbb{R}^2$. Sei $f_{elas}: \Omega \rightarrow \mathbb{R}$ eine Funktion. Dann heißt die Differentialgleichung
+	\begin{equation}
+		\begin{aligned}
+		\text{div}(\sigma) = f_{elas} \quad \text{in } \Omega \\
+		U = 0 \quad \text{auf } \partial\Omega
+		\end{aligned}
+	\end{equation}	 
+	\colorbox{red}{mit,}
+	\begin{align*}
+		\sigma := \lambda_{elas} \text{Tr}(\epsilon)I + 2\mu_{elas}\epsilon \\
+		\epsilon := \frac{1}{2}(\nabla U + \nabla U^T),
+	\end{align*}
+	\textit{lineare Elastizitätsgleichung} in starker Formulierung, wobei $\text{Tr}(\epsilon)$ die Spur der Matrix $\epsilon$ ist, und $\lambda_{elas} \in \mathbb{R}$, sowie $\mu_{elas} \in [0,\infty)$, die sogenannten \textit{Lamé-Parameter} sind. $\sigma$ wird als Dehnungs-, $\epsilon$ als Spannungstensor bezeichnet. \colorbox{red}{brauche ich das mit dem young modul und poisson zahl unbedingt? oder sollte ich vollständig sein, obwohl wir diese ja eigentlich nicht gebrauchen}
+\end{defi}
 
+Die Lösung $U: \Omega \rightarrow \mathbb{R}^2$ in dieser Differentialgleichung lässt sich als \colorbox{red}{physikalische} Deformation auf dem Gebiet $\Omega$ auffassen, \colorbox{red}{wobei $f_{elas}$ sich als physikalische Kraft interpretiert werden kann}. 
+
+\colorbox{red}{LOKAL VARIIERENDE LAME-PARAMETER SIND IMPLEMENTIERT. SOLL ICH DIESE BENUTZEN? FALLS JA, ERKLÄRE DIES HIER}
+
+Die Lamé-Parameter $\lambda_{elas}, \epsilon_{elas}$ besitzen hier keine physikalische Bedeutung, jedoch lassen haben diese Einfluss auf die Gitterdeformation, indem sie indirekt die Schrittweite steuern. Sie sind mit Hilfe des sogenannten \textit{Young'schen Elastizitätsmoduls} $E$ und der \textit{Poissonzahl} $\nu$ durch
+\begin{align*}
+	\lambda_{elas} = \frac{\nu E}{(1+\nu)(1-2\nu)}, \; 
+	\epsilon_{elas} = \frac{E}{2(1+\nu)}
+\end{align*}
+darstellbar. Das Elastizitätsmodul $E$ lässt sich als Steifigkeit des Materials interpretieren. Die Poissonzahl $\nu$ gibt an, in welchem Verhältniss sich das einen Gitterpunkt umgebende Gitter ausdehnt, falls dieser Gitterpunkt in eine Richtung verschoben wird. Insgesamt lassen also die Lamé-Parameter durch ihre Wahl die Möglichkeit einer Art Schrittweitensteuerung zu. Im weiteren Verlauf dieser Arbeit wählen wir $\lambda_{elas} = 0$.
+
+Rechtfertige nun die schwache Formulierung mittels neumannbedingungen der lin elas und mit dem theorem über formgradienten.
 
 
 

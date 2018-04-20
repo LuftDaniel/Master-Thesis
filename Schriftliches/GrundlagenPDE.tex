@@ -96,7 +96,7 @@
 
 In diesem Abschnitt möchten wir eine kurze Einführung in die für diese Arbeit nötigen Grundlagen zur Theorie und Numerik partieller Differentialgleichungen geben. Im Folgenden werden wir uns an die Werke \cite{PDE1}, \cite{PDE2} und \cite{PDE3} halten, und verweisen für weitere Details und Beweise auch auf diese.
 
-Da wir in dieser Arbeit Formoptimierung bei Differentialgleichungen betreiben möchten, stellen wir hier die von uns ausgewählte Modellgleichung, später im Kontext der Formoptimierung auch \textit{Zustandsgleichung} (engl. \textit{state equation} genannt, vor. Es handelt sich dabei um das bekannte Poisson-Problem
+Da wir in dieser Arbeit Formoptimierung bei Differentialgleichungen betreiben möchten, stellen wir hier die von uns ausgewählte Modellgleichung, später im Kontext der Formoptimierung auch \textit{Zustandsgleichung} (engl. \textit{state equation}) genannt, vor. Es handelt sich dabei um das bekannte Poisson-Problem
 
 \begin{align}\label{Poissonproblem}
 	\begin{aligned}
@@ -184,13 +184,13 @@ Falls gilt $k > l$ und $m - \frac{n}{p} > l - \frac{n}{q}$, so existiert eine ko
 \end{align*}
 \end{theorem}
 
-Diese Theoreme bieten uns die Möglichkeit, Regularität der Lösung einer PDE zu erhalten. Durch den Satz von Morrey wird auch klar, in welchen Fällen glatte, und somit starke Lösungen für das Poisson-Problem zu erhalten sind, d.h. schwache Lösungen auch starke Lösungen darstellen. Weiterhin möchten wir bemerken, dass die hier genannten Einbettungssätze auch für die sogenannten Sobolev-Slobodeckij-Räume, welche eine Verallgemeinerung der Sobolevräume auf gebrochene Ordnungen $m \in (0,\infty$ sind, im selben Wortlaut gelten. Diese werden im Laufe dieser Arbeit bei der Einführung in l-BFGS-Methoden für die Formoptimierung benötigen, weshalb wir diese im Folgenden definieren, vgl \cite{brokenSobolev}.
+Diese Theoreme bieten uns die Möglichkeit, Regularität der Lösung einer PDE zu erhalten. Durch den Satz von Morrey wird auch klar, in welchen Fällen glatte, und somit starke Lösungen für das Poisson-Problem zu erhalten sind, d.h. schwache Lösungen auch starke Lösungen darstellen. Weiterhin möchten wir bemerken, dass die hier genannten Einbettungssätze auch für die sogenannten Sobolev-Slobodeckij-Räume, welche eine Verallgemeinerung der Sobolevräume auf gebrochene Ordnungen $m \in (0,\infty$ sind, im selben Wortlaut gelten. Diese werden im Laufe dieser Arbeit bei der Einführung in l-BFGS-Methoden für die Formoptimierung benötigen, weshalb wir diese im Folgenden definieren, vgl \cite{brokenSobolev} und dort angegebene Quellen.
 
 \begin{defi}[Sobolev-Slobodeckij-Räume]
 Sei $\Omega \subseteq \mathbb{R}^n$, $m\in\mathbb{N}$, sowie $p\in [1, \infty)$ und $\sigma\in (0,1)$. Wir für messbare Funktionen $u: \Omega \rightarrow \mathbb{R}$ die sogenannte \textit{Slobodeckij-Halbnorm} durch
 \begin{align*}
-	\vert u \vert _{\sigma, p} := (\underset{\Omega}{\int}\underset{\Omega}{\int} 
-	\frac{\vert u(x) - u(y)\vert^p}{\vert x-y \vert^{n + \sigma p}}dxdy)^{1/p}.
+	\vert u \vert _{\sigma, p} := \left(\underset{\Omega}{\int}\underset{\Omega}{\int} 
+	\frac{\vert u(x) - u(y)\vert^p}{\vert x-y \vert^{n + \sigma p}}dxdy\right)^{1/p}.
 \end{align*}
 Für $s = m + \sigma$ definieren wir den \textit{Sobolev-Slobodeckij-Raum} $W^{s,p}(\Omega)$ durch
 \begin{align*}
@@ -223,6 +223,14 @@ Wir kommen nun abschließend zu dem Spursatz, welcher die Auswertung von schwach
 
 Der Spursatz (engl. \textit{trace theorem}) besagt also unter anderem, dass bei Auswertung einer $W^{1,2}(\Omega)$-Funktion auf dem Rand eine halbe Ordnung verloren geht. Aus diesem Grunde werden in folgenden Kapiteln die Räume $W^{\frac{1}{2},2}(\partial \Omega)$ als die natürlichen Räume für die meisten auf Formen definierten Funktionen auftauchen.
 
+Zuletzt werden wir im Laufe der Arbeit noch hinreichend starke Regularität für Lösungen des Poisson-Problems benötigen. Aus diesem Grund führen wir hier noch den Satz über Regularität von schwachen Lösungen auf, vgl. \cite{shape_space}, 2.13., wobei wir hier den Satz auf den Fall unseres Poisson-Problems spezialisieren.
+
+\begin{theorem}[höhere Regularität schwacher Lösungen]
+	Betrachte das Poisson-Problem \ref{Poissonproblem} in schwacher Formulierung. 
+	Sei $m\in\mathbb{N}$, $f\in H^m(\Omega)$ und der Rand $\partial\Omega$ sei von der Ordnung $C^{m+2}$. Sei $y\in H^1_0(\Omega)$ die schwache Lösung des Poisson-Problems. Dann gilt $y\in H^{m+2}(\Omega)$.
+\end{theorem}
+
+Im allgemeineren Fall elliptischer Probleme gilt der Satz weiterhin, falls die Koeffizientenfunktionen $a^{i,j}, b^j, c\in C^{m+1}(\bar{\Omega})$ sind, vgl. die oben genannte Quelle, wobei $\bar{\Omega}$ wie üblich der Abschluss von $\Omega$ bezüglich der euklidischen Metrik ist. Fordert man keine Regularität des Randes $\partial\Omega$, so gilt die obige Aussage zwar nicht bis zum Rand, jedoch lokal im Sinne $y\in H^{m+2}_{loc}(\Omega)$.
 \newpage
 \nocite{*}
 \bibliographystyle{plain}

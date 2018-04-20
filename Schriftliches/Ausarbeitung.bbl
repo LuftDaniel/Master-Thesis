@@ -17,6 +17,12 @@ J.~M. Lee.
 \newblock {\em Introduction to {S}mooth {M}anifolds{,}, {S}econd {E}dition}.
 \newblock Springer{,} {G}raduate {T}exts in {M}athematics, 2013.
 
+\bibitem{fenics}
+H.~P. Langtangen{,}~A. Logg.
+\newblock {\em Solving {P}{D}{E}s in {P}ython - {T}he {F}{E}ni{CS} {T}utorial
+  {V}olume {I}}.
+\newblock Springer, 2017.
+
 \bibitem{PDE2}
 K.~Burg{,} H. Haf{,} F. Wille{,}~A. Meister.
 \newblock {\em Partielle Differentialgleichungen und funktionalanalytische
@@ -28,6 +34,11 @@ B.~Zhong P.A. Sherar{,} C.P.Thompson{,} B.~Xu.
 \newblock An optimization method based on b-spline shape functions \& the knot
   insertion algorithm.
 \newblock {\em Proceedings of the World Congress on Engineering}, II, 2007.
+
+\bibitem{auto-diff}
+S.~Schmidt.
+\newblock Weak and strong form shape hessians and their automatic generation.
+\newblock 2018{,} SIAM J. Sci. Comput.{,} Vol. 40{,} No.2, pp. C210-C233.
 
 \bibitem{riemann}
 Volker Schulz.
