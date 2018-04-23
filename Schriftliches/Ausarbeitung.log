@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  14 APR 2018 18:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  20 APR 2018 18:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1531,63 +1531,121 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 166.
 [8]
-Overfull \hbox (360.93768pt too wide) in paragraph at lines 182--184
+Overfull \hbox (562.56436pt too wide) in paragraph at lines 182--183
+[][][][][][][] 
+ []
+
+
+LaTeX Warning: Citation `Lagrange-Newton' on page 9 undefined on input line 190
+.
+
+
+Overfull \hbox (366.81267pt too wide) in paragraph at lines 192--194
 [][][][][][][] [][][][][][] 
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 198.
+(babel)             in language  on input line 200.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 198.
+(babel)             in language  on input line 200.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 198.
+(babel)             in language  on input line 200.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 198.
-[9])
+(babel)             in language  on input line 200.
+[9]
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 233.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 233.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 233.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 126.
+(babel)             in language  on input line 233.
  [10]
+
+LaTeX Warning: Citation `Lagrange-Newton' on page 11 undefined on input line 23
+4.
+
+
+Overfull \hbox (46.60771pt too wide) in paragraph at lines 240--241
+[]\T1/lmr/m/n/12 Damit wir Wohl-de-fi-niert-heit von im spä-te-ren Ka-pi-tel []
+[][][][][]
+ []
+
+
+Overfull \hbox (82.54027pt too wide) in paragraph at lines 240--241
+\T1/lmr/m/n/12 hin-rei-chend glat-ten Rand $\OML/lmm/m/it/12 @\OT1/lmr/m/n/12 
+[]$\T1/lmr/m/n/12 , er-hal-ten wir $\OML/lmm/m/it/12 y \OMS/lmsy/m/n/12 2 \OML/
+lmm/m/it/12 H[]\OT1/lmr/m/n/12 ((0\OML/lmm/m/it/12 ; \OT1/lmr/m/n/12 1)[])$ \T1
+/lmr/m/n/12 nach [][][][][][].
+ []
+
+
+LaTeX Warning: Reference `Modelladjoint' on page 11 undefined on input line 245
+.
+
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 128.
+(babel)             in language  on input line 246.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 128.
+(babel)             in language  on input line 246.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 246.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 246.
+[11])
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 136.
+(babel)             in language  on input line 126.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 136.
- [11] (./Ausarbeitung.bbl
+(babel)             in language  on input line 126.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 1.
+(babel)             in language  on input line 126.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 1.
+(babel)             in language  on input line 126.
+ [12]
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 78.
+(babel)             in language  on input line 126.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 78.
+(babel)             in language  on input line 126.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 78.
+(babel)             in language  on input line 126.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 78.
- [12])
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 141.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 141.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 141.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 141.
+(babel)             in language  on input line 126.
  [13]
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 128.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 128.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 136.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 136.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 136.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 136.
+ [14] (./Ausarbeitung.bbl
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 1.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 1.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 77.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 77.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 77.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 77.
+ [15])
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 141.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 141.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 141.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 141.
+ [16]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
  (./Ausarbeitung.aux)
@@ -1595,13 +1653,17 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
 Package rerunfilecheck Info: File `Ausarbeitung.out' has not changed.
 (rerunfilecheck)             Checksum: CB5AA9E4A8257D62E12B6E3DEE90D926;180.
+
+
+LaTeX Warning: There were undefined references.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
- 30161 strings out of 493029
- 691677 string characters out of 6136233
- 1062116 words of memory out of 5000000
- 33094 multiletter control sequences out of 15000+600000
+ 30178 strings out of 493029
+ 691869 string characters out of 6136233
+ 1063116 words of memory out of 5000000
+ 33099 multiletter control sequences out of 15000+600000
  56550 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,14n,81p,997b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1619,10 +1681,10 @@ re/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm
 f/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
 sy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Ausarbeitung.pdf (13 pages, 305551 bytes).
+Output written on Ausarbeitung.pdf (16 pages, 320606 bytes).
 PDF statistics:
- 225 PDF objects out of 1000 (max. 8388607)
- 192 compressed objects within 2 object streams
- 48 named destinations out of 1000 (max. 500000)
+ 265 PDF objects out of 1000 (max. 8388607)
+ 228 compressed objects within 3 object streams
+ 60 named destinations out of 1000 (max. 500000)
  37 words of extra memory for PDF output out of 10000 (max. 10000000)
 

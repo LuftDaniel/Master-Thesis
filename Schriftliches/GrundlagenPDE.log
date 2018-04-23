@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  10 APR 2018 09:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  22 APR 2018 16:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1352,8 +1352,8 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 89.
 
-Overfull \hbox (80.46173pt too wide) in paragraph at lines 95--96
-[][][][][][] 
+Overfull \hbox (80.46173pt too wide) in paragraph at lines 94--96
+[][][][][][]
  []
 
 LaTeX Font Info:    Try loading font information for OT1+lmr on input line 101.
@@ -1448,14 +1448,23 @@ $\OML/lmm/m/it/12 S \OT1/lmr/m/n/12 : \OML/lmm/m/it/12 W[]\OT1/lmr/m/n/12 (
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 226.
+(babel)             in language  on input line 227.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 226.
+(babel)             in language  on input line 227.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 226.
+(babel)             in language  on input line 227.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 226.
-[5] (./GrundlagenPDE.bbl
+(babel)             in language  on input line 227.
+[5]
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 234.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 234.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 234.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 234.
+ [6] (./GrundlagenPDE.bbl
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1468,28 +1477,28 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 74.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 74.
- [6])
+ [7])
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 231.
+(babel)             in language  on input line 239.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 231.
+(babel)             in language  on input line 239.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 231.
+(babel)             in language  on input line 239.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 231.
- [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 231.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 231.
+(babel)             in language  on input line 239.
+ [8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 239.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 239.
  (./GrundlagenPDE.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 231.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 231.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 239.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 239.
 Package rerunfilecheck Info: File `GrundlagenPDE.out' has not changed.
 (rerunfilecheck)             Checksum: C598CE0D3DA200DEC34D54F7E2C36DAD;117.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 231.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 239.
  ) 
 Here is how much of TeX's memory you used:
- 30111 strings out of 493029
- 690901 string characters out of 6136233
+ 30113 strings out of 493029
+ 690913 string characters out of 6136233
  1063116 words of memory out of 5000000
  33067 multiletter control sequences out of 15000+600000
  44551 words of font info for 41 fonts, out of 8000000 for 9000
@@ -1509,10 +1518,10 @@ m/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/t
 exmf/fonts/type1/public/lm/lmsy6.pfb></usr/share/texmf/fonts/type1/public/lm/lm
 sy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm
 10.pfb>
-Output written on GrundlagenPDE.pdf (7 pages, 238423 bytes).
+Output written on GrundlagenPDE.pdf (8 pages, 240650 bytes).
 PDF statistics:
- 171 PDF objects out of 1000 (max. 8388607)
- 145 compressed objects within 2 object streams
- 34 named destinations out of 1000 (max. 500000)
+ 178 PDF objects out of 1000 (max. 8388607)
+ 151 compressed objects within 2 object streams
+ 36 named destinations out of 1000 (max. 500000)
  29 words of extra memory for PDF output out of 10000 (max. 10000000)
 
