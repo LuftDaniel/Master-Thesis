@@ -1,2 +1,4 @@
 \BOOKMARK [1][-]{section.1}{BFGS-Algorithmus in der Formoptimierung}{}% 1
-\BOOKMARK [1][-]{section*.1}{Literatur}{}% 2
+\BOOKMARK [2][-]{subsection.1.1}{Shape Spaces und Formgradienten}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Quasi-Newton-Verfahren}{section.1}% 3
+\BOOKMARK [1][-]{section*.1}{Literatur}{}% 4
