@@ -131,6 +131,32 @@ def load_mesh(name):
     # Rueckgabe als MeshData Objekt
     return MeshData(mesh, subdomains, boundaries, ind)
 
+def solve_targetfunction(meshData, deformation, y_z, fValues, nu):
+    """
+    Berechnet den Wert des Zielfunktionals nach Verschiebung
+    """
+
+    # Verschiebe Gitter
+    ALE.move(meshData.mesh, deformation)
+
+    # Berechne Zustand in verschobenem Gitter
+    y = solve_state(meshData, fValues)
+
+    # Assembliere Zielfunktional
+    V = FunctionSpace(meshData.mesh, 'P', 1)
+    z = project(y_z, V)
+
+    j = 1./2.*norm(project(y-z, V), 'L2', meshData.mesh)**2
+
+    ds = Measure('dS', subdomain_data=meshData.boundaries)
+    ones = Function(V)
+    ones.vector()[:] = 1.
+    j_reg_integral = ones*ds(5) + ones*ds(6)
+    j_reg = nu*assemble(j_reg_integral)
+
+    J = j + j_reg
+
+    return J
 
 def solve_state(meshData, fValues):
     """

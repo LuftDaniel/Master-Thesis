@@ -20,6 +20,18 @@ f2 = 100.0
 mu_min = 1.0
 mu_max = 30.0
 
+# Parameter fuer L-BFGS Algorithmus
+memory_length = 3
+
+# Parameter fuer den Formoptimierungsalgorithmus
+nu        = 0.01
+tol_shopt = 5.e-4
+
+
+# Parameter fuer Backtracking-Linesearch
+shrinkage = 0.5
+c = 0.8
+
 # ----------------------- #
 #  BENUTZER AUSWAHL ENDE  #
 # ----------------------- #
@@ -78,13 +90,6 @@ if args.mesh - 1 >= n or args.mesh <= 0:
 # Setze Funktionswerte als Array
 f_values = [f1, f2]
 
-# Parameter fuer L-BFGS Algorithmus
-memory_length = 3
-
-# Parameter fuer den Formoptimierungsalgorithmus
-nu        = 0.01
-tol_shopt = 5.e-4
-
 # Keine Ausgabe von FEniCS Funktionen in der Konsole
 set_log_active(False)
 
@@ -142,7 +147,7 @@ print('\nSchritt 1/2: Zieldaten berechnen\n')
 # Gitter der Zieldaten laden
 targetMeshData = sovi.load_mesh(targetMesh_file)
 
-# Loesen der Zustandsgleichung auf dem Zielgitter ohne Variationsungleichung
+# Loesen der Zustandsgleichung auf dem Zielgitter
 y_z = sovi.solve_state(targetMeshData, f_values)
 
 # Parameter Normalverteilung fuer Stoerung
@@ -216,27 +221,35 @@ while nrm_f_elas > tol_shopt:
     y = sovi.solve_state(MeshData, f_values)
 
     # ----------------------- #
-    #      ADJUNGIERTE        #
+    #         ADJOINT         #
     # ----------------------- #
 
     # Ohne Variationsungleichung
     p = sovi.solve_adjoint(MeshData, y, z)
 
     # ----------------------- #
-    #     LIN. ELAS. PDE      #
+    #   GRADIENT CALCULATION  #
     # ----------------------- #
 
-    # Ohne Variationsungleichung
+    # Loese lineare Elastizitaetsgleichung
     U , nrm_f_elas = sovi.solve_linelas(MeshData, p, y, z, f_values, mu_elas_projected, nu)
 
     # ----------------------- #
     #       L-BFGS STEP       #
     # ----------------------- #
 
-    # L-BFGS Schritt mit Memory-Updates
+    # L-BFGS Schritt
     bfgs_memory.update_grad(U.vector().get_local())
     S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected)
 
+            # ----------------------- #
+            # BACKTRACKING-LINESEARCH # die Frage ist, ob ich die runterskalierten Felder weiterverwende
+            # ----------------------- # oder die oben berechneten vollen
+
+    Jvalue = sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu)
+    print("Achtung: Wert des deformierten Gitters {0:.2E}  ".format(Jvalue))
+
+    # L-BFGS-Memory Update
     bfgs_memory.update_defo(S.vector().get_local())
     bfgs_memory.step_nr = bfgs_memory.step_nr + 1
 
@@ -246,8 +259,8 @@ while nrm_f_elas > tol_shopt:
     U_magnitude = project(U_magnitude, V)
     nrm_U_mag   = norm(U_magnitude, 'L2', MeshData.mesh)
 
-    # Zielfunktional berechnen
-    j = 1./2.*norm(project(y-z,V), 'L2', MeshData.mesh)
+    # Zielfunktional berechnen: KANN ERSETZT WERDEN AUS BIB
+    j = 1./2.*norm(project(y-z,V), 'L2', MeshData.mesh)**2
 
     ds = Measure('dS', subdomain_data=MeshData.boundaries)
     ones = Function(V)
