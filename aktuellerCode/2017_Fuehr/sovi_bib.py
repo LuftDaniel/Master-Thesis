@@ -131,6 +131,53 @@ def load_mesh(name):
     # Rueckgabe als MeshData Objekt
     return MeshData(mesh, subdomains, boundaries, ind)
 
+
+def mesh_distance(mesh1, mesh2):
+    """
+    Berechnet Abstand zweier Formen, mesh2 dient dabei als Ausgangsform, d.h. von dort wird Abstand gemessen
+    Input sind meshklassen
+    """
+
+    # Berechne Indizes der Vertices der Boundaries
+    boundary_index_mesh1 = __get_index_not_interior_boundary(mesh1.mesh, mesh1.subdomains, mesh1.boundaries, interior = False)
+    boundary_index_mesh2 = __get_index_not_interior_boundary(mesh2.mesh, mesh2.subdomains, mesh2.boundaries, interior = False)
+
+
+    # Berechne die Abstaende alle Vertices von mesh1 zu jeweils einem festen Vertex aus mesh2,
+    # dann bilde das Minimum und fuege in Liste hinzu
+
+    distance_list = np.zeros(mesh2.mesh.num_vertices())
+
+    for i in boundary_index_mesh2:
+        temp_distance_list = []
+
+        for j in boundary_index_mesh1:
+            local_dist = np.linalg.norm(mesh2.mesh.coordinates()[i] - mesh1.mesh.coordinates()[j])
+            temp_distance_list.append(local_dist)
+
+
+        dist = np.amin(temp_distance_list)
+        distance_list[i] = dist
+
+    # definiere eine Funktion auf mesh2 mit Abstandswerten auf Boundaries der Form
+
+    V = FunctionSpace(mesh2.mesh, "P", 1)
+    distance_function = Function(V)
+
+    print(len(distance_list))
+    print(len(distance_function.vector().array()))
+    distance_function.vector()[:] = distance_list
+
+    # Berechne das zugehoerige Integral
+
+    dS = Measure('dS', subdomain_data=mesh2.boundaries)
+
+    distance_integral = distance_function('+')*dS(5) + distance_function('+')*dS(6)
+    value = assemble(distance_integral)
+
+    return value
+
+
 def solve_targetfunction(meshData, deformation, y_z, fValues, nu):
     """
     Berechnet den Wert des Zielfunktionals nach Verschiebung
@@ -312,9 +359,9 @@ def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu, zeroed = True):
 
 
 
-def __get_index_not_interior_boundary(mesh, subdomains, boundaries):
+def __get_index_not_interior_boundary(mesh, subdomains, boundaries, interior = True):
     """
-    Berechnet Indizes der Elemente mit Traeger am inneren Rand
+    gibt Indizes der Elemente ohne Traeger am inneren Rand
     """
 
     # Facetten Indizes des inneren Randes bestimmen
@@ -330,6 +377,8 @@ def __get_index_not_interior_boundary(mesh, subdomains, boundaries):
             if f.index() in ind_interior_boundary_facets:
                 for v in vertices(f):
                     ind_interior_boundary_vertices.append(v.index())
+
+    if(interior == False): return ind_interior_boundary_vertices
 
     ind_interior_boundary_vertices = list(set(ind_interior_boundary_vertices))
 
@@ -352,7 +401,7 @@ def __get_index_not_interior_boundary(mesh, subdomains, boundaries):
         else:
             new_sub[i] = 2
 
-    # Indizes berchenen mit Traeger nicht am inneren Rand ueber Testproblem
+    # Indizes berechenen mit Traeger nicht am inneren Rand ueber Testproblem
     V = VectorFunctionSpace(mesh, "P", 1, dim=2)
 
     dx_int = Measure('dx',
@@ -374,7 +423,7 @@ def __get_index_not_interior_boundary(mesh, subdomains, boundaries):
 
     ind = ind1 | ind2
 
-    return ind
+    if(interior): return ind
 
 
 def shape_deriv(meshData, p, y, z, fValues, nu, V):
