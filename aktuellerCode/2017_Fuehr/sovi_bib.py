@@ -136,19 +136,28 @@ def solve_targetfunction(meshData, deformation, y_z, fValues, nu):
     Berechnet den Wert des Zielfunktionals nach Verschiebung
     """
 
-    # Verschiebe Gitter
-    ALE.move(meshData.mesh, deformation)
+    # erzeuge lokale Gitterkopie
+    msh = Mesh(meshData.mesh)
+    sbd = MeshFunction("size_t", msh, 2)
+    sbd.set_values(meshData.subdomains.array())
+    bnd = MeshFunction("size_t", msh, 1)
+    bnd.set_values(meshData.boundaries.array())
+    ind = __get_index_not_interior_boundary(msh, sbd, bnd)
+    local_mesh = MeshData(msh, sbd, bnd, ind)
+
+    # verschiebe Gitterkopie
+    ALE.move(local_mesh.mesh, deformation)
 
     # Berechne Zustand in verschobenem Gitter
-    y = solve_state(meshData, fValues)
+    y = solve_state(local_mesh, fValues)
 
     # Assembliere Zielfunktional
-    V = FunctionSpace(meshData.mesh, 'P', 1)
+    V = FunctionSpace(local_mesh.mesh, 'P', 1)
     z = project(y_z, V)
 
-    j = 1./2.*norm(project(y-z, V), 'L2', meshData.mesh)**2
+    j = 1./2.*norm(project(y-z, V), 'L2', local_mesh.mesh)**2
 
-    ds = Measure('dS', subdomain_data=meshData.boundaries)
+    ds = Measure('dS', subdomain_data=local_mesh.boundaries)
     ones = Function(V)
     ones.vector()[:] = 1.
     j_reg_integral = ones*ds(5) + ones*ds(6)
@@ -264,7 +273,7 @@ def calc_lame_par(meshData, mu_min_value, mu_max_value):
     return mu_elas
 
 
-def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu):
+def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu, zeroed = True):
     """
     Loest lineare Elastizitaetsgleichung ohne Variationsungleichung
     """
@@ -276,39 +285,16 @@ def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu):
     u_out = Constant((0.0, 0.0))
     bcs = [ DirichletBC(V, u_out, meshData.boundaries, i) for i in range (1, 5) ]
 
-    # Variationsproblem definieren
-    dx = Measure('dx',
-                 domain=meshData.mesh,
-                 subdomain_data=meshData.subdomains)
-
-    dS = Measure('dS', subdomain_data=meshData.boundaries)
-
-    f1 = Constant(fValues[0])
-    f2 = Constant(fValues[1])
 
     U = TrialFunction(V)
     v = TestFunction(V)
-    n = FacetNormal(meshData.mesh)
 
-    epsilon_v = sym(nabla_grad(v))
-    sigma_U   = 2.0*mu_elas*sym(nabla_grad(U))
+    LHS = bilin_a(meshData, U, v, mu_elas)
 
-    a   = inner(sigma_U, epsilon_v)*dx + Constant(0.0)*dot(U,v)*ds
-    LHS = assemble(a)
-
-    Dj = (-inner(grad(y), dot(epsilon_v*2, grad(p)))*dx
-          + nabla_div(v)*(1/2*(y-z)**2 + inner(grad(y), grad(p)))*dx
-          - nabla_div(v)*f1*p*dx(1) - nabla_div(v)*f2*p*dx(2))
-
-    Dj_reg = nu*((nabla_div(v('+'))
-                  - inner(dot(nabla_grad(v('+')), n('+')), n('+')))*dS(5)
-                  + (nabla_div(v('+'))
-                     - inner(dot(nabla_grad(v('+')), n('+')), n('+')))*dS(6))
-
-    F_elas = assemble(Dj + Dj_reg)
+    F_elas = shape_deriv(meshData, p, y, z, fValues, nu, v)
 
     # Alle die keine Traeger am innerend Rand haben auf 0 setzen
-    F_elas[meshData.indNotIntBoundary] = 0.0
+    if(zeroed): F_elas[meshData.indNotIntBoundary] = 0.0
 
     for bc in bcs:
         bc.apply(LHS)
@@ -383,12 +369,42 @@ def __get_index_not_interior_boundary(mesh, subdomains, boundaries):
     F_elas_int_2 = assemble(f_elas_int_2)
 
     # Indizes setzen durch alle Punkte mit Wert 0, die keinen Einfluss haben
-    ind1 = (F_elas_int_1.array() == 0.0)
-    ind2 = (F_elas_int_2.array() == 0.0)
+    ind1 = (F_elas_int_1.get_local() == 0.0)
+    ind2 = (F_elas_int_2.get_local() == 0.0)
 
     ind = ind1 | ind2
 
     return ind
+
+
+def shape_deriv(meshData, p, y, z, fValues, nu, V):
+    """
+    Berechnet die Formableitung in Richtung V; V ist FEniCS Funktion, z ist Projektion von y_z
+    """
+
+    dx = Measure('dx',
+                 domain=meshData.mesh,
+                 subdomain_data=meshData.subdomains)
+    dS = Measure('dS', subdomain_data=meshData.boundaries)
+
+    f1 = Constant(fValues[0])
+    f2 = Constant(fValues[1])
+    epsilon_V = sym(nabla_grad(V))
+    n = FacetNormal(meshData.mesh)
+
+    # Gradient f ist 0, da f stueckweise konstant
+    Dj = (-inner(grad(y), dot(epsilon_V*2, grad(p)))*dx
+          + nabla_div(V)*(1/2*(y-z)**2 + inner(grad(y), grad(p)))*dx
+          - nabla_div(V)*f1*p*dx(1) - nabla_div(V)*f2*p*dx(2))
+
+    Dj_reg = nu*((nabla_div(V('+'))
+                  - inner(dot(nabla_grad(V('+')), n('+')), n('+')))*dS(5)
+                  + (nabla_div(V('+'))
+                     - inner(dot(nabla_grad(V('+')), n('+')), n('+')))*dS(6))
+
+    deriv = assemble(Dj + Dj_reg)
+
+    return deriv
 
 
 def bilin_a(meshData, U, V, mu_elas):
@@ -453,8 +469,8 @@ def bfgs_step(meshData, memory, mu_elas):
             q.vector()[:]         = q.vector() + (float(alpha[-i]) - beta)*memory.initialize_defo(meshData, -(i+1)).vector()
 
     elif(memory.step_nr == 0):
-            # der erste BFGS-Schritt ist ein Gradientenschritt
-            q.vector()[:] = -1.*q.vector()
+            # der erste BFGS-Schritt ist ein Gradientenschritt, U Gradient ist in negativer Richtung
+            q.vector()[:] = q.vector()
             return q
 
     else:
