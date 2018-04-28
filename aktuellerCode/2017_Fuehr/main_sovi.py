@@ -30,7 +30,8 @@ tol_shopt = 5.e-4
 
 # Parameter fuer Backtracking-Linesearch
 shrinkage = 0.5
-c = 0.8
+c = 0.99
+start_scale = 5.0
 
 # ----------------------- #
 #  BENUTZER AUSWAHL ENDE  #
@@ -112,7 +113,7 @@ file_data_lambda = File(os.path.join(outputfolder,
 file_data_mesh   = File(os.path.join(outputfolder,
                                      'TargetData',      'mesh.pvd'))
 file_data_bound  = File(os.path.join(outputfolder,
-                                     'TargetData',      'bound.pvd'))
+                                     'BoundaryData',      'bound.pvd'))
 file_lame        = File(os.path.join(outputfolder,
                                      'LameParameter',   'lamepar.pvd'))
 file_bound_end   = File(os.path.join(outputfolder,
@@ -153,10 +154,10 @@ y_z = sovi.solve_state(targetMeshData, f_values)
 # Parameter Normalverteilung fuer Stoerung
 mu = Constant(0.0)
 
-#y_z_min = y_z.vector().array().min()
-#y_z_max = y_z.vector().array().max()
-#sigma = Constant(max(abs(y_z_min), y_z_max)*5/100)
-#
+y_z_min = y_z.vector().array().min()
+y_z_max = y_z.vector().array().max()
+sigma = Constant(max(abs(y_z_min), y_z_max)*5/100)
+
 #y_z.vector()[:] = y_z.vector()+np.random.normal(mu, sigma,
 #                                                y_z.vector().size())
 
@@ -242,16 +243,60 @@ while nrm_f_elas > tol_shopt:
     bfgs_memory.update_grad(U.vector().get_local())
     S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected)
 
+    # L-BFGS-Memory Update
+    bfgs_memory.update_defo(S.vector().get_local())
+    bfgs_memory.step_nr = bfgs_memory.step_nr + 1
+
+    # TEST ZU SKALARPRODUKT UND ABLEITUNG; ECHTER UND FALSCHER GRADIENT
+    U_real, nrm_real = sovi.solve_linelas(MeshData, p, y, z, f_values, mu_elas_projected, nu, zeroed = False)
+
+    #loler = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
+    #loler2 = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, U_real)
+
+    #print("shape derivative bfgs {0:.10e}".format(loler))
+    #print("bilin_a {0:.10e}".format(sovi.bilin_a(MeshData,S,-U_real,mu_elas_projected)))
+    #print("shape derivative gradient {0:.10e}".format(loler2))
+    #print("bilin_a {0:.10e}".format(sovi.bilin_a(MeshData,U_real,-U_real,mu_elas_projected)))
+
             # ----------------------- #
             # BACKTRACKING-LINESEARCH # die Frage ist, ob ich die runterskalierten Felder weiterverwende
             # ----------------------- # oder die oben berechneten vollen
 
-    Jvalue = sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu)
-    print("Achtung: Wert des deformierten Gitters {0:.2E}  ".format(Jvalue))
+    #print("Achtung: Wert des deformierten Gitters {0:.2E}  ".format(Jvalue))
+    #print("Achtung: Wert der Ableitung {0:.2E}  ".format(sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)))
+    #print("Achtung: Wert der bilin {0:.2E}  ".format(sovi.bilin_a(MeshData, U, S, mu_elas_projected)))
 
-    # L-BFGS-Memory Update
-    bfgs_memory.update_defo(S.vector().get_local())
-    bfgs_memory.step_nr = bfgs_memory.step_nr + 1
+    scale_parameter = start_scale
+
+    zero_function = Function(VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2))
+    current_value = sovi.solve_targetfunction(MeshData, zero_function, y_z, f_values, nu)
+    current_deriv = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
+    S.vector()[:] = start_scale * S.vector()
+
+    counterer = 0
+    #print(current_value)
+    #print(current_deriv)
+    #U_real, trash = sovi.solve_linelas(MeshData, p, y, z , f_values, mu_elas_projected, nu, zeroed = False)
+    #print(sovi.bilin_a(MeshData, U_real, S, mu_elas_projected))
+
+    # Skaliert das Deformationsfeld bei jedem Schritt automatisch dauerhaft: NOCH OHNE AMIJO
+    #while(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value + c*scale_parameter*current_deriv):
+    #while(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value):
+    #    print("shape deriv: {0:3e}".format(sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)))
+        #print("current Value: {0:3e}".format(current_value))
+        #print("next Value: {0:3e}\n".format(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu)))
+        #print("bilin deriv: {0:3e}".format(sovi.bilin_a(MeshData,S,-U_real,mu_elas_projected)))
+
+    #    scale_parameter = shrinkage * scale_parameter
+    #    S.vector()[:] = shrinkage * S.vector()
+
+    #    counterer = counterer + 1
+    #    if(counterer > 12):
+    #        print("had to break")
+    #        break
+
+
+
 
     # Norm des Deformationsvektorfeldes berechnen
     V           = FunctionSpace(MeshData.mesh, 'P', 1)
