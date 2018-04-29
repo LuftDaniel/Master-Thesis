@@ -1,0 +1,101 @@
+\documentclass[bibliography=totoc,12pt,a4paper]{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}% schicke Nummerierung
+\usepackage{graphicx}
+\usepackage[english, ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{bigdelim}
+\usepackage{multirow}
+\usepackage{dsfont}
+\usepackage[colorlinks=true,linkcolor=black, citecolor=black]{hyperref}
+\usepackage{cite}
+\usepackage[nottoc]{tocbibind}
+\usepackage{empheq}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{lipsum}
+\usepackage{tikz,pgfplots}
+\usepackage{nicefrac}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{matrix}
+\geometry{a4paper,left=40mm,right=30mm, top=5cm, bottom=5cm} 
+
+\def\@biblabel#1{\textcolor{red}{[#1]}}
+
+\newtheoremstyle{linebreak}   % name
+{3pt}                         % Space above
+{3pt}                         % Space below
+{}                            % Body font
+{}                            % Indent amount 1
+{\bfseries}                   % Theorem head font
+{\newline}                    % Punctuation after theorem head
+{.5em}                        % Space after theorem head 2
+{}                            % Theorem head spec (can be left empty, meaning ‘normal’)
+%\theoremstyle{linebreak}
+\newtheoremstyle{exampstyle}
+  {\topsep} % Space above
+  {\topsep} % Space below
+  {} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {} % Theorem head spec (can be left empty, meaning `normal')
+\theoremstyle{exampstyle}
+\newtheorem{defi}{Definition}%[chapter]
+\newtheorem{satz}[defi]{Satz}
+\newtheorem{theorem}[defi]{Theorem}
+\newtheorem{propo}[defi]{Proposition}
+\newtheorem{lemma}[defi]{Lemma}
+\newtheorem{cor}[defi]{Korollar}
+\newtheorem{bem}[defi]{Bemerkung}
+\newtheorem{bsp}[defi]{Beispiel}
+\newtheorem{folg}[defi]{Folgerung}
+%bemerkungen oder Fließtext???
+\numberwithin{equation}{section} 
+ \newcommand{\newln}{\\&\quad\quad{}}
+ \setlength\parindent{0pt}
+
+\renewenvironment{abstract}
+ {\small
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{%
+    \setlength{\leftmargin}{12mm}% <---------- CHANGE HERE
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \item\relax}
+ {\endlist}
+
+
+
+
+\begin{document}
+
+\title{Quasi-Newton Methoden in der Formoptimierung}
+
+\author{Daniel Luft \\ Prof. Dr. V. Schulz}
+
+  \pagestyle{empty}
+
+  % Ab sofort Seitenzahlen in der Kopfzeile anzeigen
+  \pagestyle{headings}
+  
+\selectlanguage{ngerman}
+
+\section{Implementierung in Python mit FEniCS}
+\subsection{Gute frage}
+
+Nachdem wir in vorigen Kapiteln den theoretischen Hintergrund der Formoptimierung und gradientenbasierte Verfahren, wie dem L-BFGS-Verfahren, gelegt haben, möchten wir in diesem Abschnitt die Implementierung des Algorithmus \colorbox{red}{cite} in Python mit Hilfe des Moduls FEniCS vorstellen. 
+
+
+
+\newpage
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{papers}
+
+\end{document}

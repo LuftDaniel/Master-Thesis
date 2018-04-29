@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  23 APR 2018 20:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  29 APR 2018 13:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1675,62 +1675,76 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 387.
 [12]
+
+LaTeX Warning: Citation `2-Schleifen-L-BFGS Rekusion' on page 13 undefined on i
+nput line 408.
+
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 408.
+(babel)             in language  on input line 409.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 408.
+(babel)             in language  on input line 409.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 408.
+(babel)             in language  on input line 409.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 408.
- [13]
-Overfull \hbox (18.544pt too wide) in paragraph at lines 411--414
-[][][][][][]\T1/lmr/m/n/12 , und
+(babel)             in language  on input line 409.
+[13]
+Overfull \hbox (225.48642pt too wide) in paragraph at lines 410--413
+\T1/lmr/m/n/12 For-men $\OML/lmm/m/it/12 @\OT1/lmr/m/n/12 
+[]$ \T1/lmr/m/n/12 ab-hän-gi-ger Hil-ber-träu-me, wie in [][][][][][],
  []
 
 
-Overfull \hbox (1.2803pt too wide) in paragraph at lines 411--414
-\T1/lmr/m/n/12 ge-nann-ten Man-nig-fal-tig-keit, von der Form ana-log zu [][][]
-[][][],
+Overfull \hbox (28.3707pt too wide) in paragraph at lines 410--413
+\T1/lmr/m/n/12 oben ge-nann-ten Man-nig-fal-tig-keit, von der Form ana-log zu [
+][][][][][],
+ []
+
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 413.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 413.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 413.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 413.
+[14]
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
+
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 416--417
-
- []
-
-
-Overfull \hbox (2.16647pt too wide) in paragraph at lines 425--429
+Overfull \hbox (2.16647pt too wide) in paragraph at lines 424--428
 \T1/lmr/m/n/12 auf die of-fe-nen Schwie-rig-kei-ten und Fra-ge-stel-lun-gen der
  Über-tra-gung des Quasi-
  []
 
 
-Overfull \hbox (114.4124pt too wide) in paragraph at lines 425--429
+Overfull \hbox (114.4124pt too wide) in paragraph at lines 424--428
 \T1/lmr/m/n/12 ti-on des Hes-se-ope-ra-tors im Sha-pe Space sind. [][][][][][],
 
  []
 
 
-Overfull \hbox (2926.01314pt too wide) in paragraph at lines 425--429
+Overfull \hbox (2926.01314pt too wide) in paragraph at lines 424--428
 [][][][][][]
  []
 
 
-Overfull \hbox (410.61061pt too wide) in paragraph at lines 425--429
+Overfull \hbox (410.61061pt too wide) in paragraph at lines 424--428
+[][][][][][] 
+ []
+
+
+Overfull \hbox (99.06635pt too wide) in paragraph at lines 431--434
+[][][][][][][] [][][][][][]
+ []
+
+
+Overfull \hbox (3.20534pt too wide) in paragraph at lines 431--434
 [][][][][][] 
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 429.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 429.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 429.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 429.
-[14]
-Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 437.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 437.
@@ -1738,7 +1752,30 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 437.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 437.
- [15] (./BFGS_shape.bbl
+[15]
+Overfull \hbox (100.44298pt too wide) in paragraph at lines 438--441
+[][][][][][][]
+ []
+
+
+Overfull \hbox (110.38623pt too wide) in paragraph at lines 438--441
+[][][][][][] [][][][][][] 
+ []
+
+
+Overfull \hbox (444.03133pt too wide) in paragraph at lines 460--461
+[][][][][][][] 
+ []
+
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 467.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 467.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 467.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 467.
+[16] (./BFGS_shape.bbl
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1751,31 +1788,35 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 77.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 77.
- [16])
+ [17])
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 442.
+(babel)             in language  on input line 472.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 442.
+(babel)             in language  on input line 472.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 442.
+(babel)             in language  on input line 472.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 442.
- [17]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 442.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 442.
+(babel)             in language  on input line 472.
+ [18]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 472.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 472.
  (./BFGS_shape.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 442.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 442.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 472.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 472.
 Package rerunfilecheck Info: File `BFGS_shape.out' has not changed.
 (rerunfilecheck)             Checksum: 7244C5FFE95D6C1724B4D1E301E7F6A5;270.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 442.
+
+
+LaTeX Warning: There were undefined references.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 472.
  ) 
 Here is how much of TeX's memory you used:
- 30162 strings out of 493029
- 691454 string characters out of 6136233
- 1063116 words of memory out of 5000000
- 33084 multiletter control sequences out of 15000+600000
- 47319 words of font info for 42 fonts, out of 8000000 for 9000
+ 30169 strings out of 493029
+ 691539 string characters out of 6136233
+ 1065116 words of memory out of 5000000
+ 33087 multiletter control sequences out of 15000+600000
+ 53305 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,15n,81p,1378b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/en
@@ -1791,10 +1832,10 @@ e/texmf/fonts/type1/public/lm/lmro12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/t
 exmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /public/amsfonts/symbols/msbm10.pfb>
-Output written on BFGS_shape.pdf (17 pages, 270731 bytes).
+Output written on BFGS_shape.pdf (18 pages, 279135 bytes).
 PDF statistics:
- 290 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
+ 306 PDF objects out of 1000 (max. 8388607)
+ 269 compressed objects within 3 object streams
+ 70 named destinations out of 1000 (max. 500000)
  45 words of extra memory for PDF output out of 10000 (max. 10000000)
 
