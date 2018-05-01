@@ -225,7 +225,7 @@ erfüllt, wobei $\alpha_V = \langle V_{\vert \partial\Omega_2}, n\rangle$ das Ko
 
 \end{defi}
 
-Die hier gemachte Definition ist als eine duale Repräsentation der Formableitung $D\mathcal{J}$ in dem Skalarprodukt $g^S$ zu sehen. Damit folgen wir nicht der typischen Definition eines gewöhnlichen Gradienten, wie diese oft in der elementaren Analysis stattfindet, sondern betrachten diese in Anlehnung an den  Riesz'schen Darstellungssatzes. Der Aufwand bis zur Definition des Formgradienten macht auch deutlich, wie wesentlich die Art des Gradienten vom zugrunde liegenden Skalarprodukt abhängt, ganz im Gegenteil zur Formableitung, für welche kein zugrunde liegendes Skalarprodukt benötigt wird. Somit ergeben sich für die selbe Formableitung, je nachdem welche Metrik man für den Shape-space verwendet, andere Gradienten und somit andere numerische Verfahren. Für eine Auswahl weiterer Alternativen, siehe \cite{shape_space}, Kapitel 3.2.
+Die hier gemachte Definition ist als eine duale Repräsentation der Formableitung $D\mathcal{J}$ in dem Skalarprodukt $g^S$ zu sehen. Damit folgen wir nicht der typischen Definition eines gewöhnlichen Gradienten, wie diese oft in Analysisvorlesungen stattfindet, sondern betrachten diese in Anlehnung an den  Riesz'schen Darstellungssatzes. Der Aufwand bis zur Definition des Formgradienten macht auch deutlich, wie wesentlich die Art des Gradienten vom zugrunde liegenden Skalarprodukt abhängt, ganz im Gegenteil zur Formableitung, für welche kein zugrunde liegendes Skalarprodukt benötigt wird. Somit ergeben sich für die selbe Formableitung, je nachdem welche Metrik man für den Shape-space verwendet, andere Gradienten und somit andere numerische Verfahren. Für eine Auswahl weiterer Alternativen, siehe \cite{shape_space}, Kapitel 3.2.
 
 Es fällt weiterhin auf, dass die hier geforderte Gleichung \ref{Gradientengleichung} nicht in dualer Paarung mit Skalarfeldern, welche in die Ableitung $D\mathcal{J}$ einfließen, sondern in deren Koeffizientenfeldern der Normalenkomponente auf der Form berücksichtigt werden. Dies lässt sich mit dem Hadamard'schen Darstellungssatz begründen:
 \begin{align*}
@@ -391,7 +391,7 @@ Morrison–Woodbury Formel den Update für $B_{k+1}$ aus $B_{k+1}^{-1}$ herzulei
 	\begin{equation}\label{Frobeniusproblem}
 	\begin{aligned}
 		\underset{H}{\min} \vert\vert H - B_k^{-1} \vert\vert _{WFrob} \\
-		\text{s.t. } H^T = H \text{und } H y_k = s_k,
+		\text{s.t. } H^T = H \text{ und } H y_k = s_k,
 	\end{aligned}
 	\end{equation}
 	wobei $B_k^{-1}$ die in \ref{BFGS-updates} definierte Inverse des $k$'ten BFGS-Updates ist, und $\vert\vert \cdot \vert\vert_{WFrob}$ die gewichtete Frobeniusnorm ist, siehe \cite{Nocedal}, 6.1. Dann ist der BFGS-Update der Inversen $B_{k+1}^{-1}$ die eindeutige Lösung des Problems \ref{Frobeniusproblem}.
@@ -401,13 +401,15 @@ Wie man sieht, lässt sich die Inverse der BFGS-Approximation der Hessematrix al
 	B_k (x_{k+1} - x_k) = \nabla \mathcal{J}(x_{k+1}) - \nabla \mathcal{J}(x_k),
 \end{equation}
 was bekannt ist als \textit{Sekantengleichung}. Diese ergibt sich als natürliche Forderung, was man direkt sieht, wenn man $B_k$ durch die eigentliche Hessematrix $\text{Hess}\mathcal{J}(x_k)$ ersetzt. \colorbox{red}{rly? :D} Um Existenz einer Inversen zu gewährleisten ist als Bedingung hinreichend, dass die Matrix $B_k$ positiv definit ist. Setzt man dies voraus, so ergibt sich aus der Sekantengleichung als notwendige Bedingung
+\colorbox{red}{ ergänze die Formulierung mit den Ableitungen, füge POWELL-RELAXATION ein}
 \begin{equation}
 	s_k^T y_k = s_k^T B_k s_k > 0.
 \end{equation}
 Diese sogenannte \textit{curvature condition} muss also notwendigerweise erfüllt sein, wenn man positive Definitheit von $B_k$ erhofft. Andererseits führt diese auch dazu, dass ein BFGS-Update-Schritt, angewandt auf eine positiv definite Matrix $B_k$ oder ihr Inverses $B_k^{-1}$, erneut eine positiv definite Matrix erzeugt. Trivialerweise ist die bei konvexen Problemen die curvature condition immer erfüllt. Im nicht-konvexen Fall ist es trotzdem möglich mit Hilfe von Line-search-Techniken, etwa der Wolfe oder starken Wolfe-Bedingungen, vgl. \cite{Nocedal}, die curvature condition zu erfüllen. Zu der Konvergenzgeschwindigkeit des BFGS-Verfahens in endlicher Dimension lässt sich sagen, dass unter Voraussetzungen, wie etwa Liptschitz-stetige Hessematrizen, superlineare Konvergenz vorhanden ist, siehe \cite{Nocedal}, Theorem 6.6.
-Sind die genannten Bedingungen nicht erfüllt, so ist die Konvergenz des BFGS-Verfahrens nicht gewährleistet. Es fällt auf, dass man zur Berechnung eines BFGS-Updates die volle $nxn$-Matrix $B_k$ speichern muss, da diese in der Regel keine dünn-besetztheit aufweisen, siehe \cite{Nocedal}, 7.2. Da dies vor allem im Fall großer $n$, etwa bei feinen, höherdimensionalen Gittern in der Formoptimierung, beträchliche Kosten verursacht, bedient man sich der sogenannten \textit{Limited Memory} Variante der Verfahren. Hierzu wird eine Approximation an $B_k$ erzeugt, indem man eine vorgegebene Anzahl $l$ der letzten Vektoren, welche bei Erzeugung der letzten Updates verwendet wurden, benutzt und speichert. Dies spart Speicherkapazität auf dem Rechner. Die formale Definition der approximativen Update-Schritte findet sich in \cite{Nocedal}, 7.(19), welche wir hier nicht angeben, da wir diese, ohne die BFGS-Approximationen $B_k$ zuvor auf Shape spaces verallgemeinert zu haben, sowieso nicht verallgemeinern können. Stattdessen verwenden wir die sogenannte \cite{2-Schleifen-L-BFGS Rekusion}, welche wir später, siehe \colorbox{red}{cite später}, auf den Formfall unter Vermeidung der Operatoren $B_k$ verallgemeinern können.
 
-Wir führen nun in analoger Weise zu dem klassischen Newton Verfahren von zuvor ein Lagrange-Newton-Verfahren in Falle der Formoptimierung ein, um anschließend mögliche Verallgemeinerungen des BFGS-Verfahrens auf den Formfall zu diskutieren.
+Sind diese 
+
+Wir führen nun in analoger Weise zu zuvor ein Lagrange-Newton-Verfahren in Falle der Formoptimierung ein, um anschließend mögliche Verallgemeinerungen des BFGS-Verfahrens auf den Formfall zu diskutieren.
 Da wir in Formräumen keine kanonische Vektorraumstruktur besitzen, benötigt man zur Verallgemeinerung des Newton-Verfahrens auf diese zusätzliche Techniken.
 Die Autoren von \cite{LagrangeNewton} liefern dafür einen Zugang unter Ausnutzung der Mannigfaltigkeitsstruktur, welche wir bereits zuvor in dieser Arbeit zur Konstruktion eines Formgradienten eingeführt haben. Hierzu konstruieren die Autoren auf Grundlage des Raums aller Formen eine neue Mannigfaltigkeit, welche im wesentlichen ein Produkt aus Bündeln von den Formen $\partial\Omega_2$ abhängiger Hilberträume, wie in \colorbox{red}{referenz als Beispiel wie in Kapitel zu Formableitung bei Lagrangefunktion}, und dem Shape space selber sind, siehe \cite{LagrangeNewton}, unter Remark 1.  Nun verwenden die Autoren Tangentialvektoren auf eben dieser Mannigfaltigkeit, um Richtungen zu gewinnen, mit derer Hilfe mittels der Exponentialabbildung auf dem Raum der Formen ein Optimierungsschritt definiert werden kann. Formal lässt sich dies wie folgt notieren, wobei $\zeta = (h_y, h_{\Omega_2}, h_p)$ ein Tangentialvektor der oben genannten Mannigfaltigkeit, von der Form analog zu \colorbox{red}{zitiere Lagrangefunktion}, ist:
 
@@ -418,7 +420,7 @@ Die Autoren von \cite{LagrangeNewton} liefern dafür einen Zugang unter Ausnutzu
 	\end{equation}
 	\item[ii)] Berechne den Schritt mit einer Schrittlänge $\alpha_k$
 	\begin{equation}
-	\zeta_{k+1} := exp_{\zeta_k}(\alpha_k \Delta \zeta).
+	\zeta_{k+1} := \exp_{\zeta_k}(\alpha_k \Delta \zeta).
 	\end{equation}
 \end{itemize}
 Wir haben das Lagrange-Newton-Verfahren im Shape-space ausformuliert, um auf die offenen Schwierigkeiten und Fragestellungen der Übertragung des Quasi-Newton-Ansatzes aus \colorbox{red}{...} aufmerksam zu machen. Da es sich bei 
@@ -426,38 +428,7 @@ Wir haben das Lagrange-Newton-Verfahren im Shape-space ausformuliert, um auf die
 \colorbox{green}{man könnte versuchen in analogie zu der Konstruktion von bfgs und dfp aus nocedal vorgehen. approxima gewinnen mittels bestapproximationen unter frobennius norm (bräuchte was ähnliches für mannigfaltigkeiten...) der Hesse durch mittels bedingungen eingeschränkte Kandidatenmengen. (ähnlich wie bei projektionssatz) Problem könnte nicht eindeutigkeit, da vllt keine konvexität, sein. weiterhin müsste man das konzept irgendwie auf mannigfaltigkeiten aufziehen, was lokal eigentlich gehen sollte, da tangentialräume die (konvexe) hilbertraumstruktur besitzen. fragt sich wie dies global mit der Mannigfaltigkeitsstruktur möglich wäre...}
 \colorbox{green}{man muss auch die curvature Bedingung für bfgs in shape metriken übersetzen richtig? da in nocedal implizit das euklidische skalarprodukt verwendet wird}
 
-Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragung der 2-Schleifen-L-BFGS Rekursion auf den Formfall begnügen. Hierzu haben die Autoren von \cite{bfgs1} den Algorithmus aus \cite{Nocedal}, 7.4, unter Verwendung des Zusammenhangs \ref{zentraleDeformation} und der dort vorkommenden Metrik $g^S$, sowie der Bilinearform $a$, angepasst. Zu beachten ist, dass hier die Tangentialvektoren Elemente verschiedener Tangentialräumen sind, weshalb diese noch zuerst in die richtigen Räume transportiert werden müssen. Für die differentialgeometrische Definition der Transporte $\mathcal{T}$, siehe etwa \cite{LeeDGEO} oder \cite{shape_space}, 2.3.1. Der klassische Algorithmus entsteht, wenn man statt der Metrik $g^S$ im endlich-dimensionalen Fall das euklidische Skalarprodukt verwendet, wobei keine Transporte von Tangentialvektoren anfallen. Es folgt die Definition nach \cite{bfgs1}, Kapitel 4.
 
-\colorbox{red}{notation hj lieber zu grad (partial omega j) ???}
-\colorbox{red}{ achtung: länge l oder länge m oder was genau}
-\colorbox{red}{referenz zu den verwendeten Randauswertungen gamma aus vorigem Kapitel}
-
-\begin{defi}[2-Schleifen-L-BFGS Rekursion im Formfall]
-	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $h_j \in T_{partial\Omega_j}B_e$ Formgradienten der Formen $\partial\Omega_j$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{h_j} \in H^{1/2}(\partial\Omega_j)$ nach \ref{Tangentialvektor} , sowie den zugehörigen Darstellungen $H_j \in H^1_0(\Omega, \mathbb{R}^2)$ auf dem ganzen Gebiet, nach \ref{zentraleDeformation}. Weiterhin seien $S_j \in H^1_0(\Omega, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_j := H_{j+1} - \mathcal{T}_{S_j}H_j \in H^1_0(\Omega, \mathbb{R}^2)$ die entlang der Deformation $\mathcal{J}_{S_j}$ transportierte Differenz der Gradienten. Sei $m \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Dann ist der \textit{2-Schleifen-L-BFGS Rekursion im Formfall} gegeben durch 
-
-\colorbox{red}{hier lieber alphas statt gamma verwenden?? also die definition wie wir sie zuvor gemacht haben}
-\colorbox{red}{format: einrücken bei code wie in python}
-\colorbox{red}{stimmt das mit den Vorzeichen hier: hatt ja den Fehler}
-
-\begin{align*}
-	\rho_j \leftarrow g^S((\gamma_0 Y_j)^Tn, (\gamma_0 S_j)^Tn)^{-1} = a(Y_j, S_j)^{-1} \\
-		q \leftarrow H_j \\
-	\textbf{for } i = j - 1, \dots, j - m \textbf{ do} \\
-		S_i \leftarrow \mathcal{T}_q S_i \\
-		Y_i \leftarrow \mathcal{T}_q Y_i \\
-		\alpha_i \leftarrow \rho_i g^S((\gamma_0 S_i)^Tn, (\gamma_0 q)^T n) = \rho_i a(S_i, q) \\
-				q \leftarrow q - \alpha_i Y_i
-	\textbf{end for} \\
-	q \leftarrow \frac{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 S_{j-1})^Tn)}{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 Y_{j-1})^Tn)}q = \frac{a(Y_{j-1}, S_{j-1})}{a(Y_{j-1}, Y_{j-1})}q \\	
-	\textbf{for } i = j - m, \dots, j - 1 \textbf{ do} \\
-		\beta_i \leftarrow \rho_i g^S((\gamma_0 Y_i)^Tn, (\gamma_0 q)^Tn) = \rho_i a(Y_i, q) \\
-		q \leftarrow q + (\alpha_i - \beta_i)S_i \\
-		\textbf{end do.}
-\end{align*}
-	Dann lässt sich das erzeugte Vektorfeld als Deformation $S_j := q$ verwenden. \colorbox{red}{vorzeichen!}
-\end{defi}
-
-\colorbox{red}{mache noch die hier benutzte vereinfachung der Transporte, rede kurz über transportgleichungen und lösung für geodätische, vllt mit Quelle aus einem Dgeo buch}
 
 %Transporte!!!! und exponentialabbildung
 
