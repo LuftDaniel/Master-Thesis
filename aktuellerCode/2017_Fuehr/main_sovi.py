@@ -25,7 +25,7 @@ memory_length = 3
 
 # Parameter fuer den Formoptimierungsalgorithmus
 nu        = 0.01
-tol_shopt = 5.e-4
+tol_shopt = 2.e-4
 
 
 # Parameter fuer Backtracking-Linesearch
@@ -49,6 +49,8 @@ string_mesh_desription = """\nFunktionswerte f1 und f2 und
                             \n [3] Form -> kleiner Kreis
                             \n [4] kleiner Kreis -> verschobener Kreis
                             \n [5] verschobener Kreis -> kleiner Kreis
+                            \n [6] kleiner Kreis hoch aufgeloest -> grosser Kreis hoch aufgeloest
+                            \n [7] grosser Kreis hoch aufgeloest -> kleiner Kreis hoch aufgeloest                            
                             """
 
 # ----------------------- #
@@ -58,7 +60,7 @@ string_mesh_desription = """\nFunktionswerte f1 und f2 und
 parser = argparse.ArgumentParser(description=string_mesh_desription,
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('-m','--mesh', type=int,
-                    help='Waehle Gitter-Kombinationen (1, 2, 3, 4, 5)',
+                    help='Waehle Gitter-Kombinationen (1, 2, 3, 4, 5, 6, 7)',
                     required=True)
 args = parser.parse_args()
 
@@ -67,11 +69,13 @@ args = parser.parse_args()
 # ----------------------- #
 
 # Liste aller Gitter-Kombinationen
-mesh_combination_list = [("mesh_smallercircle", "mesh_circle"),
-                         ("mesh_circle",        "mesh_smallercircle"),
-                         ("mesh_form",          "mesh_smallercircle"),
-                         ("mesh_smallercircle", "mesh_leftbottom"),
-                         ("mesh_leftbottom",    "mesh_smallercircle")]
+mesh_combination_list = [("mesh_smallercircle",      "mesh_circle"),
+                         ("mesh_circle",             "mesh_smallercircle"),
+                         ("mesh_form",               "mesh_smallercircle"),
+                         ("mesh_smallercircle",      "mesh_leftbottom"),
+                         ("mesh_leftbottom",         "mesh_smallercircle"),
+                         ("mesh_fine_smallercircle", "mesh_fine_circle"),
+                         ("mesh_fine_circle",        "mesh_fine_smallercircle")]
 
 # Anzahl aller Kombinationen
 n = len(mesh_combination_list)
@@ -154,8 +158,8 @@ y_z = sovi.solve_state(targetMeshData, f_values)
 # Parameter Normalverteilung fuer Stoerung
 mu = Constant(0.0)
 
-y_z_min = y_z.vector().array().min()
-y_z_max = y_z.vector().array().max()
+y_z_min = y_z.vector().get_local().min()
+y_z_max = y_z.vector().get_local().max()
 sigma = Constant(max(abs(y_z_min), y_z_max)*5/100)
 
 #y_z.vector()[:] = y_z.vector()+np.random.normal(mu, sigma,
@@ -176,6 +180,8 @@ print('\nSchritt 2/2: Formoptimierung')
 MeshData = sovi.load_mesh(startMesh_file)
 file_bound_start << MeshData.boundaries, 0
 
+
+print("initial meshdistance: {0:8e}".format(sovi.mesh_distance(MeshData, targetMeshData)))
 # file_mesh << MeshData.mesh
 
 # BFGS-memory initialisieren
@@ -196,6 +202,9 @@ start_time = time.time()
 
 # Outputgraph
 file_output = open(os.path.join(outputfolder, 'outputdata.txt'),'a')
+
+# Formableitungen fuer Curv. Cond; 0 aktuelles Gitter, 1 vorheriges
+curv_cond = np.zeros(2)
 
 # Start der Optimierungsschritte
 print("\nIteration " + "  ||f_elas||_L2 " + "  J = j + j_reg " + "  ||U||_L2\n")
@@ -239,6 +248,19 @@ while nrm_f_elas > tol_shopt:
     #       L-BFGS STEP       #
     # ----------------------- #
 
+    # Curvature Condition
+    V_2 = VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2)
+    last_defo = Function(V_2)
+    last_defo.vector()[:] = bfgs_memory.deformation[0]
+    curv_cond[0] = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, last_defo)
+
+    if(counter > 1):
+        curv_cond_val = curv_cond[1] - curv_cond[0]
+        print("Curvature Condition value: {0:4e}".format(curv_cond_val))
+        if(curv_cond_val <= 0.):
+            print("Condition not fullfilled! Exiting process, last step was invalid!")
+            break
+
     # L-BFGS Schritt
     bfgs_memory.update_grad(U.vector().get_local())
     S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected)
@@ -246,6 +268,11 @@ while nrm_f_elas > tol_shopt:
     # L-BFGS-Memory Update
     bfgs_memory.update_defo(S.vector().get_local())
     bfgs_memory.step_nr = bfgs_memory.step_nr + 1
+
+    # speichere Formableitung fuer Berechnung der curv. cond. nach der naechsten Deformation,
+    # d.h. in der naechsten Schleife (deshalb curv. cond. der vorrigen Bedingung VOR BFGS-Schritt
+
+    curv_cond[1] = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
 
     # TEST ZU SKALARPRODUKT UND ABLEITUNG; ECHTER UND FALSCHER GRADIENT
     U_real, nrm_real = sovi.solve_linelas(MeshData, p, y, z, f_values, mu_elas_projected, nu, zeroed = False)
@@ -270,32 +297,29 @@ while nrm_f_elas > tol_shopt:
 
     zero_function = Function(VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2))
     current_value = sovi.solve_targetfunction(MeshData, zero_function, y_z, f_values, nu)
-    current_deriv = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
     S.vector()[:] = start_scale * S.vector()
 
     counterer = 0
     #print(current_value)
     #print(current_deriv)
-    #U_real, trash = sovi.solve_linelas(MeshData, p, y, z , f_values, mu_elas_projected, nu, zeroed = False)
-    #print(sovi.bilin_a(MeshData, U_real, S, mu_elas_projected))
+    U_real, trash = sovi.solve_linelas(MeshData, p, y, z , f_values, mu_elas_projected, nu, zeroed = False)
+    #print(sovi.bilin_a(MeshData, U_real, U, mu_elas_projected))
 
     # Skaliert das Deformationsfeld bei jedem Schritt automatisch dauerhaft: NOCH OHNE AMIJO
     #while(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value + c*scale_parameter*current_deriv):
-    #while(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value):
+    while(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value):
     #    print("shape deriv: {0:3e}".format(sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)))
         #print("current Value: {0:3e}".format(current_value))
         #print("next Value: {0:3e}\n".format(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu)))
         #print("bilin deriv: {0:3e}".format(sovi.bilin_a(MeshData,S,-U_real,mu_elas_projected)))
 
-    #    scale_parameter = shrinkage * scale_parameter
-    #    S.vector()[:] = shrinkage * S.vector()
+        scale_parameter = shrinkage * scale_parameter
+        S.vector()[:] = shrinkage * S.vector()
 
-    #    counterer = counterer + 1
-    #    if(counterer > 12):
-    #        print("had to break")
-    #        break
-
-
+        counterer = counterer + 1
+        if(counterer > 20):
+            print("had to break")
+            break
 
 
     # Norm des Deformationsvektorfeldes berechnen
@@ -327,8 +351,14 @@ while nrm_f_elas > tol_shopt:
                    str(J).replace(".", ",") + ";" +
                    str(nrm_U_mag).replace(".", ",")   + "\n")
 
+    # Norm von f_elas plotten
+    #file_output.write(str(counter)       +";"+
+    #                  str(nrm_f_elas)  + "\n")
+
+    # Abstand zur Zielform plotten
     file_output.write(str(counter)       +";"+
-                      str(nrm_f_elas)  + "\n")
+                      str(np.log(sovi.mesh_distance(MeshData, targetMeshData)))  + "\n")
+
     # ----------------------- #
     #      DEFORMATION        #
     # ----------------------- #
