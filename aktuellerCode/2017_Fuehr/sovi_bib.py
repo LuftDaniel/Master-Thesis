@@ -142,11 +142,14 @@ def mesh_distance(mesh1, mesh2):
     boundary_index_mesh1 = __get_index_not_interior_boundary(mesh1.mesh, mesh1.subdomains, mesh1.boundaries, interior = False)
     boundary_index_mesh2 = __get_index_not_interior_boundary(mesh2.mesh, mesh2.subdomains, mesh2.boundaries, interior = False)
 
+    #print(facet_index_mesh2)
+    #print(boundary_index_mesh2[1])
+    #for i in range(16): print(mesh2.mesh.coordinates()[boundary_index_mesh2[i]])
 
     # Berechne die Abstaende alle Vertices von mesh1 zu jeweils einem festen Vertex aus mesh2,
     # dann bilde das Minimum und fuege in Liste hinzu
 
-    distance_list = np.zeros(mesh2.mesh.num_vertices())
+    distance_list_vertex = np.zeros(mesh2.mesh.num_vertices())
 
     for i in boundary_index_mesh2:
         temp_distance_list = []
@@ -157,22 +160,39 @@ def mesh_distance(mesh1, mesh2):
 
 
         dist = np.amin(temp_distance_list)
-        distance_list[i] = dist
+        distance_list_vertex[i] = dist
 
     # definiere eine Funktion auf mesh2 mit Abstandswerten auf Boundaries der Form
 
     V = FunctionSpace(mesh2.mesh, "P", 1)
     distance_function = Function(V)
+    vtod = dolfin.vertex_to_dof_map(V)
 
-    print(len(distance_list))
-    print(len(distance_function.vector().array()))
-    distance_function.vector()[:] = distance_list
+    # uebersetze vertexindizes in zugehoerige dofindizes (der fenicsfunction), da indizes nicht gleich
+    distance_list_dof = np.zeros(len(distance_function.vector().get_local()))
+    for i in boundary_index_mesh2: distance_list_dof[vtod[i]] = distance_list_vertex[i]
+
+    # definiere Funktion auf der Form
+    distance_function.vector()[:] = distance_list_dof
+
+    #outputfolder = os.path.join(__this_files_dir,
+    #                            'Output',
+    #                            datetime.now().strftime('%Y%m%d_%H%M%S'))
+    #file_datar = File(os.path.join(outputfolder,
+    #                                     'shapefunc', 'shapefunc.pvd'))
+    #file_datar << distance_function
 
     # Berechne das zugehoerige Integral
-
     dS = Measure('dS', subdomain_data=mesh2.boundaries)
 
+    # for testing: kann analytisch berechnet werden
+    onefunction = Function(V)
+    onematrix = np.zeros(len(onefunction.vector().get_local()))
+    for i in boundary_index_mesh2: onematrix[vtod[i]] = 1.
+    onefunction.vector()[:] = onematrix
+
     distance_integral = distance_function('+')*dS(5) + distance_function('+')*dS(6)
+    #distance_integral = onefunction('+') * dS(5) + onefunction('+') * dS(6)
     value = assemble(distance_integral)
 
     return value
@@ -474,7 +494,7 @@ def bilin_a(meshData, U, V, mu_elas):
     return value
 
 
-def bfgs_step(meshData, memory, mu_elas):
+def bfgs_step(meshData, memory, mu_elas, q_target):
     """
     berechnet aus einer BFGS-memory eine Mesh-Deformation q mittels double-loop-L-BFGS-Verfahren, welche zu memory.grad[0] gehoert
     benoetigt memory.grad[0] als aktuellen Gradienten, memory.deformation[0] als aktuell neueste Deformation
@@ -487,10 +507,11 @@ def bfgs_step(meshData, memory, mu_elas):
     if isinstance(memory, bfgs_memory): pass
     else: raise SystemExit("bfgs_step benoetigt Objekt der  BFGS-Memory-Klasse als Input!")
 
-    q     = memory.initialize_grad(meshData, 0)
+    V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+    q = Function(V)
+    q.vector()[:] = q_target
     alpha = np.zeros(memory.length)
 
-    V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
     diff_grad = Function(V)
     first_diff_grad = Function(V)
 
