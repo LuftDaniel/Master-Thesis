@@ -372,7 +372,7 @@ def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu, zeroed = True):
 
     # Berechne Loesung
     U = Function(V, name="deformation_vec")
-    solve(LHS, U.vector(), -F_elas)
+    solve(LHS, U.vector(), F_elas)
 
     # Rueckgabe des Deformationsvektorfeldes U und der Abbruchbedingung
     return U, nrm_f_elas
@@ -522,25 +522,25 @@ def bfgs_step(meshData, memory, mu_elas, q_target):
         for i in range(memory.length-1):
             # Vorwaertsschleife
             i         = i+1
-            diff_grad.vector()[:] = memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector()
+            diff_grad.vector()[:] = (memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector())
             alpha[i]              = bilin_a(meshData, memory.initialize_defo(meshData, i-1), q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, i-1), mu_elas)
             q.vector()[:]         = q.vector() - float(alpha[i])*diff_grad.vector()
 
         # Reskalierung von q
-        first_diff_grad.vector()[:] = memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector()
+        first_diff_grad.vector()[:] = (memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector())
         gamma                       = bilin_a(meshData, first_diff_grad, memory.initialize_defo(meshData, 0), mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
         q.vector()[:]               = gamma*q.vector()
 
         for i in range(memory.length-1):
             # Rueckwaertsschleife
             i                     = i+1
-            diff_grad.vector()[:] = memory.initialize_grad(meshData, -(i+1)).vector() - memory.initialize_grad(meshData, -i).vector()
+            diff_grad.vector()[:] = (memory.initialize_grad(meshData, -(i+1)).vector() - memory.initialize_grad(meshData, -i).vector())
             beta                  = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, -(i+1)), mu_elas)
             q.vector()[:]         = q.vector() + (float(alpha[-i]) - beta)*memory.initialize_defo(meshData, -(i+1)).vector()
 
     elif(memory.step_nr == 0):
             # der erste BFGS-Schritt ist ein Gradientenschritt, U Gradient ist in negativer Richtung
-            q.vector()[:] = q.vector()
+            q.vector()[:] = -1.*q.vector().get_local()
             return q
 
     else:
@@ -549,12 +549,12 @@ def bfgs_step(meshData, memory, mu_elas, q_target):
         for i in range(memory.step_nr):
             # Vorwaertsschleife
             i         = i+1
-            diff_grad.vector()[:] = memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector()
+            diff_grad.vector()[:] = (memory.initialize_grad(meshData, i-1).vector() - memory.initialize_grad(meshData, i).vector())
             alpha[i]              = bilin_a(meshData, memory.initialize_defo(meshData, i-1), q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, i-1), mu_elas)
             q.vector()[:]         = q.vector() - float(alpha[i])*diff_grad.vector()
 
         # Reskalierung von q
-        first_diff_grad.vector()[:] = memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector()
+        first_diff_grad.vector()[:] = (memory.initialize_grad(meshData, 0).vector() - memory.initialize_grad(meshData, 1).vector())
         gamma                       = bilin_a(meshData, first_diff_grad, memory.initialize_defo(meshData, 0), mu_elas) / bilin_a(meshData, first_diff_grad, first_diff_grad, mu_elas)
         q.vector()[:]               = gamma*q.vector()
 
@@ -562,7 +562,7 @@ def bfgs_step(meshData, memory, mu_elas, q_target):
             # Rueckwaertsschleife
             shift = (memory.length-1) - memory.step_nr
             i                     = i+1
-            diff_grad.vector()[:] = memory.initialize_grad(meshData, -(i+1)-shift).vector() - memory.initialize_grad(meshData, -i-shift).vector()
+            diff_grad.vector()[:] = (memory.initialize_grad(meshData, -(i+1)-shift).vector() - memory.initialize_grad(meshData, -i-shift).vector())
             beta                  = bilin_a(meshData, diff_grad, q, mu_elas) / bilin_a(meshData, diff_grad, memory.initialize_defo(meshData, -(i+1)-shift), mu_elas)
             q.vector()[:]         = q.vector() + (float(alpha[-i-shift]) - beta)*memory.initialize_defo(meshData, -(i+1)-shift).vector()
 

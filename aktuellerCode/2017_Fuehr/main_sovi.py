@@ -23,15 +23,15 @@ mu_max = 30.0
 
 # Parameter fuer L-BFGS Algorithmus
 L_BFGS = True
-Powell_Relaxation = True
-memory_length = 3
+memory_length = 60
 
 # Parameter fuer den Formoptimierungsalgorithmus
-nu        = 0.01
-tol_shopt = 1.e-4
+nu        = 0.0001
+tol_shopt = 5.e-4
 
 # Parameter fuer Backtracking-Linesearch
-Linesearch = False
+Linesearch = True
+Resetcounter = 0
 shrinkage = 0.5
 c = 0.99
 start_scale = 5.0
@@ -212,6 +212,7 @@ curv_cond = np.zeros(2)
 # Berechnete Deformation s_k
 last_defo = np.zeros([ 2 * MeshData.mesh.num_vertices()])
 
+
 # Start der Optimierungsschritte
 print("\nIteration " + "  ||f_elas||_L2 " + "  J = j + j_reg " + "  ||U||_L2\n")
 # Start der Optimierungsschritte
@@ -257,7 +258,7 @@ while nrm_f_elas > tol_shopt:
 
     if(L_BFGS):
 
-        # Curvature Condition
+        # Curvature Condition berechnen
         V_k_1 = VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2)
         last_defo_function = Function(V_k_1)
 
@@ -274,94 +275,52 @@ while nrm_f_elas > tol_shopt:
         if(counter > 1):
             curv_cond_val = curv_cond[1] - curv_cond[0]
             print("Curvature Condition value: {0:4e}".format(curv_cond_val))
+
             if(curv_cond_val <= 0.):
                 print("Condition not fullfilled! Exiting process, last step was invalid!")
                 step_valid = False
 
 
-        if(Powell_Relaxation):
-            # falls Schritt zulaessig, tue nichts
+        if(step_valid == False):
+            print("break ausgeschaltet, codiere erstmal, dass keine matrix update, sondern lediglich gradient verwendet wird!")
+            #break
+            # muss weg!
+            #bfgs_memory.update_grad(U.vector().get_local())
+            if(counter == 1):
+                bfgs_memory.update_grad(U.vector().get_local())
+                S = U
+                S.vector()[:] = -1. * U.vector().get_local()
+                bfgs_memory.update_defo(S.vector().get_local())
+                last_defo = S.vector().get_local()
 
-            if(step_valid == False):
-            # falls nicht zulaessig, mache Powell-Relaxation
-                # bewege mesh zurueck
-                meshmove = Function(V_k_1)
-                meshmove.vector()[:] = -1. * last_defo
-                ALE.move(MeshData.mesh, meshmove)
+            if(counter > 1):
 
-                # berechne theta_k
-                theta = 0.5
+                # last_defo kann nicht bei aussetzen des updates zur berechnung der curv cond verwendet werden
+                # ergo fuehre einen counter ein, s.d. man dann diesen nicht berechnet ( oder geht was besseres?)
 
-                V_k = VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2)
-                last_defo_function = Function(V_k)
-                last_defo_function.vector()[:] = last_defo
-
-                q_k = Function(V_k)
-                q_k.vector()[:] = U.vector().get_local() - bfgs_memory.gradient[0]
-
-
-                step_value = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected, last_defo_function.vector().get_local())
-                scalprod = sovi.bilin_a(MeshData, last_defo_function, step_value, mu_elas_projected)
-                print(scalprod)
-                theta_k = (1.-theta)*scalprod / (scalprod - curv_cond_val)
-                print(theta_k)
-
-                # berechne korrektur r_k
-                r = np.zeros([ 2 * MeshData.mesh.num_vertices()])
-                r = theta_k * last_defo_function.vector().get_local() + (1. - theta_k) * step_value.vector().get_local()
-
-                #R = Function(V_k)
-                #R.vector()[:] = r
-                #S = R
+                bfgs_memory.update_grad(U.vector().get_local())
+                bfgs_memory.update_defo(last_defo)
+                S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected, bfgs_memory.gradient[0])
+                #S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected, U.vector().get_local())
+                last_defo = S.vector().get_local()
 
 
+            # BESSER STATT COUNTER STEP_NR VERWENDEN!
 
-                # passe defo an und maches schritt (WIR MACHEN DIE ZWISCHEN q UND p GETAUSCHTE VARIANTE
 
-                bfgs_memory.gradient[0] = bfgs_memory.gradient[0] + r
+            # L-BFGS Schritt
+        elif(step_valid):
+            bfgs_memory.update_grad(U.vector().get_local())
+            if(counter == 1):
+                S = U
+                S.vector()[:] = -1. * U.vector().get_local()
+                bfgs_memory.update_defo(S.vector().get_local())
+                last_defo = S.vector().get_local()
+
+            if(counter > 1):
+                bfgs_memory.update_defo(last_defo)
                 S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected, bfgs_memory.gradient[0])
                 last_defo = S.vector().get_local()
-                # updates
-
-                #bfgs_memory.update_grad(U.vector().get_local())
-                #bfgs_memory.update_defo(r)
-                #last_defo = S.vector().get_local()
-
-
-
-            if(step_valid):
-                bfgs_memory.update_grad(U.vector().get_local())
-                if(counter == 1):
-                    bfgs_memory.update_defo(U.vector().get_local())
-                    S = U
-                    last_defo = S.vector().get_local()
-
-                if(counter > 1):
-                    bfgs_memory.update_defo(last_defo)
-                    S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected, bfgs_memory.gradient[0])
-                    last_defo = S.vector().get_local()
-
-
-
-                #BAUESTELLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        if(Powell_Relaxation == False):
-            if(step_valid == False):
-                print("break ausgeschaltet")
-                #break
-            # L-BFGS Schritt
-            elif(step_valid):
-                #bfgs_memory.update_grad(U.vector().get_local())
-                bfgs_memory.update_grad(U.vector().get_local())
-                if(counter == 1):
-                    bfgs_memory.update_defo(U.vector().get_local())
-                    S = U
-                    last_defo = S.vector().get_local()
-
-                if(counter > 1):
-                    bfgs_memory.update_defo(last_defo)
-                    S = sovi.bfgs_step(MeshData, bfgs_memory, mu_elas_projected, bfgs_memory.gradient[0])
-                    last_defo = S.vector().get_local()
 
         # L-BFGS-Memory Update
         #bfgs_memory.update_defo(S.vector().get_local())
@@ -370,7 +329,7 @@ while nrm_f_elas > tol_shopt:
         # speichere Formableitung fuer Berechnung der curv. cond. nach der naechsten Deformation,
         # d.h. in der naechsten Schleife (deshalb curv. cond. der vorrigen Bedingung VOR BFGS-Schritt
 
-        curv_cond[1] = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
+        #curv_cond[1] = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
 
         # TEST ZU SKALARPRODUKT UND ABLEITUNG; ECHTER UND FALSCHER GRADIENT
         #U_real, nrm_real = sovi.solve_linelas(MeshData, p, y, z, f_values, mu_elas_projected, nu, zeroed = False)
@@ -391,6 +350,7 @@ while nrm_f_elas > tol_shopt:
     #print("Achtung: Wert der Ableitung {0:.2E}  ".format(sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)))
     #print("Achtung: Wert der bilin {0:.2E}  ".format(sovi.bilin_a(MeshData, U, S, mu_elas_projected)))
     if(Linesearch):
+
         scale_parameter = start_scale
 
         zero_function = Function(VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2))
@@ -402,6 +362,7 @@ while nrm_f_elas > tol_shopt:
         #print(current_deriv)
         #U_real, trash = sovi.solve_linelas(MeshData, p, y, z , f_values, mu_elas_projected, nu, zeroed = False)
         #print(sovi.bilin_a(MeshData, U_real, U, mu_elas_projected))
+        #print(Resetcounter)
 
         # Skaliert das Deformationsfeld bei jedem Schritt automatisch dauerhaft: NOCH OHNE AMIJO
         #while(sovi.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value + c*scale_parameter*current_deriv):
@@ -415,10 +376,35 @@ while nrm_f_elas > tol_shopt:
             S.vector()[:] = shrinkage * S.vector()
 
             counterer = counterer + 1
-            if(counterer > 20):
-                print("had to break")
+            if(counterer >= 20):
+                print("Had to break, restarting L-BFGS!")
+
+                #                                        #
+                #     BAUE HIER DEN MEMORY REBOOT EIN    #
+                #                                        #
+
+                bfgs_memory.gradient = np.zeros([memory_length, 2 * MeshData.mesh.num_vertices()])
+                bfgs_memory.deformation = np.zeros([memory_length, 2 * MeshData.mesh.num_vertices()])
+                bfgs_memory.step_nr = 0
+                Resetcounter = Resetcounter + 1
+                #counter = 0
+                S.vector()[:] = np.zeros(2*MeshData.mesh.num_vertices())
                 break
 
+        if(counterer < 20):
+            #print("hurray")
+            Resetcounter = 0
+
+    #print("zweiter Resetcounter:")
+    #print(Resetcounter)
+
+    if(Resetcounter >= 2):
+        # Falls nach Restart immernoch keine gute Reskalierung gefunden, so stoppe das Verfahren
+        print("Reboot didn't help, quitting L-BFGS optimization!")
+        break
+
+    if(L_BFGS):
+        curv_cond[1] = sovi.shape_deriv(MeshData, p, y, z, f_values, nu, S)
 
     # Norm des Deformationsvektorfeldes berechnen
     V           = FunctionSpace(MeshData.mesh, 'P', 1)
@@ -467,7 +453,9 @@ while nrm_f_elas > tol_shopt:
 
     elif(L_BFGS == False):
         # Gradientenverfahren
-        ALE.move(MeshData.mesh, U)
+        S = U
+        S.vector()[:] = -1.*U.vector().get_local()
+        ALE.move(MeshData.mesh, S)
 
 
 
