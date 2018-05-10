@@ -17,6 +17,9 @@ parameters['allow_extrapolation'] = True
 f1 = -10.0
 f2 = 100.0
 
+# Waehle, ob das Zielgitter pertubiert werden soll
+Pertubation = False
+
 # Definition des minimalen und maximalen Lameparameters
 mu_min = 1.0
 mu_max = 30.0
@@ -27,7 +30,7 @@ memory_length = 60
 
 # Parameter fuer Perimeter-Regularisierung und Abbruchkriterium fuer Optimierung
 nu        = 0.001
-tol_shopt = 1.44e-3
+tol_shopt = 2.e-3
 
 # Parameter fuer Backtracking-Linesearch
 Linesearch = False
@@ -53,7 +56,9 @@ string_mesh_desription = """\nParameter und Verfahren muessen in Datei geaendert
                             \n [4] kleiner Kreis -> verschobener Kreis
                             \n [5] verschobener Kreis -> kleiner Kreis
                             \n [6] kleiner Kreis hoch aufgeloest -> grosser Kreis hoch aufgeloest
-                            \n [7] grosser Kreis hoch aufgeloest -> kleiner Kreis hoch aufgeloest                            
+                            \n [7] grosser Kreis hoch aufgeloest -> kleiner Kreis hoch aufgeloest
+                            \n [8] kleiner Kreis -> kaputter Donut       
+                            \n [9] kleiner Kreis hoch aufgeloest -> kaputter Donut hoch aufgeloest                     
                             """
 
 # ----------------------- #
@@ -63,7 +68,7 @@ string_mesh_desription = """\nParameter und Verfahren muessen in Datei geaendert
 parser = argparse.ArgumentParser(description=string_mesh_desription,
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('-m','--mesh', type=int,
-                    help='Waehle Gitter-Kombinationen (1, 2, 3, 4, 5, 6, 7)',
+                    help='Waehle Gitter-Kombinationen (1, 2, 3, 4, 5, 6, 7, 8)',
                     required=True)
 args = parser.parse_args()
 
@@ -78,7 +83,9 @@ mesh_combination_list = [("mesh_smallercircle",      "mesh_circle"),
                          ("mesh_smallercircle",      "mesh_leftbottom"),
                          ("mesh_leftbottom",         "mesh_smallercircle"),
                          ("mesh_fine_smallercircle", "mesh_fine_circle"),
-                         ("mesh_fine_circle",        "mesh_fine_smallercircle")]
+                         ("mesh_fine_circle",        "mesh_fine_smallercircle"),
+                         ("mesh_smallercircle",      "mesh_broken_donut"),
+                         ("mesh_fine_smallercircle", "mesh_fine_broken_donut")]
 
 # Anzahl aller Kombinationen
 n = len(mesh_combination_list)
@@ -164,12 +171,14 @@ targetMeshData = bib.load_mesh(targetMesh_file)
 mu = Constant(0.0)
 sigma = Constant(0.006)
 
-boundary_index_target = bib.__get_index_not_interior_boundary(targetMeshData.mesh, targetMeshData.subdomains, targetMeshData.boundaries, interior=False)
+if(Pertubation):
+    # finde Indizes der Knoten am Inneren Rand
+    boundary_index_target = bib.__get_index_not_interior_boundary(targetMeshData.mesh, targetMeshData.subdomains, targetMeshData.boundaries, interior=False)
 
-# Stoere das Zielgitter!
-for i in boundary_index_target:
-    targetMeshData.mesh.coordinates()[i,0] += np.random.normal(mu, sigma)
-    targetMeshData.mesh.coordinates()[i,1] += np.random.normal(mu, sigma)
+    # Stoere das Zielgitter!
+    for i in boundary_index_target:
+        targetMeshData.mesh.coordinates()[i,0] += np.random.normal(mu, sigma)
+        targetMeshData.mesh.coordinates()[i,1] += np.random.normal(mu, sigma)
 
 
 # Loesen der Zustandsgleichung auf dem Zielgitter
