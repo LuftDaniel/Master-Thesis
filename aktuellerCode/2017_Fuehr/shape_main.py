@@ -27,7 +27,7 @@ memory_length = 60
 
 # Parameter fuer Perimeter-Regularisierung und Abbruchkriterium fuer Optimierung
 nu        = 0.001
-tol_shopt = 5.e-4
+tol_shopt = 1.44e-3
 
 # Parameter fuer Backtracking-Linesearch
 Linesearch = False
@@ -160,18 +160,20 @@ print('\nSchritt 1/2: Zieldaten berechnen\n')
 # Gitter der Zieldaten laden
 targetMeshData = bib.load_mesh(targetMesh_file)
 
+# Parameter Normalverteilung fuer Stoerung, sigma vorsichtig waehlen!
+mu = Constant(0.0)
+sigma = Constant(0.006)
+
+boundary_index_target = bib.__get_index_not_interior_boundary(targetMeshData.mesh, targetMeshData.subdomains, targetMeshData.boundaries, interior=False)
+
+# Stoere das Zielgitter!
+for i in boundary_index_target:
+    targetMeshData.mesh.coordinates()[i,0] += np.random.normal(mu, sigma)
+    targetMeshData.mesh.coordinates()[i,1] += np.random.normal(mu, sigma)
+
+
 # Loesen der Zustandsgleichung auf dem Zielgitter
 y_z = bib.solve_state(targetMeshData, f_values)
-
-# Parameter Normalverteilung fuer Stoerung
-mu = Constant(0.0)
-
-y_z_min = y_z.vector().get_local().min()
-y_z_max = y_z.vector().get_local().max()
-sigma = Constant(max(abs(y_z_min), y_z_max)*5/100)
-
-#y_z.vector()[:] = y_z.vector()+np.random.normal(mu, sigma,
-#                                                y_z.vector().size())
 
 # Loesung y, lambda_c_squared, und das Gitter in pvd-Datei speichern
 file_data_sol << y_z
@@ -264,6 +266,7 @@ while nrm_f_elas[1] > tol_shopt:
 
     # Loese lineare Elastizitaetsgleichung, weise aktuelle nrm_f_elas zu
     U , nrm_f_elas[0] = bib.solve_linelas(MeshData, p, y, z, f_values, mu_elas_projected, nu)
+    if(L_BFGS == False): nrm_f_elas[1] = nrm_f_elas[0]
     #if(counter == 1): bfgs_memory.update_grad(U.vector().get_local())
 
     # ----------------------- #
@@ -305,12 +308,12 @@ while nrm_f_elas[1] > tol_shopt:
                   " {0:.2E}".format(mesh_dist))
 
             # speichere in CSV-Datei (hier, da curv_cond_val berechnet werden musste) von vorigem Schritt
-            file_csv.write(str(counter-1) +
-                           str(nrm_f_elas[1]).replace(".", ",") +
-                           str(J).replace(".", ",") +
-                           str(nrm_U_mag).replace(".", ",") +
-                           str(curv_cond_val).replace(".", ",") +
-                           str(mesh_dist).replace(".", ",") + "\n")
+            file_csv.write(str(counter-1) + ";" +
+                           str(nrm_f_elas[1]) + ";" +
+                           str(J) + ";" +
+                           str(nrm_U_mag) + ";" +
+                           str(curv_cond_val) + ";" +
+                           str(mesh_dist) + ";" + "\n")
 
         # aktualisiere, nachdem alte Werte geprintet wurden
         nrm_f_elas[1] = nrm_f_elas[0]
@@ -476,11 +479,11 @@ while nrm_f_elas[1] > tol_shopt:
               " {0:.2E}".format(mesh_dist))
 
         # Iterationsschritt in csv-Datei speichern
-        file_csv.write(str(counter) +
-                       str(nrm_f_elas[0]).replace(".", ",") +
-                       str(J).replace(".", ",") +
-                       str(nrm_U_mag).replace(".", ",") +
-                       str(mesh_dist).replace(".", ",") + "\n")
+        file_csv.write(str(counter) + ";" +
+                       str(nrm_f_elas[0]) + ";" +
+                       str(J) + ";" +
+                       str(nrm_U_mag) + ";" +
+                       str(mesh_dist) + ";" + "\n")
 
     # Norm von aktuellem f_elas plotten
     file_output_grad.write(str(counter)       +";"+
@@ -539,7 +542,7 @@ elapsed_time = time.time() - start_time
 
 # Dauer der Berechnung in csv-Datei speichern
 file_csv.write("Dauer der Berechnung in Sekunden;" +
-               str(elapsed_time).replace(".", ",") + ";" + "\n")
+               str(elapsed_time) + ";" + "\n")
 
 # Datei schliessen
 file_csv.close()
