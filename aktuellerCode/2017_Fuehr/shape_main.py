@@ -248,18 +248,14 @@ while nrm_f_elas[1] > tol_shopt:
     mu_elas_projected = project(mu_elas, V)
     mu_elas_projected.rename("lame_par", "label")
 
-    # ----------------------- #
-    #     ZUSTANDSGLEICHUNG   #
-    # ----------------------- #
+    # ---------------------------- #
+    #  STATE & ADJOINT CALCULATION #
+    # ---------------------------- #
 
-    # Ohne Variationsungleichung
+    # loese Zustandgleichung
     y = bib.solve_state(MeshData, f_values)
 
-    # ----------------------- #
-    #         ADJOINT         #
-    # ----------------------- #
-
-    # Ohne Variationsungleichung
+    # loese adjungierte Gleichung
     p = bib.solve_adjoint(MeshData, y, z)
 
     # ----------------------- #
@@ -271,14 +267,14 @@ while nrm_f_elas[1] > tol_shopt:
     #if(counter == 1): bfgs_memory.update_grad(U.vector().get_local())
 
     # ----------------------- #
-    #       L-BFGS STEP       #
+    #       L-BFGS METHOD     #
     # ----------------------- #
 
     if(L_BFGS):
 
-        # ----------------------- #
-        #    CURVATURE CONDITION  #
-        # ----------------------- #
+        # ---------------------------------#
+        #   CURVATURE CONDITION & PRINTING #
+        # ---------------------------------#
 
         # Curvature Condition berechnen
         V_k_1 = VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2)
