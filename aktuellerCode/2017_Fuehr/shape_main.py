@@ -407,7 +407,7 @@ while nrm_f_elas[1] > tol_shopt:
         scale_parameter = start_scale
 
         zero_function = Function(VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2))
-        current_value = bib.solve_targetfunction(MeshData, zero_function, y_z, f_values, nu)
+        current_value = bib.targetfunction(MeshData, zero_function, y_z, f_values, nu)
         S.vector()[:] = start_scale * S.vector()
         #current_deriv = bib.shape_deriv(MeshData, p, y, z, f_values, nu, S)
 
@@ -419,11 +419,11 @@ while nrm_f_elas[1] > tol_shopt:
         #print(Resetcounter)
 
         # Skaliert das Deformationsfeld bei jedem Schritt automatisch dauerhaft: NOCH OHNE AMIJO
-        #while(bib.solve_targetfunction(MeshData, S, y_z, f_values, nu) > current_value + c*scale_parameter*current_deriv):
-        while(bib.solve_targetfunction(MeshData, S, y_z, f_values, nu) >= current_value):
+        #while(bib.targetfunction(MeshData, S, y_z, f_values, nu) > current_value + c*scale_parameter*current_deriv):
+        while(bib.targetfunction(MeshData, S, y_z, f_values, nu) >= current_value):
             print("shape deriv: {0:3e}".format(bib.shape_deriv(MeshData, p, y, z, f_values, nu, S)))
             #print("current Value: {0:3e}".format(current_value))
-            #print("next Value: {0:3e}\n".format(bib.solve_targetfunction(MeshData, S, y_z, f_values, nu)))
+            #print("next Value: {0:3e}\n".format(bib.targetfunction(MeshData, S, y_z, f_values, nu)))
             #print("bilin deriv: {0:3e}".format(bib.bilin_a(MeshData,S,-U_real,mu_elas_projected)))
 
             scale_parameter = shrinkage * scale_parameter
@@ -473,7 +473,7 @@ while nrm_f_elas[1] > tol_shopt:
 
     # Zielfunktional berechnen: KANN ERSETZT WERDEN AUS BIB
     zero_function = Function(VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2))
-    J = bib.solve_targetfunction(MeshData, zero_function, y_z, f_values, nu)
+    J = bib.targetfunction(MeshData, zero_function, y_z, f_values, nu)
 
     # Abstand zum Zielgitter berechnen
     mesh_dist = bib.mesh_distance(MeshData, targetMeshData)

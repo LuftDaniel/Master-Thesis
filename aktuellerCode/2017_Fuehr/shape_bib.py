@@ -11,25 +11,6 @@ __this_files_dir  = os.path.dirname(__this_files_path)
 # Pfad zum Ordner mit den Gitter Dateien
 DATA_DIR = os.path.abspath(os.path.join(__this_files_dir, 'Meshes'))
 
-def create_outputfolder():
-
-    # Erstellen eines Output Ordners, falls nicht vorhanden
-    try:
-        os.mkdir('Output')
-    except OSError as exc:
-        if exc.errno != errno.EEXIST:
-            raise exc
-        pass
-
-    # Erstelle Ordner fuer jeden Durchlauf nach Datum und Zeit
-    outputfolder = os.path.join(__this_files_dir,
-                                'Output',
-                                datetime.now().strftime('%Y%m%d_%H%M%S'))
-    os.mkdir(outputfolder)
-
-    # Gibt den Pfad zum speziellen Order im Output Ordner zurueck
-    return outputfolder
-
 
 class MeshData:
 
@@ -50,11 +31,12 @@ class MeshData:
 
 
 class bfgs_memory:
-
     """
-    Schreibe zwei Funktionen, die Gradienten und Deformationen bei verschobenen Meshes
-    neu als Fenics Functions initialisieren, indem sie Meshes nehmen und die Nummer
-    des Gradienten/Defo.
+    Klasse, welche alle Information fuer das L-BFGS-Verfahren enthaelt.
+    Besteht aus length Gradienten- und Deformationsvektoren, welche jeweils
+    in einem Array der Historie nach absteigend sortiert sind.
+    Besitzt die Funktion, Gradienten und Deformationen zu updaten, wobei der aelteste
+    Eintrag verworfen wird. step_nr ist ein counter fuer das Verfahren.
     """
 
     # Objekt mit gespeicherten Gradienten und Deformationen der letzten l Schritte in Form von Arrays
@@ -113,8 +95,33 @@ class bfgs_memory:
         return f
 
 
-def load_mesh(name):
+def create_outputfolder():
+    '''
+    Erstelt einen Outputordner, falls nicht vorhanden
+    '''
 
+    try:
+        os.mkdir('Output')
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise exc
+        pass
+
+    # Erstelle Ordner fuer jeden Durchlauf nach Datum und Zeit
+    outputfolder = os.path.join(__this_files_dir,
+                                'Output',
+                                datetime.now().strftime('%Y%m%d_%H%M%S'))
+    os.mkdir(outputfolder)
+
+    # Gibt den Pfad zum speziellen Order im Output Ordner zurueck
+    return outputfolder
+
+
+def load_mesh(name):
+    '''
+    Initialisiert ein Objekt der MeshData-klasse mittels per GMesh und Dolfin erzeugter
+    .xml Dateien
+    '''
     # Pfad zur speziellen Gitter Datei
     path_meshFile = os.path.join(DATA_DIR, name)
 
@@ -132,23 +139,88 @@ def load_mesh(name):
     return MeshData(mesh, subdomains, boundaries, ind)
 
 
+def __get_index_not_interior_boundary(mesh, subdomains, boundaries, interior = True):
+    """
+    Gibt Indizes der Elemente ohne Traeger am inneren Rand zurueck.
+    Falls interior = False, so werden die Indizes der Vertices
+    des Inneren Randes zurueckgegeben. Diese nicht verwechseln mit DOF-Indizes!
+    """
+
+    # Facetten Indizes des inneren Randes bestimmen
+    ind_interior_boundary_facets = []
+    for i in range(0,len(boundaries)):
+        if boundaries[i] > 4:
+            ind_interior_boundary_facets.append(i)
+
+    # Knoten Indizes des inneren Randes bestimmen
+    ind_interior_boundary_vertices = []
+    for c in cells(mesh):
+        for f in facets(c):
+            if f.index() in ind_interior_boundary_facets:
+                for v in vertices(f):
+                    ind_interior_boundary_vertices.append(v.index())
+
+    if(interior == False): return ind_interior_boundary_vertices
+
+    ind_interior_boundary_vertices = list(set(ind_interior_boundary_vertices))
+
+    # Element Indizes des inneren Randes bestimmen
+    ind_around_interior_boundary_cells = []
+    for c in cells(mesh):
+        ind = False
+        for v in vertices(c):
+            if v.index() in ind_interior_boundary_vertices:
+                ind = True
+        if ind:
+            ind_around_interior_boundary_cells.append(c.index())
+
+    # Als neue Subdomain definieren
+    new_sub = MeshFunction("size_t", mesh, 2)
+    new_sub.set_all(0)
+    for i in ind_around_interior_boundary_cells:
+        if subdomains[i] == 1:
+            new_sub[i] = 1
+        else:
+            new_sub[i] = 2
+
+    # Indizes berechenen mit Traeger nicht am inneren Rand ueber Testproblem
+    V = VectorFunctionSpace(mesh, "P", 1, dim=2)
+
+    dx_int = Measure('dx',
+                     domain=mesh,
+                     subdomain_data=new_sub)
+
+    v = TestFunction(V)
+
+    dummy_y = Constant((1.0, 1.0))
+
+    f_elas_int_1 = inner(dummy_y, v)*dx_int(1)
+    F_elas_int_1 = assemble(f_elas_int_1)
+    f_elas_int_2 = inner(dummy_y, v)*dx_int(2)
+    F_elas_int_2 = assemble(f_elas_int_2)
+
+    # Indizes setzen durch alle Punkte mit Wert 0, die keinen Einfluss haben
+    ind1 = (F_elas_int_1.get_local() == 0.0)
+    ind2 = (F_elas_int_2.get_local() == 0.0)
+
+    ind = ind1 | ind2
+
+    if(interior): return ind
+
+
 def mesh_distance(mesh1, mesh2):
     """
-    Berechnet Abstand zweier Formen, mesh2 dient dabei als Ausgangsform, d.h. von dort wird Abstand gemessen
-    Input sind meshklassen
+    Berechnet einen integrierten Abstand der Minima aller Punkte zweier Formen.
+    mesh2 dient dabei als Ausgangsform, d.h. von dort aus wird Abstand gemessen.
+    Input sind Objekte der MeshData-Klasse.
     """
 
     # Berechne Indizes der Vertices der Boundaries
     boundary_index_mesh1 = __get_index_not_interior_boundary(mesh1.mesh, mesh1.subdomains, mesh1.boundaries, interior = False)
     boundary_index_mesh2 = __get_index_not_interior_boundary(mesh2.mesh, mesh2.subdomains, mesh2.boundaries, interior = False)
 
-    #print(facet_index_mesh2)
-    #print(boundary_index_mesh2[1])
-    #for i in range(16): print(mesh2.mesh.coordinates()[boundary_index_mesh2[i]])
-
     # Berechne die Abstaende alle Vertices von mesh1 zu jeweils einem festen Vertex aus mesh2,
     # dann bilde das Minimum und fuege in Liste hinzu
-
     distance_list_vertex = np.zeros(mesh2.mesh.num_vertices())
 
     for i in boundary_index_mesh2:
@@ -163,42 +235,26 @@ def mesh_distance(mesh1, mesh2):
         distance_list_vertex[i] = dist
 
     # definiere eine Funktion auf mesh2 mit Abstandswerten auf Boundaries der Form
-
     V = FunctionSpace(mesh2.mesh, "P", 1)
     distance_function = Function(V)
     vtod = dolfin.vertex_to_dof_map(V)
 
-    # uebersetze vertexindizes in zugehoerige dofindizes (der fenicsfunction), da indizes nicht gleich
+    # uebersetze Vertexindizes in zugehoerige DOF-Indizes (der fenicsfunction), da Indizes nicht gleich
     distance_list_dof = np.zeros(len(distance_function.vector().get_local()))
     for i in boundary_index_mesh2: distance_list_dof[vtod[i]] = distance_list_vertex[i]
 
     # definiere Funktion auf der Form
     distance_function.vector()[:] = distance_list_dof
 
-    #outputfolder = os.path.join(__this_files_dir,
-    #                            'Output',
-    #                            datetime.now().strftime('%Y%m%d_%H%M%S'))
-    #file_datar = File(os.path.join(outputfolder,
-    #                                     'shapefunc', 'shapefunc.pvd'))
-    #file_datar << distance_function
-
     # Berechne das zugehoerige Integral
     dS = Measure('dS', subdomain_data=mesh2.boundaries)
-
-    # for testing: kann analytisch berechnet werden
-    onefunction = Function(V)
-    onematrix = np.zeros(len(onefunction.vector().get_local()))
-    for i in boundary_index_mesh2: onematrix[vtod[i]] = 1.
-    onefunction.vector()[:] = onematrix
-
     distance_integral = distance_function('+')*dS(5) + distance_function('+')*dS(6)
-    #distance_integral = onefunction('+') * dS(5) + onefunction('+') * dS(6)
     value = assemble(distance_integral)
 
     return value
 
 
-def solve_targetfunction(meshData, deformation, y_z, fValues, nu):
+def targetfunction(meshData, deformation, y_z, fValues, nu):
     """
     Berechnet den Wert des Zielfunktionals nach Verschiebung
     """
@@ -233,6 +289,37 @@ def solve_targetfunction(meshData, deformation, y_z, fValues, nu):
     J = j + j_reg
 
     return J
+
+
+def shape_deriv(meshData, p, y, z, fValues, nu, V):
+    """
+    Berechnet die Formableitung in Richtung V; V ist FEniCS Funktion, z ist Projektion von y_z
+    """
+
+    dx = Measure('dx',
+                 domain=meshData.mesh,
+                 subdomain_data=meshData.subdomains)
+    dS = Measure('dS', subdomain_data=meshData.boundaries)
+
+    f1 = Constant(fValues[0])
+    f2 = Constant(fValues[1])
+    epsilon_V = sym(nabla_grad(V))
+    n = FacetNormal(meshData.mesh)
+
+    # Gradient f ist 0, da f stueckweise konstant
+    Dj = (-inner(grad(y), dot(epsilon_V*2, grad(p)))*dx
+          + nabla_div(V)*(1/2*(y-z)**2 + inner(grad(y), grad(p)))*dx
+          - nabla_div(V)*f1*p*dx(1) - nabla_div(V)*f2*p*dx(2))
+
+    Dj_reg = nu*((nabla_div(V('+'))
+                  - inner(dot(nabla_grad(V('+')), n('+')), n('+')))*dS(5)
+                  + (nabla_div(V('+'))
+                     - inner(dot(nabla_grad(V('+')), n('+')), n('+')))*dS(6))
+
+    deriv = assemble(Dj + Dj_reg)
+
+    return deriv
+
 
 def solve_state(meshData, fValues):
     """
@@ -376,104 +463,6 @@ def solve_linelas(meshData, p, y, z, fValues, mu_elas, nu, zeroed = True):
 
     # Rueckgabe des Deformationsvektorfeldes U und der Abbruchbedingung
     return U, nrm_f_elas
-
-
-
-def __get_index_not_interior_boundary(mesh, subdomains, boundaries, interior = True):
-    """
-    gibt Indizes der Elemente ohne Traeger am inneren Rand
-    """
-
-    # Facetten Indizes des inneren Randes bestimmen
-    ind_interior_boundary_facets = []
-    for i in range(0,len(boundaries)):
-        if boundaries[i] > 4:
-            ind_interior_boundary_facets.append(i)
-
-    # Knoten Indizes des inneren Randes bestimmen
-    ind_interior_boundary_vertices = []
-    for c in cells(mesh):
-        for f in facets(c):
-            if f.index() in ind_interior_boundary_facets:
-                for v in vertices(f):
-                    ind_interior_boundary_vertices.append(v.index())
-
-    if(interior == False): return ind_interior_boundary_vertices
-
-    ind_interior_boundary_vertices = list(set(ind_interior_boundary_vertices))
-
-    # Element Indizes des inneren Randes bestimmen
-    ind_around_interior_boundary_cells = []
-    for c in cells(mesh):
-        ind = False
-        for v in vertices(c):
-            if v.index() in ind_interior_boundary_vertices:
-                ind = True
-        if ind:
-            ind_around_interior_boundary_cells.append(c.index())
-
-    # Als neue Subdomain definieren
-    new_sub = MeshFunction("size_t", mesh, 2)
-    new_sub.set_all(0)
-    for i in ind_around_interior_boundary_cells:
-        if subdomains[i] == 1:
-            new_sub[i] = 1
-        else:
-            new_sub[i] = 2
-
-    # Indizes berechenen mit Traeger nicht am inneren Rand ueber Testproblem
-    V = VectorFunctionSpace(mesh, "P", 1, dim=2)
-
-    dx_int = Measure('dx',
-                     domain=mesh,
-                     subdomain_data=new_sub)
-
-    v = TestFunction(V)
-
-    dummy_y = Constant((1.0, 1.0))
-
-    f_elas_int_1 = inner(dummy_y, v)*dx_int(1)
-    F_elas_int_1 = assemble(f_elas_int_1)
-    f_elas_int_2 = inner(dummy_y, v)*dx_int(2)
-    F_elas_int_2 = assemble(f_elas_int_2)
-
-    # Indizes setzen durch alle Punkte mit Wert 0, die keinen Einfluss haben
-    ind1 = (F_elas_int_1.get_local() == 0.0)
-    ind2 = (F_elas_int_2.get_local() == 0.0)
-
-    ind = ind1 | ind2
-
-    if(interior): return ind
-
-
-def shape_deriv(meshData, p, y, z, fValues, nu, V):
-    """
-    Berechnet die Formableitung in Richtung V; V ist FEniCS Funktion, z ist Projektion von y_z
-    """
-
-    dx = Measure('dx',
-                 domain=meshData.mesh,
-                 subdomain_data=meshData.subdomains)
-    dS = Measure('dS', subdomain_data=meshData.boundaries)
-
-    f1 = Constant(fValues[0])
-    f2 = Constant(fValues[1])
-    epsilon_V = sym(nabla_grad(V))
-    n = FacetNormal(meshData.mesh)
-
-    # Gradient f ist 0, da f stueckweise konstant
-    Dj = (-inner(grad(y), dot(epsilon_V*2, grad(p)))*dx
-          + nabla_div(V)*(1/2*(y-z)**2 + inner(grad(y), grad(p)))*dx
-          - nabla_div(V)*f1*p*dx(1) - nabla_div(V)*f2*p*dx(2))
-
-    Dj_reg = nu*((nabla_div(V('+'))
-                  - inner(dot(nabla_grad(V('+')), n('+')), n('+')))*dS(5)
-                  + (nabla_div(V('+'))
-                     - inner(dot(nabla_grad(V('+')), n('+')), n('+')))*dS(6))
-
-    deriv = assemble(Dj + Dj_reg)
-
-    return deriv
 
 
 def bilin_a(meshData, U, V, mu_elas):

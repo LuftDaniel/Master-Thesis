@@ -1,12 +1,14 @@
 import numpy as np
-import sovi_bib as sovi
+import shape_bib as sovi
+import tkinter as tk
 
 memory_length = 4
 
 def f(x): return (x[0]**2)*(x[1]**2)
 
 #negative ableitung
-def f_div(x): return np.array([2.*x[0]*(x[1]**2), 2.*(x[0]**2)*(x[1])])
+def f_div(x):
+    return np.array([2.*x[0]*(x[1]**2), 2.*(x[0]**2)*(x[1])])
 
 x_start = np.array([20., 20.])
 
