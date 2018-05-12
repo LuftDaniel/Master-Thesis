@@ -71,7 +71,34 @@
  {\endlist}
 
 
-
+\usepackage{listings}
+\usepackage{color}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
 
 \begin{document}
 
@@ -87,10 +114,140 @@
 \selectlanguage{ngerman}
 
 \section{Implementierung in Python mit FEniCS}
-\subsection{Gute frage}
+\subsection{???}
 
-Nachdem wir in vorigen Kapiteln den theoretischen Hintergrund der Formoptimierung und gradientenbasierte Verfahren, wie dem L-BFGS-Verfahren, gelegt haben, möchten wir in diesem Abschnitt die Implementierung des Algorithmus \colorbox{red}{cite} in Python mit Hilfe des Moduls FEniCS vorstellen. 
+\colorbox{red}{mache 2 große sections bib und main, dann bei bib untersections gitter, lösen von pdes und berechnungen, und bfgs-step}
 
+Nachdem wir in vorigen Kapiteln den theoretischen Hintergrund der Formoptimierung und gradientenbasierte Verfahren, wie dem L-BFGS-Verfahren, gelegt haben, möchten wir in diesem Abschnitt die Implementierung des Algorithmus \colorbox{red}{cite} in Python 3.5 \colorbox{red}{Versicherung, dass es nur unter dieser Version läuft} mit Hilfe des Moduls FEniCS vorstellen. Im Folgenden werden wir die in den Dateien enthaltenen Kommentare nicht oder nicht in voller Länge in den Codeausschnitten aufführen, da wir Redundanz bei den Erklärungen vermeiden möchten. Selbstverständlich sind in den Quellcodes selber ausführliche Kommentierungen vorhanden. Die Implementierung in Python besteht im wesentlichen aus den beiden Dateien
+\begin{align*}
+\textsf{shape\_main.py} \hspace{0.8cm} \textsf{shape\_bib.py}.
+\end{align*}
+Die Datei \textit{shape\_main.py} enthält hierbei den zusammenhängenden Hauptcode. Die Datei \textit{shape\_bib.py} ist eine Bibliothek, in welcher Funktionen zum Umgang mit Gittern, Berechnungen auf Formen, Löser für PDEs und der L-BFGS-Algorithmus mit den damit verbundenen Objekten gebündelt sind. Die Berechnungen auf den Formen und das Lösen der PDEs wird mittels FEniCS geschehen.
+FEniCS ist eine \colorbox{red}{https://fenicsproject.org/} frei zugängliche Programmierung, welche ermöglicht, partielle Differentialgleichungen mit relativ geringem Aufwand zu lösen. Dabei bedient sich FEniCS der sogenannten \textit{Unified Form Language} (UFL), was die Grundlage zur Implementierung der PDE's in schwacher Formulierung darstellt, mehr hierzu bei \cite{Unifiedformlanguage}. Diese nutzen wir, um 
+Bevor wir uns der Lösung von PDE's und der Implementierung des L-BFGS-Algorithmus zuwenden, müssen wir zunächst klären, wie wir die notwendigen Gitter erzeugen und mit diesen umgehen.
+
+\colorbox{red}{subsection gitter?}
+
+Gitterdateien erzeugen wir mit Hilfe des offen zugänglichen Programms \textsf{Gmsh 3.0.6} \colorbox{red}{http://gmsh.info/}. Hierbei muss man zunächst eine \textsf{.geo} Datei geschrieben werden. Wir zeigen dies am Beispiel eines kleinen Kreises.
+Zunächst setzen wir die für unser Gitter relevanten Punkte in ein 3-dimensionales Koordinatensystem
+
+\begin{lstlisting}
+Point(1) = {0.0, 0.0, 0.0, 1.0};
+Point(2) = {1.0, 0.0, 0.0, 1.0};
+Point(3) = {0.0, 1.0, 0.0, 1.0};
+Point(4) = {1.0, 1.0, 0.0, 1.0};
+Point(5) = {0.5, 0.35, 0.0, 1.0};
+Point(6) = {0.5, 0.5, 0.0, 1.0};
+Point(7) = {0.5, 0.65, 0.0, 1.0};
+\end{lstlisting}
+
+Hierbei beschreiben die ersten 3 Einträge des Tupels die x-, y- und z-Koordinaten der Punkte, der vierte Eintrag gibt die sogenannte \textit{characteristic length} der Punkte an, was lediglich die Elementgröße des Punktes ist. Punkte 1 bis 4 werden dazu dienen das Einheitsquadrat im $\mathbb{R}^2$ zu definieren, Punkte 5 bis 7 werden einen Kreis mit Mittelpunkt $(0.5,0.5)$ definieren. Dies geschieht mittels der Befehle
+
+\begin{lstlisting}
+Line(1) = {1, 2};
+Line(2) = {2, 4};
+Line(3) = {4, 3};
+Line(4) = {3, 1};
+
+Circle(5) = {5, 6, 7};
+Circle(6) = {7, 6, 5};
+\end{lstlisting}
+
+Da diese Befehle lediglich Linien und Halbkreise aus den eingegebenen Punkten definieren, ist es nötig mittels eines \textsf{Loop}-Befehls diese zu einer gemeinsamen Form zu verbinden.
+
+\begin{lstlisting}
+Line Loop(1) = {1, 2, 3, 4};
+Line Loop(2) = {5, 6};
+\end{lstlisting}
+
+Um innere und äußere Gebiete, welche durch Abgrenzung mittels des Kreises definiert sind, zu markieren, setzen wir diese als \textsf{Plane Line} fest. Die erste Zahl gibt jeweils die Nummer des \textsf{Line Loops} des äußeren Randes, die zweite die des inneren Randes an.
+
+\begin{lstlisting}
+Plane Surface(1) = {1, 2};
+Plane Surface(2) = {2};
+\end{lstlisting}
+
+Weil wir später in der Implementierung auf die Ränder bzw. Formen zugreifen möchten, ist es abschließend noch nötig diese als sogenannte \textsf{Physical Lines} und \textsf{Physical Surfaces} zu definieren. 
+
+\begin{lstlisting}
+Physical Line(1) = {1};
+Physical Line(2) = {2};
+Physical Line(3) = {3};
+Physical Line(4) = {4};
+Physical Line(5) = {5};
+Physical Line(6) = {6};
+
+Physical Surface(1) = {1};
+Physical Surface(2) = {2};
+\end{lstlisting}
+
+Die so geschriebene \textsf{.geo}-Datei wird nun mit Hilfe des Programms \textsf{Gmsh} mit dem Kommando
+
+\begin{center}
+\textsf{gmsh mesh\_smallercircle.geo -2 -clscale 0.025}
+\end{center}
+
+in eine \textsf{.msh} Datei konvertiert. Dabei ist \textsf{mesh\_smallercircle.geo}
+der Name der gespeicherten \textsf{.geo}-Datei, \textsf{-2} die Dimension des erzeugten Gitters und \textsf{0.025} die Feinheit des Gitters. Um diese Datei für FEniCS nutzbar zu machen, konvertieren wir diese mit Hilfe des Dolfin-Befehls
+
+\begin{center}
+\textsf{dolfin-convert mesh\_smallercircle.msh mesh\_smallercircle.xml}
+\end{center}
+
+wobei der erste Eingabewert der Name der \textsf{.msh}-Datei ist, und der zweite der Name der erzeugten \textsf{.xml}-Datei. Hierbei werden außerdem neben dem bloßen Mesh auch eine \textsf{facet\_region.xml}-Datei erstellt, mit welcher man die Ränder initialisieren kann, sowie eine \textsf{physical\_region.xml}-Datei, welche zur Initialisierung der Gebiete des Inneren und Äußeren der Form dient.
+
+\colorbox{red}{neuer Abschnitt?}
+
+Nun besitzen wir die nötigen Gitterdateien, um auf diesen Formoptimierung zu betreiben. Wir stellen kurz vor, mit welchen Objekten und Funktionen wir mit diesen umgehen. Eines der beiden zentralen Objekte des Optimierungsprogramms ist die sogenannte \textit{MeshData-Klasse}. 
+
+\begin{lstlisting}
+class MeshData:
+
+    # Objekt mit allen Daten des Gitters
+    def __init__(self, mesh, subdomains, boundaries, ind):
+
+        # FEniCS Mesh
+        self.mesh = mesh
+
+        # FEniCS Subdomains
+        self.subdomains = subdomains
+
+        # FEniCS Boundaries
+        self.boundaries = boundaries
+
+        # Indizes der Knotenpunkte mit Traeger nicht am inneren Rand
+        self.indNotIntBoundary = ind
+\end{lstlisting}
+
+In einem Objekt dieser Klasse werden sowohl das Gitter, als auch die Gebiete und Ränder bzw. Formen gespeichert. Weiterhin benötigen wir für spätere folgende Berechnungen auch die Indizes der Knotenpunkte (engl. \textit{Vertices}), welche keinen Träger am inneren Rand haben, gespeichert.Die Initialisierung erfolgt mit der von uns implementierten Funktion 
+\begin{center}
+\textsf{load\_mesh(Name)},
+\end{center} wobei \textsf{Name} der Name der Mesh-Datei ohne \textsf{.xml}-Endung ist. Die \textsf{subdomains} und \textsf{boundaries} werden als sogenannte \textsf{MeshFunction} initialisiert. Dies sind Objekte einer in FEniCS implementierten Klasse, welche als Array im \textsf{i}-ten Eintrag die Nummer der \textsf{subdomain} bzw. der \textsf{boundary} zurückgibt, welche den Nummern der \textsf{Physical Surface} bzw. \textsf
+{Physical Line}  in der \textsf{.geo}-Datei entsprechen. Diese Initialierungen geschehen über die Befehle
+
+\begin{lstlisting}
+    mesh 	     = Mesh(path_meshFile + ".xml")
+    subdomains = MeshFunction("size_t", mesh,
+                              path_meshFile + 
+                              "_physical_region.xml")
+    boundaries = MeshFunction("size_t", mesh,
+                              path_meshFile + 
+                              "_facet_region.xml")
+    ind = __get_index_not_interior_boundary(mesh, subdomains, 
+    												                boundaries)  
+\end{lstlisting}
+wobei \textsf{Mesh} als Eingabe den Pfad zur \textsf{.xml}-Datei enthält. Die Meshfunktionen erhalten neben dem \textsf{mesh}-Objekt den Typ der Funktion, in diesem Fall \textsf{size\_t}, und die Pfade zu den jeweiligen Dateien \textsf{\_physical\_region.xml} und \textsf{\_facet\_region.xml}. Es bleibt noch, die Indexliste der Indizes mit Träger nicht am Inneren Rand zu initialisieren. Um diese Indexliste zu erzeugen haben wir die Funktion 
+\begin{align*}
+\textsf{\_\_get\_index\_not\_interior\_boundary(mesh, subdomains, 
+boundaries, interior = True))}  
+\end{align*}
+implementiert. Als Input erhält sie die oben gezeigten Objekte, falls \textsf{interior = True} eingestellt ist, so gibt die Funktion die Liste mit Indizes ohne Träger am Inneren Rand wieder. Wir möchten an dieser Stelle anmerken, dass Indizes auch mehrfach vorkommen, was für unser Programm kein Problem darstellt und bei Bedarf verbessert werden kann. Ist der Parameter \textsf{interior = False}, so gibt die Funktion eine Liste mit den Indizes der Knotenpunkte genau des inneren Randes wieder. Dies spart uns die Implementierung einer weiteren Funktion. Das erzeugen der Liste basiert auf Iterationen durch Facetten des Randes, deren Knoten und den benachbarten Knoten. Diese aufwändige Iteration ist nötig, da die Indizierung der Facetten in der Meshfunktion des Randes in FEniCS nicht mit den Indizes der Mesh's übereinstimmen. Für die genaue Implementierung verweisen wir auf den von uns beigefügten Code. 
+
+\colorbox{red}{neuer Abschnitt lösen von PDE und berechnungen, falls oben noch irgendwas dazugehören kann zu gittern einfügen (evtl bilder)}
+
+Nun besitzen wir Gitterobjekte, auf welchen wir Berechnungen durchführen können. Der Hauptanteil der Berechnungen besteht in dem Lösen von partiellen Differentialgleichungen. Wir möchten exemplarisch an einer implementierten Funktion zeigen, wie dies in FEniCS praktisch passiert.
+
+\colorbox{red}{vergiss nicht die distance function}
 
 
 \newpage
