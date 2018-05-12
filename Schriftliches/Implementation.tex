@@ -215,7 +215,8 @@ class MeshData:
         # FEniCS Boundaries
         self.boundaries = boundaries
 
-        # Indizes der Knotenpunkte mit Traeger nicht am inneren Rand
+        # Indizes der Knotenpunkte mit Traeger nicht 
+        # am inneren Rand
         self.indNotIntBoundary = ind
 \end{lstlisting}
 
@@ -226,26 +227,80 @@ In einem Objekt dieser Klasse werden sowohl das Gitter, als auch die Gebiete und
 {Physical Line}  in der \textsf{.geo}-Datei entsprechen. Diese Initialierungen geschehen über die Befehle
 
 \begin{lstlisting}
-    mesh 	     = Mesh(path_meshFile + ".xml")
-    subdomains = MeshFunction("size_t", mesh,
-                              path_meshFile + 
-                              "_physical_region.xml")
-    boundaries = MeshFunction("size_t", mesh,
-                              path_meshFile + 
-                              "_facet_region.xml")
-    ind = __get_index_not_interior_boundary(mesh, subdomains, 
-    												                boundaries)  
+mesh 	     = Mesh(path_meshFile + ".xml")
+subdomains = MeshFunction("size_t", mesh,
+                          path_meshFile + "_physical_region.xml")
+boundaries = MeshFunction("size_t", mesh, 
+                          path_meshFile + "_facet_region.xml")
+ind        = __get_index_not_interior_boundary(mesh, subdomains, 
+                                               boundaries)  
 \end{lstlisting}
 wobei \textsf{Mesh} als Eingabe den Pfad zur \textsf{.xml}-Datei enthält. Die Meshfunktionen erhalten neben dem \textsf{mesh}-Objekt den Typ der Funktion, in diesem Fall \textsf{size\_t}, und die Pfade zu den jeweiligen Dateien \textsf{\_physical\_region.xml} und \textsf{\_facet\_region.xml}. Es bleibt noch, die Indexliste der Indizes mit Träger nicht am Inneren Rand zu initialisieren. Um diese Indexliste zu erzeugen haben wir die Funktion 
 \begin{align*}
 \textsf{\_\_get\_index\_not\_interior\_boundary(mesh, subdomains, 
-boundaries, interior = True))}  
+boundaries, interior = True)}  
 \end{align*}
 implementiert. Als Input erhält sie die oben gezeigten Objekte, falls \textsf{interior = True} eingestellt ist, so gibt die Funktion die Liste mit Indizes ohne Träger am Inneren Rand wieder. Wir möchten an dieser Stelle anmerken, dass Indizes auch mehrfach vorkommen, was für unser Programm kein Problem darstellt und bei Bedarf verbessert werden kann. Ist der Parameter \textsf{interior = False}, so gibt die Funktion eine Liste mit den Indizes der Knotenpunkte genau des inneren Randes wieder. Dies spart uns die Implementierung einer weiteren Funktion. Das erzeugen der Liste basiert auf Iterationen durch Facetten des Randes, deren Knoten und den benachbarten Knoten. Diese aufwändige Iteration ist nötig, da die Indizierung der Facetten in der Meshfunktion des Randes in FEniCS nicht mit den Indizes der Mesh's übereinstimmen. Für die genaue Implementierung verweisen wir auf den von uns beigefügten Code. 
 
 \colorbox{red}{neuer Abschnitt lösen von PDE und berechnungen, falls oben noch irgendwas dazugehören kann zu gittern einfügen (evtl bilder)}
 
-Nun besitzen wir Gitterobjekte, auf welchen wir Berechnungen durchführen können. Der Hauptanteil der Berechnungen besteht in dem Lösen von partiellen Differentialgleichungen. Wir möchten exemplarisch an einer implementierten Funktion zeigen, wie dies in FEniCS praktisch passiert.
+Nun besitzen wir Gitterobjekte, auf welchen wir Berechnungen durchführen können. Der Hauptanteil der Berechnungen besteht in dem Lösen von partiellen Differentialgleichungen. Die Gleichungen, welche wir für die Formoptimierung lösen müssen, haben wir in \colorbox{red}{zitat kapitel vorher} eingeführt. Dabei handelt es sich um die Poisson-Zustandsgleichung \colorbox{red}{ref}, die zugehörige adjungierte Gleichung \colorbox{red}{ref}, und die lineare Elastizitätsgleichung \colorbox{red}{ref}, welche uns einen Formgradienten liefern wird. Wir möchten exemplarisch an der implementierten Funktion zur Lösung der linearen Elastizitätsgleichung zeigen, wie dies in FEniCS praktisch passiert. Für die beiden anderen Gleichungen wird im wesentlichen analog vorgegangen, hierbei verweisen wir auf unseren Quellcode \colorbox{red}{zitat?}. Die Lösung der Gleichungen wird über die Funktionen 
+\begin{lstlisting}
+solve_state(meshData, fValues)
+solve_adjoint(meshData, y, z)
+solve_linelas(meshData, p, y, z, fValues, 
+	          mu_elas, nu, zeroed = True)
+\end{lstlisting}
+zurückgegeben, wobei jede Funktion ein Objekt der \textsf{MeshData}-Klasse erhält, sowie die nötigen Funktionen aus den oben genannten Gleichungen, welche als sogenannte \textit{FEniCS-Funktionen} initialisiert sind. Der Löser der linearen Elastizitätsgleichung benötigt weiterhin die aus \colorbox{red}{ref lame param} bekannten Lamé-Parameter, sowie den Parameter der Perimeter-Regularisierung \textsf{nu}. Die Einstellung \textsf{zeroed = True} bewirkt, dass bei Lösen der Gleichung die Werte der Punkte ohne Träger am inneren Rand auf 0 gesetzt werden, was eine Instabilität des Verfahrens vermeidet. Wir vermuten, dass es sich bei den Instabilitäten um Rundungs- und/ oder Diskretisierungsfehler handelt, siehe \cite{bfgs1}, Abschnitt 5. Die genaue Ursache der Fehler ist jedoch nicht sicher geklärt. 
+
+Wie oben schon erwähnt, sind die Funktionen \textsf{p, y, z} FEniCS-Funktionen. 
+Skalarwertige FEniCS-Funktionen \textsf{f} auf dem Gitter \textsf{meshData.mesh} werden beispeilsweise mit
+\begin{lstlisting}
+V = FunctionSpace(meshData.mesh, "P", 1)
+f = Function(V)
+\end{lstlisting}
+initialisiert. Um die lineare Elastizitätsgleichung zu lösen, müssen wir zunächst den dazugehörigen Funktionenraum angeben, was durch
+\begin{lstlisting}
+V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+\end{lstlisting}
+geschieht. Da die Lösung eine vektorwertige Funktion ist, ist es für FEniCS notwendig die Dimension explizit anzugeben. Die Parameter \textsf{"P"} und \textsf{1} geben an, dass die Werte zwischen den Gitterpunkten mittels einer Polynominterpolation vom Grad 1 erzeugt werden. Hier sind weitere Möglichkeiten zur Interpolation gegeben, siehe etwa \cite{fenics}. Um die Gleichung aufzustellen, müssen wir Randwerte festlegen. Für die Dirichlet-Nullrandwerte geschieht dies über den Befehl
+\begin{lstlisting}
+u_out = Constant((0.0, 0.0))
+bcs = [DirichletBC(V, u_out, 
+                   meshData.boundaries, i) for i in range (1, 5) ]
+\end{lstlisting}
+wobei \textsf{i} über die Nummern der äußeren Ränder läuft. FEniCS unterscheidet beim Lösen von Differentialgleichungen zwischen Testfunktionen und der Lösungsfunktion. Wir initialisieren diese mittels
+\begin{lstlisting}
+U = TrialFunction(V)
+v = TestFunction(V)
+\end{lstlisting}
+\colorbox{red}{sage, dass damit nicht so einfach gearbeitet werden kann, vielleicht das vorweg nehmen, oder auf das bfgs kapitel weiter unten verweisen}
+wobei \textsf{U} die Lösung, also das Gradientenvektorfeld in Domaindarstellung, und \textsf{v} stellvertretend für die zum Raum \textsf{V} gehörenden Testfunktionen steht. Nun wird die linke und rechte Seite der Gleichung aufgestellt:
+\begin{lstlisting}
+LHS    = bilin_a(meshData, U, v, mu_elas)
+F_elas = shape_deriv(meshData, p, y, z, fValues, nu, v)
+\end{lstlisting}
+Hierbei ist \textsf{bilin\_a} die aus \colorbox{red}{ref bilinform} bekannte Bilinearform, und \textsf{shape\_deriv} die in \colorbox{red}{ref shape deriv} angegebene Formableitung. Beides wird in der für FEniCS typischen Weise assembliert, wobei wir dies exemplarisch an der Bilinearform \textsf{bilin\_a} aufzeigen: 
+\begin{lstlisting}
+def bilin_a(meshData, U, V, mu_elas):
+
+    dx = Measure("dx", domain=meshData.mesh, 
+                 subdomain_data=meshData.subdomains)
+
+    epsilon_v = sym(nabla_grad(V))
+    sigma_U   = 2.0*mu_elas*sym(nabla_grad(U))
+
+    a     = inner(sigma_U, epsilon_v)*dx('everywhere')
+    value = assemble(a)
+
+    return value
+
+\end{lstlisting}
+Input sind ein Objekt der \textsf{MeshData}-Klasse, sowie zwei FEniCS Funktionen \textsf{U, V} und die Lamé-Parameter \textsf{mu\_elas}. \colorbox{red}{eigentlich lame oder? passt eig.} Hier kommt die stärke von FEniCS zur Geltung, nähmlich die Verwendung der eingangs erwähnten \textit{Unified Form Language}. Die hier Initialisierten Objekte sind exakt die Objekte, welche in der schwachen Formulierung der Gleichung \colorbox{red}{ref lin elas} auftauchen, was der mathematischen Schreibweise sehr nahe steht, und somit die Lesbarkeit deutlich erhöht. Es ist lediglich notwendig die Objekte abschließend zu assemblieren um einen Wert zu erhalten. Dies geschieht mit dem Befehl \textsf{assemble}. Genau auf selbige Weise wird die Formableitung \textsf{shape\_deriv} aufgebaut, weshalb wir hier auf den Quellcode verweisen. Da die Angabe der programmiertechnischen Details der Objekte der UFL den Rahmen dieser Arbeit sprengen würde, verweisen wir für den interessierten Leser auf \cite{fenics} und \cite{Unifiedformlanguage}.
+
+\colorbox{red}{printe mal F\_elas und schaue, wie das mit der Ableitung shape\_deriv zusamenhängt und nrm\_f\_elas}
+
+jetzt solve\_linelas fertig erklären.
 
 \colorbox{red}{vergiss nicht die distance function}
 
