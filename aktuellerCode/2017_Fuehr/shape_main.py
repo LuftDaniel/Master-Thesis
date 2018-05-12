@@ -4,6 +4,8 @@ import time
 import argparse
 import os
 import numpy as np
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 parameters['allow_extrapolation'] = True
@@ -18,7 +20,8 @@ f1 = -10.0
 f2 = 100.0
 
 # Waehle, ob das Zielgitter pertubiert werden soll
-Pertubation = False
+Pertubation = True
+sigma = Constant(0.0006)
 
 # Definition des minimalen und maximalen Lameparameters
 mu_min = 1.0
@@ -30,13 +33,13 @@ memory_length = 60
 
 # Parameter fuer Perimeter-Regularisierung und Abbruchkriterium fuer Optimierung
 nu        = 0.001
-tol_shopt = 2.e-3
+tol_shopt = 5.e-4
 
 # Parameter fuer Backtracking-Linesearch
 Linesearch = False
 Resetcounter = 0
 shrinkage = 0.5
-c = 0.99
+c = 0.9999
 start_scale = 5.0
 
 # ----------------------- #
@@ -68,7 +71,7 @@ string_mesh_desription = """\nParameter und Verfahren muessen in Datei geaendert
 parser = argparse.ArgumentParser(description=string_mesh_desription,
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('-m','--mesh', type=int,
-                    help='Waehle Gitter-Kombinationen (1, 2, 3, 4, 5, 6, 7, 8)',
+                    help='Waehle Gitter-Kombinationen (1, 2, 3, 4, 5, 6, 7, 8, 9)',
                     required=True)
 args = parser.parse_args()
 
@@ -127,7 +130,7 @@ file_data_lambda = File(os.path.join(outputfolder,
 file_data_mesh   = File(os.path.join(outputfolder,
                                      'TargetData',      'mesh.pvd'))
 file_data_bound  = File(os.path.join(outputfolder,
-                                     'BoundaryData',      'bound.pvd'))
+                                     'BoundaryData',      'bound_target.pvd'))
 file_lame        = File(os.path.join(outputfolder,
                                      'LameParameter',   'lamepar.pvd'))
 file_bound_end   = File(os.path.join(outputfolder,
@@ -169,7 +172,6 @@ targetMeshData = bib.load_mesh(targetMesh_file)
 
 # Parameter Normalverteilung fuer Stoerung, sigma vorsichtig waehlen!
 mu = Constant(0.0)
-sigma = Constant(0.006)
 
 if(Pertubation):
     # finde Indizes der Knoten am Inneren Rand
@@ -409,7 +411,7 @@ while nrm_f_elas[1] > tol_shopt:
         zero_function = Function(VectorFunctionSpace(MeshData.mesh, "P", 1, dim=2))
         current_value = bib.targetfunction(MeshData, zero_function, y_z, f_values, nu)
         S.vector()[:] = start_scale * S.vector()
-        #current_deriv = bib.shape_deriv(MeshData, p, y, z, f_values, nu, S)
+        current_deriv = bib.shape_deriv(MeshData, p, y, z, f_values, nu, S)
 
         counterer = 0
         #print(current_value)
@@ -424,7 +426,7 @@ while nrm_f_elas[1] > tol_shopt:
             print("shape deriv: {0:3e}".format(bib.shape_deriv(MeshData, p, y, z, f_values, nu, S)))
             #print("current Value: {0:3e}".format(current_value))
             #print("next Value: {0:3e}\n".format(bib.targetfunction(MeshData, S, y_z, f_values, nu)))
-            #print("bilin deriv: {0:3e}".format(bib.bilin_a(MeshData,S,-U_real,mu_elas_projected)))
+            #print("bilin deriv: {0:3e}".format(bib.bilin_a(MeshData,S,U_real,mu_elas_projected)))
 
             scale_parameter = shrinkage * scale_parameter
             S.vector()[:]   = shrinkage * S.vector()
@@ -567,16 +569,22 @@ print("\n-------------------------------------------------\n")
 #     GRAPH PRINTING      #
 # ----------------------- #
 
+
 with open(os.path.join(outputfolder, 'outputdata_grad.txt')) as output:
     items  = (map(float, line.split(";")) for line in output)
     xs_grad, ys_grad = zip(*items)
 
-plt.plot(xs_grad, ys_grad)
+plot1, = plt.plot(xs_grad, ys_grad, label="log Norm f_elas")
+
+#legend_grad = plt.legend(handles=[plot1], loc=1)
 
 with open(os.path.join(outputfolder, 'outputdata_mshd.txt')) as output:
     items  = (map(float, line.split(";")) for line in output)
     xs_mshd, ys_mshd = zip(*items)
 
-plt.plot(xs_mshd, ys_mshd)
+plot2, = plt.plot(xs_mshd, ys_mshd, label = "log Meshdistance")
 
+legend_mshd = plt.legend(handles=[plot1, plot2], loc=1)
+
+plt.savefig(os.path.join(outputfolder, 'convergence_fig'))
 plt.show()

@@ -1,6 +1,8 @@
 import numpy as np
 import shape_bib as sovi
-import tkinter as tk
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 
 memory_length = 4
 
