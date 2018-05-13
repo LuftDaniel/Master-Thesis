@@ -298,7 +298,7 @@ def bilin_a(meshData, U, V, mu_elas):
 \end{lstlisting}
 Input sind ein Objekt der \textsf{MeshData}-Klasse, sowie zwei FEniCS Funktionen \textsf{U, V} und die Lamé-Parameter \textsf{mu\_elas}. \colorbox{red}{eigentlich lame oder? passt eig.} Hier kommt die stärke von FEniCS zur Geltung, nähmlich die Verwendung der eingangs erwähnten \textit{Unified Form Language}. Die hier Initialisierten Objekte sind exakt die Objekte, welche in der schwachen Formulierung der Gleichung \colorbox{red}{ref lin elas} auftauchen, was der mathematischen Schreibweise sehr nahe steht, und somit die Lesbarkeit deutlich erhöht. Es ist lediglich notwendig die Objekte abschließend zu assemblieren um einen Wert zu erhalten. Dies geschieht mit dem Befehl \textsf{assemble}. Genau auf selbige Weise wird die Formableitung \textsf{shape\_deriv} aufgebaut, weshalb wir hier auf den Quellcode verweisen. Da die Angabe der programmiertechnischen Details der Objekte der UFL den Rahmen dieser Arbeit sprengen würde, verweisen wir für den interessierten Leser auf \cite{fenics} und \cite{Unifiedformlanguage}.
 
-Es bedarf nur noch dem initialisieren der Randbedingungen für die assemblierten Objekte, bevor wir die lineare Elastizitätsgleichung gelöst wird. Zuvor bauen wir noch die Option ein, die Werte, welche nicht am Träger des inneren Randes sind, auf Null zu setzen.
+Es bedarf nur noch dem Initialisieren der Randbedingungen für die assemblierten Objekte, bevor wir die lineare Elastizitätsgleichung lösen. Zuvor bauen wir noch die Option ein, die Werte, welche nicht am Träger des inneren Randes sind, auf Null zu setzen.
 
 \begin{lstlisting}
 if(zeroed): F_elas[meshData.indNotIntBoundary] = 0.0
@@ -403,8 +403,19 @@ def update_grad(self, upd_grad):
 \end{lstlisting}
 
 Wir wollen anmerken, dass sich diese Klasse natürlich auch direkt für die Implementierung von anderen Limited-Memory-Verfahren weiterverwenden ließe. 
+Mit Hilfe dieser Klasse lässt sich nun ein L-BFGS-Schritt nach dem 2-Schleifen-Algorithmus \colorbox{red}{ref 2 loop} implementieren. Dies haben wir mit der Funktion 
+\begin{center}
+\textsf{bfgs\_step(meshData, memory, mu\_elas, q\_target)}
+\end{center} getan. Diese Funktion benötigt als Input zum einen ein Objekt der  \textsf{MeshData}-Klasse, auf der die FEniCS-Funktionen initialisiert, und die Bilinearform \textsf{bilin\_a} ausgewertet werden. Für die Bilinearform wird zudem der Lamé-Parameter \textsf{mu\_elas} benötigt. Weiterhin wird eine \textsf{bfgs\_memory} verlangt, mit deren Daten die genannten Funktionen erzeugt werden. Die von uns in vorigen Beispielen erläuterte Arithmetik mit FEniCS-Funktionen kommt hierbei zum tragen. Da dies zu lange Codesequenzen sind, verweisen wir für die genaue Implementierung auf den beiliegenden Quellcode. \textsf{q\_target} ist hier ein Array mit den DOF-Werten einer FEniCS-Funktion, in welcher der in dem Schritt berechnete approximierte Hesseoperator ausgewertet wird. So gibt die Funktion \textsf{bfgs\_step} eine vektorwertige FEniCS-Funktion zurück, welche als Deformationsvektorfeld dienen kann, und mit
+\begin{center}
+	$B_k^{-1} q_{target} \; \hat{=} \; \textsf{bfgs\_step(meshData, memory, mu\_elas, q\_target)}$
+\end{center}
+identifiziert werden kann, falls $k>0$. Im Falle, dass die Memory noch leer ist, und kein Schritt zuvor durchgeführt wurde, gibt die Funktion das negative Gradientenfeld \textsf{-memory.gradient[0]} wieder. Wir möchten den Leser darauf aufmerksam machen, dass die Position der in der Memory gespeicherten Gradienten und Deformationen für die korrekte Berechnung des Schrittes essentiell sind. Befindet man sich in Schritt $k$, so muss der Eintrag \textsf{memory.gradient[0]} der $k$'te Gradient sein, und \textsf{memory.deformation[0]} die zuvor im Schritt $k-1$ berechnete Deformation. D.h. die Memory muss auf dem aktuellst möglichen Stand sein. Jetzt besitzen wir das gesamte Rüstzeug, um in der Hauptdatei die Bausteine miteinander zu vernetzen.
 
-\colorbox{red}{bfgsstep}
+\colorbox{red}{neues großes Kapitel; Maindatei}
+
+Die von uns eingeführten Funktionen und Objekte lassen sich nun auf bequeme Weise miteinander in Verbindung bringen. Den Hauptalgorithmus 
+
 
 \newpage
 \nocite{*}
