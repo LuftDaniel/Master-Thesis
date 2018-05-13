@@ -97,6 +97,11 @@ Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
 \newblock {\em Geometric Science of Information{,} Lecture Notes in Computer
   Science}, 9389:pp. 499--508, 2015.
 
+\bibitem{diffusion}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Structured inverse modeling in parabolic diffusion problems.
+\newblock 2015.
+
 \bibitem{bfgs2}
 Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
 \newblock Efficient pde constrained shape optimization based on

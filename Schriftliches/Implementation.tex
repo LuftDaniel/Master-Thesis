@@ -251,7 +251,7 @@ solve_adjoint(meshData, y, z)
 solve_linelas(meshData, p, y, z, fValues, 
 	          mu_elas, nu, zeroed = True)
 \end{lstlisting}
-zurückgegeben, wobei jede Funktion ein Objekt der \textsf{MeshData}-Klasse erhält, sowie die nötigen Funktionen aus den oben genannten Gleichungen, welche als sogenannte \textit{FEniCS-Funktionen} initialisiert sind. Der Löser der linearen Elastizitätsgleichung benötigt weiterhin die aus \colorbox{red}{ref lame param} bekannten Lamé-Parameter, sowie den Parameter der Perimeter-Regularisierung \textsf{nu}. Die Einstellung \textsf{zeroed = True} bewirkt, dass bei Lösen der Gleichung die Werte der Punkte ohne Träger am inneren Rand auf 0 gesetzt werden, was eine Instabilität des Verfahrens vermeidet. Wir vermuten, dass es sich bei den Instabilitäten um Rundungs- und/ oder Diskretisierungsfehler handelt, siehe \cite{bfgs1}, Abschnitt 5. Die genaue Ursache der Fehler ist jedoch nicht sicher geklärt. 
+zurückgegeben, wobei jede Funktion ein Objekt der \textsf{MeshData}-Klasse erhält, sowie die nötigen Funktionen aus den oben genannten Gleichungen, welche als sogenannte \textit{FEniCS-Funktionen} initialisiert sind. Der Löser der linearen Elastizitätsgleichung benötigt weiterhin die aus \colorbox{red}{ref lame param} bekannten Lamé-Parameter, sowie den Parameter der Perimeter-Regularisierung \textsf{nu}. Zusätzlich gibt dieser die Norm des Objekts, welches die Formableitung als Operator auf dem Raum der Testfunktionen repräsentiert als zweiten Return wieder, mehr hierzu im weiteren Verlauf, unter \ref{felas}. Die Einstellung \textsf{zeroed = True} bewirkt, dass bei Lösen der Gleichung die Werte der Punkte ohne Träger am inneren Rand auf 0 gesetzt werden, was eine Instabilität des Verfahrens vermeidet. Wir vermuten, dass es sich bei den Instabilitäten um Rundungs- und/ oder Diskretisierungsfehler handelt, siehe \cite{bfgs1}, Abschnitt 5. Die genaue Ursache der Fehler ist jedoch nicht sicher geklärt. 
 
 Wie oben schon erwähnt, sind die Funktionen \textsf{p, y, z} FEniCS-Funktionen. 
 Skalarwertige FEniCS-Funktionen \textsf{f} auf dem Gitter \textsf{meshData.mesh} werden beispeilsweise mit
@@ -280,17 +280,17 @@ wobei \textsf{U} die Lösung, also das Gradientenvektorfeld in Domaindarstellung
 LHS    = bilin_a(meshData, U, v, mu_elas)
 F_elas = shape_deriv(meshData, p, y, z, fValues, nu, v)
 \end{lstlisting}
-Hierbei ist \textsf{bilin\_a} die aus \colorbox{red}{ref bilinform} bekannte Bilinearform, und \textsf{shape\_deriv} die in \colorbox{red}{ref shape deriv} angegebene Formableitung. Beides wird in der für FEniCS typischen Weise assembliert, wobei wir dies exemplarisch an der Bilinearform \textsf{bilin\_a} aufzeigen: 
+Hierbei ist \textsf{bilin\_a} die aus \colorbox{red}{ref bilinform} bekannte Bilinearform, und \textsf{shape\_deriv} die in \colorbox{red}{ref shape deriv} angegebene Formableitung. Beides wird in der für FEniCS typischen Weise assembliert, wobei wir dies exemplarisch an der Bilinearform \textsf{bilin\_a} aufzeigen: \label{bilina}
 \begin{lstlisting}
 def bilin_a(meshData, U, V, mu_elas):
 
     dx = Measure("dx", domain=meshData.mesh, 
                  subdomain_data=meshData.subdomains)
 
-    epsilon_v = sym(nabla_grad(V))
+    epsilon_V = sym(nabla_grad(V))
     sigma_U   = 2.0*mu_elas*sym(nabla_grad(U))
 
-    a     = inner(sigma_U, epsilon_v)*dx('everywhere')
+    a     = inner(sigma_U, epsilon_V)*dx('everywhere')
     value = assemble(a)
 
     return value
@@ -298,12 +298,113 @@ def bilin_a(meshData, U, V, mu_elas):
 \end{lstlisting}
 Input sind ein Objekt der \textsf{MeshData}-Klasse, sowie zwei FEniCS Funktionen \textsf{U, V} und die Lamé-Parameter \textsf{mu\_elas}. \colorbox{red}{eigentlich lame oder? passt eig.} Hier kommt die stärke von FEniCS zur Geltung, nähmlich die Verwendung der eingangs erwähnten \textit{Unified Form Language}. Die hier Initialisierten Objekte sind exakt die Objekte, welche in der schwachen Formulierung der Gleichung \colorbox{red}{ref lin elas} auftauchen, was der mathematischen Schreibweise sehr nahe steht, und somit die Lesbarkeit deutlich erhöht. Es ist lediglich notwendig die Objekte abschließend zu assemblieren um einen Wert zu erhalten. Dies geschieht mit dem Befehl \textsf{assemble}. Genau auf selbige Weise wird die Formableitung \textsf{shape\_deriv} aufgebaut, weshalb wir hier auf den Quellcode verweisen. Da die Angabe der programmiertechnischen Details der Objekte der UFL den Rahmen dieser Arbeit sprengen würde, verweisen wir für den interessierten Leser auf \cite{fenics} und \cite{Unifiedformlanguage}.
 
-\colorbox{red}{printe mal F\_elas und schaue, wie das mit der Ableitung shape\_deriv zusamenhängt und nrm\_f\_elas}
+Es bedarf nur noch dem initialisieren der Randbedingungen für die assemblierten Objekte, bevor wir die lineare Elastizitätsgleichung gelöst wird. Zuvor bauen wir noch die Option ein, die Werte, welche nicht am Träger des inneren Randes sind, auf Null zu setzen.
 
-jetzt solve\_linelas fertig erklären.
+\begin{lstlisting}
+if(zeroed): F_elas[meshData.indNotIntBoundary] = 0.0
 
-\colorbox{red}{vergiss nicht die distance function}
+for bc in bcs:
+    bc.apply(LHS)
+    bc.apply(F_elas)
+\end{lstlisting}
 
+Das lösen der nun aufgebauten Gleichung erfolgt mit dem Befehl.
+\begin{lstlisting}
+U = Function(V, name="deformation_vec")
+solve(LHS, U.vector(), F_elas)
+
+# Rueckgabe des Deformationsvektorfeldes U und der Abbruchbedingung
+return U, nrm_f_elas
+
+\end{lstlisting}
+
+Zu beachten ist, dass wir \textsf{U} als \textsf{.vector()} Objekt übergeben. Diese Objekte lassen Arithmetik, wie beispielsweise das Initialisieren einzelner Werte an Knoten des Gitters für die FEniCS-Funktion, zu. Dies werden wir bei der Implementierung des BFGS-Schrittes maßgeblich verwenden. Das Objekt \textsf{F\_elas} ist bereits von diesem Typ, da wir nicht mit einer bestimmten Richtung, sondern mit einer \textsf{TestFunction} initialisiert haben, weshalb wir hier keinen Befehl benötigen. Das so entstandene Objekt ist also keine skalare Größe, sondern lässt sich als
+\begin{align}\label{felas}
+	D\mathcal{J}(\Omega_2)[\varphi_i] \; \hat{=}\; \textsf{F\_elas.get\_local()[i]}
+\end{align}
+interpretieren, wobei $\varphi_i$ polynomielle Basisfunktionen vom Grad 1 auf dem Gitter sind, welches $\Omega_2$ repräsentiert. Auf diese Weise lässt sich $D\mathcal{J}(\Omega_2)[\cdot]$ über \textsf{F\_elas} als skalarwertige Funktion auf dem initialisierten Gitter auffassen, wobei die jeweiligen Werte des Knoten mit Index \textsf{i} genau den Ableitungen $D\mathcal{J}(\Omega_2)[\varphi_i]$ entsprechen. Dies ermöglicht es uns, die $\mathcal{L}^2$-Norm des so zur Formableitung assozierten Objekts zu bilden, welche genau der zweite Return \textsf{nrm\_f\_elas} ist. 
+Die Größe dieser Norm wird bei uns als Ausstiegskriterium sowohl bei dem Gradienten-, als auch bei dem L-BFGS-Verfahren Verwendung finden.
+Wir warnen den Leser an dieser Stelle, dass die obige Indizierung der Gitterpunkte $i$ und somit der Basisfunktionen $\varphi_i$ im Allgemeinen nicht mit der Indizierung der Werte FEniCS-Funktionen auf dem Gitter, welche \textit{Degrees of freedom (DOF)} genannt werden, und somit nicht mit \textsf{F\_elas.get\_local()[i]} übereinstimmen. Dennoch lässt sich eine entsprechende Bijektion finden, welche in \textsf{Dolfin} mit dem Befehl \textsf{Dolfin.vertex\_to\_dof\_map(V)} erzeugt wird. Diese wird bei uns zum berechnen eines nötigen Formabstandes verwendet, auf welchen wir nun zu sprechen kommen.
+
+Die Distanz zweier Formen werden wir mit 
+\colorbox{red}{sieht scheisse aus}
+\begin{align}\label{distfktdef}
+	d_{shp}(\partial\Omega_1, \partial\Omega_2) := \underset{\partial\Omega_2}{\int} \underset{y\in\partial\Omega_1}{\min} \vert\vert x - y \vert\vert dx
+\end{align}
+messen werden. Diese Distanzfunktion wird bei uns lediglich als Ersatz für den Abstand zweier Formen im Shape-space verwendet, welchen man mittels Geodätischer definieren kann. Um jedoch Geodätische zu bestimmen wäre es nötig eine weitere Differentialgleichung zu lösen, was wir vom Aufwand für nicht vertretbar halten, obwohl dies die korrektere Variante zur Abstandsmessung wäre. Wir bemerken außerdem, dass die oben definierte Abstandfunktion $d_{shp}$ ist nicht symmetrisch, was sich auch anhand der von uns implementierten Beispielformen leicht vorführen lässt. Die Auswertung dieser Distanzfunktion passiert über die von uns implementierte Funktion
+\begin{lstlisting}
+mesh_distance(mesh1, mesh2)
+\end{lstlisting}
+wobei \textsf{mesh1, mesh2} Objekte der \textsf{MeshData}-Klasse sein müssen. Die eigentliche Berechnung der Minima geschieht über Iteration aller sich auf den jeweiligen Boundaries befindlichen Punkte, deren Vertex-Indizes wir aus den Facettenindizes beispielsweise mittels     
+\begin{center}
+\textsf{\_\_get\_index\_not\_interior\_boundary(mesh2.mesh, mesh2.subdomains, mesh2.boundaries, interior = False)}
+\end{center}
+erhalten. Wie bei der linearen Elastizitätsgleichung erwähnt, lässt sich die List der Minima der einzelnen Punkte $x$ nicht ohne weiteres als FEniCS-Funktion initialisieren, da der angesprochene Unterschied der Indizierung der Gitterpunkte und DOFs Probleme bereitet. An dieser Stelle kommt die vertex\_to\_dof\_map zum tragen. Abschließend findet eine zu \ref{bilina} ähnliche Assemblierung des Integrals statt, welche uns den Abstandwert als Return liefert. 
+
+\colorbox{red}{vllt noch ein bild mit dem Abstandswerten als Fenics funktion mit Wert drunter}
+
+\colorbox{red}{vllt noch restliche auf gitter rechnende Funktionen nennen}
+\colorbox{red}{neuer abschnitt}
+
+Die von uns bisher eingeführten Objekte würde schon ausreichen, um ein Verfahren auf Basis des Gradientenabstiegs zu programieren. Wir möchten jedoch einen Schritt weiter gehen, und den L-BFGS-Algorithmus implementieren. Das Hauptproblem bei dem Verfahren besteht darin, sich eine Möglichkeit zu überlegen, mit dessen Hilfe man die Gradienten- und Deformationsfelder speichern und updaten kann, da wir ja nur eine \textit{limited memory} besitzen. Hierzu entwerfen wir die zweite wichtige Klasse in unserem Program, die sogenannte \textsf{bfgs\_memory}-Klasse. Diese ist wie folgt aufgebaut, wobei wir im Program selber noch Initialisierungsfehler mit Warnungen an künftige weitere Verwender eingebaut haben, siehe den Quellcode:
+
+\begin{lstlisting}
+class bfgs_memory:
+
+    def __init__(self, gradient, deformation, length, step_nr):
+
+        # Liste von Gradientenvektorfeldern
+        self.gradient = gradient
+
+        # Liste von Deformationsvektorfeldern
+        self.deformation = deformation
+
+        # Anzahl der gespeicherten letzten Schritte
+        self.length = length
+
+        # Anzahl der bereits ausgefuehrten l-BFGS-Schritte
+        self.step_nr = step_nr
+\end{lstlisting}
+
+Diese Klasse besteht aus zwei Listen von Arrays \textsf{gradient} und \textsf{deformation}, und zwei Zahlen \textsf{length} und \textsf{step\_nr}. 
+\textsf{length} ist der Parameter, welche die Anzahl der gespeicherten vorherigen Schritte im L-BFGS-Verfahren angibt, und somit die Länge der Liste der Arrays bestimmt. \textsf{step\_nr} ist ein Counter, welcher den Schritt des L-BFGS-Verfahrens zählt. 
+
+Die Gradienten und Deformationen werden als Arrays, welche jeweils die DOF-Werte der FEniCS-Funktionen der Gradienten- und Deformationsvektorfelder enthalten, dem Alter her aufsteigend gespeichert. Das bedeutet beispielsweise, dass mit 
+\begin{center}
+	\textsf{bfgs\_memory.gradient[1]}
+\end{center} 
+die Liste der DOF-Werte des vorletzten Gradientenvektorfeldes abgerufen werden. Die Speicherung als Array, und nicht als FEniCS-Funktion, ist nötig, da wir damit den Transport der Vektorfelder umgehen. FEniCS-Funktionen sind unweigerlich an das Gitter, auf dem sie initialisiert wurden, gebunden, und eine Änderung des zugrunde liegenden Gitters macht die Funktionen unbrauchbar. Da wir die Indizierung der Knoten, und damit die der DOFs, nicht durch Deformationen verändern, entkoppeln wir die Funktionswerte von dem Gitter, indem wir ausschließlich diese nach der DOF Indizierung speichern. Damit erreichen wir den vereinfachten Transport nach \cite{diffusion}, Abschnitt 4. 
+Anschließend  lässt sich bei Bedarf mit diesen Daten eine neue FEniCS-Funktion auf einem neuen Gitter initialisieren.
+\begin{lstlisting}
+    def initialize_grad(self, meshData, i):
+
+        if isinstance(meshData, MeshData): pass
+        else: raise SystemExit("initialize_grad benoetigt Objekt der MeshData-									   Klasse als Input!")
+
+        V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+        f = Function(V)
+        f.vector()[:] = self.gradient[i]
+        return f
+\end{lstlisting}
+wobei es wichtig ist, ein Objekt des \textsf{MeshData}-Klasse zu übergeben. Es ist wichtig zu beachten, dass die Initialisierung von Werten in die FEniCS-Funktion ausschließlich durch einen kompletten Slice-Befehl auf allen Gitterpunkten erfolgen sollte, da FEniCS sonst eine automatische Konvertierung der Funktion durchführt und diese für einige spätere Berechnungen unbrauchbar macht. Da wie angesprochen die Indizierung invariant bei Verschiebung ist, ist dies kein Problem.
+
+Um die Memory zu updaten, haben wir eine update-Funktion implementiert, welche 
+den ältesten Werte, sobald die Anzahl \textsf{length} an gespeicherten Einträgen überschritten wird, löscht, und alle anderen dem Index nach um 1 aufrückt. 
+
+\colorbox{red}{ vllt ein einfaches Diagram}
+
+\begin{lstlisting}
+def update_grad(self, upd_grad):
+    
+    for i in range(self.length-1): 
+      	self.gradient[-(i+1)]  = self.gradient[-(i+2)]
+    
+    self.gradient[0] = upd_grad
+\end{lstlisting}
+
+Wir wollen anmerken, dass sich diese Klasse natürlich auch direkt für die Implementierung von anderen Limited-Memory-Verfahren weiterverwenden ließe. 
+
+\colorbox{red}{bfgsstep}
 
 \newpage
 \nocite{*}
