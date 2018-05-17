@@ -1,0 +1,133 @@
+\documentclass[bibliography=totoc,12pt,a4paper]{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}% schicke Nummerierung
+\usepackage{graphicx}
+\usepackage[english, ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{bigdelim}
+\usepackage{multirow}
+\usepackage{dsfont}
+\usepackage[colorlinks=true,linkcolor=black, citecolor=black]{hyperref}
+\usepackage{cite}
+\usepackage[nottoc]{tocbibind}
+\usepackage{empheq}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{lipsum}
+\usepackage{tikz,pgfplots}
+\usepackage{nicefrac}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{matrix}
+\geometry{a4paper,left=40mm,right=30mm, top=5cm, bottom=5cm} 
+
+\def\@biblabel#1{\textcolor{red}{[#1]}}
+
+\newtheoremstyle{linebreak}   % name
+{3pt}                         % Space above
+{3pt}                         % Space below
+{}                            % Body font
+{}                            % Indent amount 1
+{\bfseries}                   % Theorem head font
+{\newline}                    % Punctuation after theorem head
+{.5em}                        % Space after theorem head 2
+{}                            % Theorem head spec (can be left empty, meaning ‘normal’)
+%\theoremstyle{linebreak}
+\newtheoremstyle{exampstyle}
+  {\topsep} % Space above
+  {\topsep} % Space below
+  {} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {} % Theorem head spec (can be left empty, meaning `normal')
+\theoremstyle{exampstyle}
+\newtheorem{defi}{Definition}%[chapter]
+\newtheorem{satz}[defi]{Satz}
+\newtheorem{theorem}[defi]{Theorem}
+\newtheorem{propo}[defi]{Proposition}
+\newtheorem{lemma}[defi]{Lemma}
+\newtheorem{cor}[defi]{Korollar}
+\newtheorem{bem}[defi]{Bemerkung}
+\newtheorem{bsp}[defi]{Beispiel}
+\newtheorem{folg}[defi]{Folgerung}
+%bemerkungen oder Fließtext???
+\numberwithin{equation}{section} 
+ \newcommand{\newln}{\\&\quad\quad{}}
+ \setlength\parindent{0pt}
+
+\renewenvironment{abstract}
+ {\small
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{%
+    \setlength{\leftmargin}{12mm}% <---------- CHANGE HERE
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \item\relax}
+ {\endlist}
+
+
+\usepackage{listings}
+\usepackage{color}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\begin{document}
+
+\title{Quasi-Newton Methoden in der Formoptimierung}
+
+\author{Daniel Luft \\ Prof. Dr. V. Schulz}
+
+  \pagestyle{empty}
+
+  % Ab sofort Seitenzahlen in der Kopfzeile anzeigen
+  \pagestyle{headings}
+  
+\selectlanguage{ngerman}
+
+\section{Resultate}
+\subsection{???}
+
+\colorbox{red}{l-bfgs springt schnell nahe Lösung: Verwandtschaft zu CG (nocedal + das paper zu konvergenz}
+\colorbox{red}{erwähne, dass Gitter Probleme macht; eigentlich Neustart mit Gitter nötig; oder Lameparameter mit Funktion tweaken}
+\colorbox{red}{wenn konvergiert, so vllt auch mit lokalen Minima...}
+\colorbox{red}{Gitterunabhängig? Ordnung der Bilinearform mit der des Hesseoperators in übereinstimmung? Ausblick biharmonic?}
+\colorbox{red}{plotte l-BFGs vs Gradient}
+\colorbox{red}{mache Langzeit rechnung mit und ohne Line-search bei Pertubation}
+
+\colorbox{blue}{mache curvature cond richtig: falls falsch, so setze Gitter zurück und berechne ohne Updates; hierzu werte aus in k+1, dann zurücksetzen in k+1, und neue Defo ausrechnen und als last\_defo speichern, wobei kein Update stattfindet, und erst am ende von k+1 Schleife deformiert wird. Schaue ob das passt, denn d}
+
+\newpage
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{papers}
+
+\end{document}

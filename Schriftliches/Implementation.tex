@@ -331,7 +331,7 @@ Die Distanz zweier Formen werden wir mit
 \begin{align}\label{distfktdef}
 	d_{shp}(\partial\Omega_1, \partial\Omega_2) := \underset{\partial\Omega_2}{\int} \underset{y\in\partial\Omega_1}{\min} \vert\vert x - y \vert\vert dx
 \end{align}
-messen werden. Diese Distanzfunktion wird bei uns lediglich als Ersatz für den Abstand zweier Formen im Shape-space verwendet, welchen man mittels Geodätischer definieren kann. Um jedoch Geodätische zu bestimmen wäre es nötig eine weitere Differentialgleichung zu lösen, was wir vom Aufwand für nicht vertretbar halten, obwohl dies die korrektere Variante zur Abstandsmessung wäre. Wir bemerken außerdem, dass die oben definierte Abstandfunktion $d_{shp}$ ist nicht symmetrisch, was sich auch anhand der von uns implementierten Beispielformen leicht vorführen lässt. Die Auswertung dieser Distanzfunktion passiert über die von uns implementierte Funktion
+messen werden. Diese Distanzfunktion wird bei uns lediglich als Ersatz für den Abstand zweier Formen im Shape-space verwendet, welchen man mittels Geodätischer definieren kann. Um jedoch Geodätische zu bestimmen wäre es nötig eine weitere Differentialgleichung zu lösen, was wir vom Aufwand für nicht vertretbar halten, obwohl dies die korrektere Variante zur Abstandsmessung wäre. Wir bemerken außerdem, dass die oben definierte Abstandfunktion $d_{shp}$ nicht symmetrisch ist, was sich auch anhand der von uns implementierten Beispielformen leicht vorführen lässt. Die Auswertung dieser Distanzfunktion passiert über die von uns implementierte Funktion
 \begin{lstlisting}
 mesh_distance(mesh1, mesh2)
 \end{lstlisting}
@@ -376,15 +376,15 @@ Die Gradienten und Deformationen werden als Arrays, welche jeweils die DOF-Werte
 die Liste der DOF-Werte des vorletzten Gradientenvektorfeldes abgerufen werden. Die Speicherung als Array, und nicht als FEniCS-Funktion, ist nötig, da wir damit den Transport der Vektorfelder umgehen. FEniCS-Funktionen sind unweigerlich an das Gitter, auf dem sie initialisiert wurden, gebunden, und eine Änderung des zugrunde liegenden Gitters macht die Funktionen unbrauchbar. Da wir die Indizierung der Knoten, und damit die der DOFs, nicht durch Deformationen verändern, entkoppeln wir die Funktionswerte von dem Gitter, indem wir ausschließlich diese nach der DOF Indizierung speichern. Damit erreichen wir den vereinfachten Transport nach \cite{diffusion}, Abschnitt 4. 
 Anschließend  lässt sich bei Bedarf mit diesen Daten eine neue FEniCS-Funktion auf einem neuen Gitter initialisieren.
 \begin{lstlisting}
-    def initialize_grad(self, meshData, i):
+def initialize_grad(self, meshData, i):
 
-        if isinstance(meshData, MeshData): pass
-        else: raise SystemExit("initialize_grad benoetigt Objekt der MeshData-									   Klasse als Input!")
+    if isinstance(meshData, MeshData): pass
+    else: raise SystemExit("initialize_grad benoetigt Objekt der MeshData-			 						   Klasse als Input!")
 
-        V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
-        f = Function(V)
-        f.vector()[:] = self.gradient[i]
-        return f
+    V = VectorFunctionSpace(meshData.mesh, "P", 1, dim=2)
+    f = Function(V)
+    f.vector()[:] = self.gradient[i]
+    return f
 \end{lstlisting}
 wobei es wichtig ist, ein Objekt des \textsf{MeshData}-Klasse zu übergeben. Es ist wichtig zu beachten, dass die Initialisierung von Werten in die FEniCS-Funktion ausschließlich durch einen kompletten Slice-Befehl auf allen Gitterpunkten erfolgen sollte, da FEniCS sonst eine automatische Konvertierung der Funktion durchführt und diese für einige spätere Berechnungen unbrauchbar macht. Da wie angesprochen die Indizierung invariant bei Verschiebung ist, ist dies kein Problem.
 
@@ -412,11 +412,108 @@ Mit Hilfe dieser Klasse lässt sich nun ein L-BFGS-Schritt nach dem 2-Schleifen-
 \end{center}
 identifiziert werden kann, falls $k>0$. Im Falle, dass die Memory noch leer ist, und kein Schritt zuvor durchgeführt wurde, gibt die Funktion das negative Gradientenfeld \textsf{-memory.gradient[0]} wieder. Wir möchten den Leser darauf aufmerksam machen, dass die Position der in der Memory gespeicherten Gradienten und Deformationen für die korrekte Berechnung des Schrittes essentiell sind. Befindet man sich in Schritt $k$, so muss der Eintrag \textsf{memory.gradient[0]} der $k$'te Gradient sein, und \textsf{memory.deformation[0]} die zuvor im Schritt $k-1$ berechnete Deformation. D.h. die Memory muss auf dem aktuellst möglichen Stand sein. Jetzt besitzen wir das gesamte Rüstzeug, um in der Hauptdatei die Bausteine miteinander zu vernetzen.
 
-\colorbox{red}{neues großes Kapitel; Maindatei}
+\colorbox{red}{neues großes Kapitel; Maindatei; zuerst Einstellbarkeit und Parameter; dann Verfahren und algorithmus}
 
-Die von uns eingeführten Funktionen und Objekte lassen sich nun auf bequeme Weise miteinander in Verbindung bringen. Den Hauptalgorithmus 
+Die von uns eingeführten Funktionen und Objekte lassen sich nun auf bequeme Weise miteinander in Verbindung bringen. Die Hauptdatei führt, je nach Einstellung der Parameter, eine Formoptimierung mit in der Datei verstellbarem Verfahren und Gittern durch. Zunächst zur Auswahl der Gitter; diese müssen in der Konsole bei Aufruf des Programs als \textsf{integer}-Parameter mit dem Befehl
+\begin{center}
+ \textsf{python3.5 shape\_main.py -m 9}
+\end{center}
+übergeben werden, wobei wir hier das Beispielgitterpaar 9, welches für die Gitterkombination
+\begin{center}
+\textsf{("mesh\_fine\_smallercircle", "mesh\_fine\_broken\_donut")}
+\end{center}
+steht, verwendet wird. Das Startgitter wäre in diesem Fall das eines fein aufgelösten kleinen Kreises, der zweite Eintrag das Zielgitter eines fein aufgelösten, nierenartigen Form. \colorbox{red}{Bild einfügen?}.
+
+Wir haben bei der Wahl des Gitters außerdem die Option eingebaut, bei der man als Startgitter mit einer in jedem Punkt am Rand unabhängig normalverteilt gestörten Version des ersten Eintrags der Gitterpaare startet, und als Zielgitter das ungestörte Startgitter verwendet. Diese Option lässt sich mit den Parametern \textsf{Pertubation} und \textsf{sigma} steuern, wobei der erste Parameter diesen Optimierungsfall bei \textsf{True} einschaltet, und der zweite Parameter die Standardabweichung der Normalverteilung angibt. Wir wollen darauf hinweisen, dass bei großem \textsf{sigma} aufgrund der Unabhängigkeit der Verteilungen auch entartete Gitter entstehen können, so dass das Verfahren direkt abbricht.
+
+Abgebrochen wird die Optimierung, sobald der bei \ref{felas} eingeführte Wert der Norm \textsf{nrm\_f\_elas} die einstellbare Toleranz \textsf{tol\_shopt} unterschreitet.
+
+Als Parameter des Ausgangsproblems lassen sich außerdem noch die Werte der Zustandsgleichung \colorbox{red}{referenz} innerhalb und außerhalb der Form, \textsf{f\_1} und \textsf{f\_2} einstellen, sowie auch der Werte des Parameters der Périmeter-Regularisierung \textsf{nu}. Letzterer sollte problemabhängig nicht zu groß gewählt werden, um eine Optimalität des Zielgitters nicht stark zu verfälschen. Hinzu kommen zudem die minimalen und maximalen Werte der Lamé-Parameter \textsf{mu\_min} und \textsf{mu\_max}.
+
+Weiterhin besitzt das Programm die Möglichkeit auszuwählen, ob ein L-BFGS-Verfahren oder ein Gradientenabstieg zur Optimierung verwendet werden soll. Dies lässt sich mit dem Parameter \textsf{L\_BFGS} steuern, wobei \textsf{L\_BFGS = True} das L-BFGS-Verfahren einschaltet. Wird dieses Verfahren verwendet, so muss man mit \textsf{memory\_length} die Anzahl der gespeicherten und zur Berechnung verwendeten Gradienten und Deformationen einstellen.
+
+Zu den beiden möglichen Optimierungsverfahren lässt sich jeweils eine Line-Search durch Backtracking einschalten, indem man den Parameter \textsf{Linesearch} auf \textsf{True} setzt. Die weiteren Parameter und die Implementierung der Line-Search werden weiter unten bei \colorbox{red}{Referenz}, und in der folgenden alle Parameter und Einstellungen umfassenden Tabelle näher erklärt
+
+\colorbox{red}{mache hier eine Tabelle wie in einem Nutzerhandbuch zu allen Parameten in der Auswahl}
 
 
+\colorbox{red}{jetzt abschnitt zur genauen implementierung; Schema des programs; line-search; output}
+
+Im Folgenden möchten wir den genauen Ablauf des Programs in Python erläutern. 
+Das Program läuft nach dem Schema
+
+\colorbox{red}{mit ktikz ein Flussdiagram wie bei bayesian inference machen}
+
+
+ab. 
+
+Das Program beginnt mit der in \colorbox{red}{subchapter meshes} erklärten Initialisierung der Meshes. Je nach Einstellung findet die oben erklärte Pertubation des Startgitters statt. Weiterhin werden die lokal variierenden Lamé-Parameter, sowie die Zustandsfunktion im Zielgitter berechnet. Dies findet im Program unter der Überschrift \textit{Targetdata Calculation} statt. Es folgt der Einstieg in den Formoptimierungsalgorithmus, wobei unter \textit{Interplation} die Daten auf das derzeitige Gitter zu einer FEniCS-Funktion interpoliert werden, für welche wir eine polynomielle Interpolation vom Grad 1 ausgewählt haben. Es werden anschließend die Zustands- und adjungierte Gleichung gelöst, sowie der Formgradient des derzeitigen Schrittes berechnet, was im Program unter dem gleichnamigen Schritt zu finden ist. Falls das Gradientenverfahren ausgewählt ist, wird zusätzlich als Deformation der negative Gradient initialisiert. 
+
+Nun findet im Program die Unterscheidung zwischen dem L-BFGS- und dem Gradientenverfahren statt; der folgende Abschnitt ist lediglich für das L-BFGS-Verfahren relevant, im Gradientenverfahren springt der Algorithmus direkt zu \colorbox{red}{referenz von Linesearch}
+
+Ein programiertechnisch etwas aufwendiger Punkt ist die Berechnung der Curvature Condition. In unserem Setting ist diese errechnet durch \colorbox{red}{transporte richig? Vllt noch die Vereinfachung mit einbauen, um Transporte wegzukriegen. }
+\begin{align*}
+	a(S_k, \mathcal{T}_k(\nabla U_{k+1}) - \nabla U_k) = D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{k+1}(S_k)] - D\mathcal{J}(\Omega_k)[S_k] > 0.
+\end{align*}
+Dies vermeidet die Lösung einer weiteren linearen Elastizitätsgleichung. Nichts desto trotz \colorbox{blue}{rechtschreibung?} müssen wir zur Berechnung von $D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{k+1}(S_k)]$ eine Gitterverschiebung durchführen. Wir berechnen deshalb die Curvature Condition des $k$'ten Schrittes in Schritt Nummer $k+1$, da wir zuvor sowieso die passende Gitterverschiebung durchführen mussten. Die Deformation $S_k$ aus dem Schritt $k$ wird im Program unter \textsf{last\_defo} mitgeschleppt, der Wert der Ableitung $D\mathcal{J}(\Omega_k)[S_k]$ als Eintrag \textsf{curv\_cond[1]} gespeichert. Wir wählen diese kompliziert wirkende Iteration, um zu häufiges verschieben der Meshes zu vermeiden, denn FEniCS verschiebt auch das Ausgangsgitter, wenn ein anderes Gitter unter selber Initialisierung verschoben wird. Dies könnte man vermeiden, indem man eine Deep Copy anlegt, was bei großen Gittern speicherintensiv sein kann. Hinzu kommen Rundungsfehler, deren Ausmaß wir jedoch nicht einschätzen können.
+Als Folge der um einen Schritt verschobenen Berechnung printen wir im L-BFGS-Verfahren die Werte der Schleife $k$ in Schleife $k+1$, außerdem wird die Memory aus selbigen Gründen erst dann geupdatet. Bei Einhaltung der Curvature Condition findet der Update unter dem Abschnitt \textit{Update Step} statt, das Printen und die Berechnung der Curvature Condition unter dem Abschnitt \textit{Curvature Condition \& Printing}. 
+
+Im Falle, dass die Curvature Condition \colorbox{red}{ref} nicht erfüllt ist, verwenden wir das Verfahren, die Memory nicht einem Update zu unterziehen, d.h. es wurde lediglich ein Schritt mit schon vorhandenen Daten berechnet. Dieses Skipping findet im Program unter dem Abschnitt \textit{Non Update Step} statt. Da der Update sowieso einen Schritt verzögert stattfindet, wird dieser einfach ausgelassen, und das Program läuft weiter.  \colorbox{red}{vllt noch die möglichkeit break einzustellen falls curv cond nicht erfüllt und dann vergleich}
+
+\label{backtracking}
+Nachdem die Gradienten und Deformationen berechnet wurden, erfolgt je nach Einstellung eine Linesearch mittels Backtracking. Diese wird gesteuert durch die Parameter \textsf{Linesearch}, \textsf{shrinkage}, \textsf{c} und \textsf{start\_scale}. Ersterer schaltet die Linesearch bei \textsf{True} ein, \textsf{shrinkage} ist der Reskalierungsfaktor bei einem Backtracking-Schritt, \textsf{c} gibt den Faktor der Verbesserung im Zielfunktional im Vergleich zum derzeitigen Wert an, und \textsf{start\_scale} gibt den Faktor zur Hochskalierung zum Beginn des Backtracking an.
+
+Die Linesearch startet mit dem Berechnen der Hochskalierten Deformation.
+\colorbox{red}{AMIJO? ist die Initialisierung wirklich interessant? Name counterer?}
+\begin{lstlisting}
+if(Linesearch):
+	scale_parameter = start_scale
+
+    zero_function = Function(VectorFunctionSpace(MeshData.mesh,
+                                                 "P", 1, dim=2))
+    current_value = bib.targetfunction(MeshData, zero_function,
+        								               y_z, f_values, nu)
+    S.vector()[:] = start_scale * S.vector()
+    current_deriv = bib.shape_deriv(MeshData, p, y, z, 
+    								                f_values, nu, S)
+
+    counterer = 0
+\end{lstlisting}
+Der Counter \textsf{counterer} zählt dabei die Anzahl der Reskalierungen der Deformation. Das eigentliche Backtracking findet in der gleich folgenden Schleife statt. Weiterhin ist in dieser Schleife die Strategie implementiert, bei maximalem Herunterskalieren des Deformationsfeldes die L-BFGS-Memory zu löschen und das Verfahren im jetzigen Punkt neu zu starten, wobei dies mit einer Meldung zur Kenntnis gegeben wird. Falls das Verfahren im sofort darauf folgenden Schritt erneut maximal Herunterskaliert, wird das Optimierungsverfahren mit einer Fehlermeldung abgebrochen. Hierzu wird der Counter \textsf{Resetcounter} verwendet.
+\newpage
+\begin{lstlisting}
+while(bib.targetfunction(MeshData, S, y_z, f_values, nu)
+       >= current_value):
+	
+	scale_parameter = shrinkage * scale_parameter
+    S.vector()[:]   = shrinkage * S.vector()
+
+    counterer = counterer + 1
+
+	if(counterer >= 20):
+    	print("Had to break, restarting L-BFGS!")
+
+        bfgs_memory.gradient    = np.zeros([memory_length, 2 * 																     MeshData.mesh.num_vertices()])
+        bfgs_memory.deformation = np.zeros([memory_length, 2 * 																   MeshData.mesh.num_vertices()])
+        bfgs_memory.step_nr     = 0
+        Resetcounter            = Resetcounter + 1
+        S.vector()[:]           = np.zeros(2*MeshData.mesh.
+        											           num_vertices())
+        break
+
+        if(counterer < 20):
+            Resetcounter = 0
+
+        last_defo = S.vector().get_local()
+
+if(Resetcounter >= 2):
+    print("Reboot didn't help, quitting L-BFGS optimization!")
+    break
+\end{lstlisting}
+
+Es wäre außerdem möglich, statt der einfachen Backtracking Bedingung, die sogenannte \textit{Amijo-Bedingung} mit Hilfe eines Backtracking-Verfahrens zu implementieren. \colorbox{red}{sollte ich noch implementieren und checke, ob das nicht lohnenswert ist.}
+
+POWELL
 \newpage
 \nocite{*}
 \bibliographystyle{plain}
