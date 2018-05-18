@@ -117,6 +117,8 @@
 \subsection{???}
 
 \colorbox{red}{mache 2 große sections bib und main, dann bei bib untersections gitter, lösen von pdes und berechnungen, und bfgs-step}
+\colorbox{red}{POWELL}
+\colorbox{red}{InitialData ordner anlegen??}
 
 Nachdem wir in vorigen Kapiteln den theoretischen Hintergrund der Formoptimierung und gradientenbasierte Verfahren, wie dem L-BFGS-Verfahren, gelegt haben, möchten wir in diesem Abschnitt die Implementierung des Algorithmus \colorbox{red}{cite} in Python 3.5 \colorbox{red}{Versicherung, dass es nur unter dieser Version läuft} mit Hilfe des Moduls FEniCS vorstellen. Im Folgenden werden wir die in den Dateien enthaltenen Kommentare nicht oder nicht in voller Länge in den Codeausschnitten aufführen, da wir Redundanz bei den Erklärungen vermeiden möchten. Selbstverständlich sind in den Quellcodes selber ausführliche Kommentierungen vorhanden. Die Implementierung in Python besteht im wesentlichen aus den beiden Dateien
 \begin{align*}
@@ -536,10 +538,10 @@ zeigt, wobei die Norm wie in \ref{felas} erklärt berechnet wird. Um eine Analys
 \textsf{Iteration \hspace{0.1cm}  ||f\_elas||\_L2 \hspace{0.1cm}  J = j + j\_reg   \hspace{0.1cm} ||U||\_L2 \hspace{0.1cm}  Curv. Cond. \hspace{0.1cm} Meshdistance}
 \end{center}
 
-Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
+Falls das Gradientenverfahren ausgewählt wurde, so wird die Spalte mit der Curvature Condition weggelassen. Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
  \colorbox{red}{sollte ich noch implementieren und checke, ob das nicht lohnenswert ist.}
 
-POWELL
+\colorbox{red}{POWELL}
 \newpage
 \nocite{*}
 \bibliographystyle{plain}
