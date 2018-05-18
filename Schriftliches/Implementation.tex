@@ -511,7 +511,33 @@ if(Resetcounter >= 2):
     break
 \end{lstlisting}
 
-Es wäre außerdem möglich, statt der einfachen Backtracking Bedingung, die sogenannte \textit{Amijo-Bedingung} mit Hilfe eines Backtracking-Verfahrens zu implementieren. \colorbox{red}{sollte ich noch implementieren und checke, ob das nicht lohnenswert ist.}
+Es ist außerdem möglich, statt der einfachen Backtracking Bedingung, die sogenannte \textit{Amijo-Bedingung} mit Hilfe eines Backtracking-Verfahrens zu implementieren.
+Dies würde mit einer Schleife der Form
+\begin{lstlisting}
+while(bib.targetfunction(MeshData, S, y_z, f_values, nu)
+       > current_value + c*scale_parameter*current_deriv):
+		#Schleifenaktionen von oben
+\end{lstlisting}
+funktionieren. Diese haben wir in auskommentierter Form im Code eingefügt, so dass der Benutzer diese durch entfernen der Auskommentierung verwenden kann.
+
+Wir kommen im Kapitel zur Implementierung abschließend zum Output des Programs.
+Zu Beginn wird bei Aufruf des Programs ein Outputordner im Verzeichnis des Programs mit Namen \textsf{Output} erzeugt, falls dieser noch nicht vorhanden ist. Dies geschieht mit der von uns implementierten Funktion \textsf{create\_outputfolder()}. In diesen Ordner wird für jedes Aufrufen des Programs, sprich für jedes Optimierungsproblem, ein eigener Unterordner mit dem Namen erstellt, welches nach dem exaktem jetzigem Datum bis auf die Sekunde benannt wird. Beispielsweise würde ein Outputordner, welcher am 11.09.2001 um 8:46 und 0 Sekunden erzeugt wurde, den Namen 
+\begin{center}
+\textsf{20010911\_084600}.
+\end{center}
+\colorbox{red}{Gradientenvektorfeld output ist auskommentiert, weg machen?}
+erhalten. Dadurch wird immer ein eindeutig bestimmter, neuer Outputordner erzeugt. In diesem werden die Gitter der einzelnen Iterationen mit den zugehörigen Formen, sowie die Daten des Zielgitters in \textsf{.pvd} Dateien gespeichert, welche beipsielsweise mit dem Program \textit{Paraview} \colorbox{red}{vllt version? oder bsp} visualisiert werden können. Zusätzlich wird bei erfolgreichem Durchlaufen der Optimierung ein Konvergenzplot gespeichert, welcher \colorbox{red}{vllt noch ein bisschen aufschönen} die Abbildungen
+\begin{align*}
+k &\mapsto \log(d_{shopt}(\Omega_k, \Omega_{target}) \\
+k &\mapsto \log(\vert\vert D\mathcal{J}(\Omega_k) \vert\vert)
+\end{align*}
+zeigt, wobei die Norm wie in \ref{felas} erklärt berechnet wird. Um eine Analyse der \colorbox{red}{mache noch Parameterauswahl in cvd kenntlich, d.h. Pertub und linesearch} Verfahren besser durchführen zu können, werden weiterhin relevante Größen in einer \textsf{.cvd}-Datei gespeichert. Diese Daten werden in der selben Anordnung gespeichert, wie sie im Laufe des Programs auch für den Benutzer in der Konsole geprintet werden. Schematisch sieht dies wie folgt aus:
+\begin{center}
+\textsf{Iteration \hspace{0.1cm}  ||f\_elas||\_L2 \hspace{0.1cm}  J = j + j\_reg   \hspace{0.1cm} ||U||\_L2 \hspace{0.1cm}  Curv. Cond. \hspace{0.1cm} Meshdistance}
+\end{center}
+
+Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
+ \colorbox{red}{sollte ich noch implementieren und checke, ob das nicht lohnenswert ist.}
 
 POWELL
 \newpage
