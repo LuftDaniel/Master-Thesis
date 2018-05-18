@@ -28,6 +28,11 @@ M.~S. Alnæs{,}~A. Logg.
 \newblock {\em {UFL} Specification and User Manual 0.3}.
 \newblock www.fenics.org, 2010.
 
+\bibitem{powell}
+{M. J. D. Powell}.
+\newblock Algorithms for nonlinear constraints that use lagrangian functions.
+\newblock {\em Mathematical Programming {14}}, 1976.
+
 \bibitem{PDE2}
 K.~Burg{,} H. Haf{,} F. Wille{,}~A. Meister.
 \newblock {\em Partielle Differentialgleichungen und funktionalanalytische

@@ -522,7 +522,10 @@ while(bib.targetfunction(MeshData, S, y_z, f_values, nu)
 \end{lstlisting}
 funktionieren. Diese haben wir in auskommentierter Form im Code eingefügt, so dass der Benutzer diese durch entfernen der Auskommentierung verwenden kann.
 
-Wir kommen im Kapitel zur Implementierung abschließend zum Output des Programs.
+An dieser Stelle sei erwähnt, dass wir die nach \cite{Powell}, Abschnitt 5, beschriebene Methode zur Einhaltung der Curvature Condition versucht haben zu implementieren. Dieses Verfahren wird \textit{Powell-Relaxation} genannt, und ersetzt mit Hilfe eines Kriteriums, welches die BFGS-Approximierende $B_k$ aus \colorbox{red}{ref zu anderem kapitel} zur Berechnung verwendet, die Differenz der Gradienten  \colorbox{red}{heißt das ding pk bei uns? sicher defo
+} wie in \colorbox{red}{referenz bfgs verfahren defi} zu ersetzen. Das die Differenz der Gradienten ersetzende Vektorfeld würde dann die Curvature Condition erfüllen, und somit ein positiv definiten Update $B_{k+1}$ garantieren. Zum einen haben wir dies nicht implementiert, da zur Berechnung $B_k$ selbst benötigt würde, wir aber den Zwei-Schleifen-Algorithmus \colorbox{red}{ref} verwenden, um die Inverse $B_k^{-1}$ zu berechnen. Weiterhin führt dieses Verfahren zu einem sogenannten \textit{Blow-Up} des Hesseoperators, weshalb das Verfahren dann neugestartet werden müsste, und somit sich die Frage nach dem Nutzen im Vergleich zum Aufwand stellt. Aus diesen Gründen haben wir die Powell-Relaxation nicht implementiert.
+
+Abschließend kommen wir im Kapitel zur Implementierung zum Output des Programs.
 Zu Beginn wird bei Aufruf des Programs ein Outputordner im Verzeichnis des Programs mit Namen \textsf{Output} erzeugt, falls dieser noch nicht vorhanden ist. Dies geschieht mit der von uns implementierten Funktion \textsf{create\_outputfolder()}. In diesen Ordner wird für jedes Aufrufen des Programs, sprich für jedes Optimierungsproblem, ein eigener Unterordner mit dem Namen erstellt, welches nach dem exaktem jetzigem Datum bis auf die Sekunde benannt wird. Beispielsweise würde ein Outputordner, welcher am 11.09.2001 um 8:46 und 0 Sekunden erzeugt wurde, den Namen 
 \begin{center}
 \textsf{20010911\_084600}.
@@ -541,7 +544,6 @@ zeigt, wobei die Norm wie in \ref{felas} erklärt berechnet wird. Um eine Analys
 Falls das Gradientenverfahren ausgewählt wurde, so wird die Spalte mit der Curvature Condition weggelassen. Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
  \colorbox{red}{sollte ich noch implementieren und checke, ob das nicht lohnenswert ist.}
 
-\colorbox{red}{POWELL}
 \newpage
 \nocite{*}
 \bibliographystyle{plain}
