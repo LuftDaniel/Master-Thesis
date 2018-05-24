@@ -149,10 +149,10 @@ Wir fahren fort mit notwendigen Optimalitätskriterien für Lösungen, welche ge
 
 \begin{defi}[Adjungierte und Design-Gleichung]
 	Betrachte ein PDE beschränktes Formoptimierungsproblem mit differenzierbarem Zielfunktional $\mathcal{J}$. Verwende die Notation von \ref{lagrangefunction} und bezeichne mit $D\mathcal{J}$ die zu $\mathcal{J}$ gehörige Formableitung. Seien $\tilde{y} \in H(\tilde{\Omega}_2)$ und $\tilde{\Omega}_2\in \mathcal{D}$ optimale Lösungen des Problems \ref{PDE constrained equation}. Dann gilt die Variationsgleichung
-\begin{equation}\label{adjoint equation}
+\begin{equation}\label{adjointequation}
 	a_{\tilde{\Omega}_2}(\tilde{y},z) = - \frac{\partial}{\partial y} \mathcal{J}(\tilde{y},\tilde{\Omega}_2)(z) \quad \forall z\in H(\tilde{\Omega}_2),
 \end{equation}
-welche wir als \textit{adjungierte Gleichung} bezeichnen. Sei $\tilde{p} \in H(\tilde{\Omega}_2)$ die Lösung der adjungierten Gleichung \ref{adjoint equation}. Dann gilt weiterhin die Variationsgleichung
+welche wir als \textit{adjungierte Gleichung} bezeichnen. Sei $\tilde{p} \in H(\tilde{\Omega}_2)$ die Lösung der adjungierten Gleichung \ref{adjointequation}. Dann gilt weiterhin die Variationsgleichung
 \colorbox{red}{ relativ frei definiert, kriege ich das abgesegnet? Vielleicht lieber Lagrangefunktion?}
 \begin{equation}\label{Design equation}
 	D\left(\mathcal{J}(\tilde{y},\tilde{\Omega}_2) + a_{\tilde{\Omega}_2}(\tilde{y},\tilde{p}) + b_{\tilde{\Omega}_2}(\tilde{p})\right)(\tilde{\Omega}_2)[V] = 0 \quad \forall C^\infty(\tilde{\Omega}_2,\tilde{\Omega}_2),
@@ -239,7 +239,7 @@ Die Interface condition \ref{Interfacecondition} sorgt bei uns dafür, dass der 
 
 Damit wir Wohldefiniertheit von im späteren Kapitel \colorbox{red}{cite, vllt sogar direkt die Metrik?} definierten Metriken für Formen sicherstellen können, benötigen wir, dass $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega_2)$ ist. Mit unseren Voraussetzungen $f,\bar{y} \in \mathcal{L}^2((0,1)^2)$, sowie einem hinreichend glatten Rand $\partial\Omega_2$, erhalten wir $y\in H^2((0,1)^2)$ nach \colorbox{red}{ref Regularität für Lösungen}. Kombiniert man dies mit den auf Sobolev-Slobodeckij-Räumen verallgemeinerten Spursatz \colorbox{red}{REFERENZ}, so erhalten wir wie gewünscht $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega_2)$. \colorbox{red}{fraglich, ob Ränder glatt?? und nicht sobolev?}
 
-Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung angeben. Die genaue Herleitung, die das Theorem von Correa-Seger verwendet und auf  Materialableitungen aufbaut, findet sich in \cite{shape_space}.
+Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung angeben. Die genaue Herleitung, die das Theorem von Correa-Seger verwendet und auf  Materialableitungen aufbaut, findet sich in \cite{shape_space}, die alternative Randformulierung für die Formableitung der Perimeter-Regularisierung in \cite{multigrid}.
 
 \begin{theorem}[Formableitung für das Modellproblem]
 	Betrachte das Modellproblem \ref{Modellproblem} mit Interface condition. Sei $y\in H^1_0((0,1)^2)$ Lösung der Zustandsgleichung aus \ref{Modellproblem} und $p\in H^1_0((0,1)^2)$ Lösung der adjungierten Gleichung \ref{Modelladjoint}. Dann hat das Zielfunktional aus \ref{Modellproblem} \textit{ohne} Perimeter-Regularisierung $\mathcal{J}_{target}$ folgende Volumen-Formulierung für alle Formen $\partial\Omega_2 \in \mathcal{D}$ und Richtungen $V \in C^\infty(\Omega_2)$:
@@ -254,12 +254,16 @@ Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung a
 	\end{equation}
 	Zusammen mit der Perimeter-Regularisierung erhält man
 	\begin{equation}
-	D\mathcal{J}_{target}(\Omega_2)[V] = \underset{\partial\Omega_2}{\int} (-[[f]]p  + \kappa )\langle V,n \rangle ds,
+	D\mathcal{J}_{target}(\Omega_2)[V] = \underset{\partial\Omega_2}{\int} (-[[f]]p  + \mu\kappa )\langle V,n \rangle ds 
 	\end{equation}
-	wobei $\kappa := \text{div}_{\partial\Omega_2}(n)$ die mittlere Krümmung von $\partial\Omega_2$ ist. \colorbox{red}{kappa so lassen?}
+	wobei $\kappa := \text{div}_{\partial\Omega_2}(n)$ die mittlere Krümmung von $\partial\Omega_2$ ist. Außerdem besitzt die Perimeter-Regularisierung alternative  Randformulierung
+	\begin{equation}
+	D\mathcal{J}_{reg}(\Omega_2)[V] = \mu\underset{\partial\Omega_2}{\int} \text{div}(V) - \langle\frac{\partial V}{\partial n}, n\rangle ds,
+	\end{equation}\colorbox{red}{kappa so lassen?}
+	wobei $n$ erneut das äußere Normalenvektorfeld von $\partial\Omega_2$ ist.
 \end{theorem}
 
-Diese Formableitungen lassen sich nun in ableitungsbasierten Optimierungsmethoden verwenden. Wie man sieht, muss man zum Auswerten der Formableitung in einer bestimmten Form $\partial\Omega_2$ die zugehörige Zustandsgleichung bei \ref{Modellproblem}, und die entsprechende adjungierte Gleichung \ref{adjoint equation} lösen. Weiter ließe sich dann aus der Ableitungsinformation ein Gradient erzeugen, mit dessen Hilfe man beispielsweise ein Verfahren des steilsten Abstiegs einsetzen kann. Um einen solchen Gradienten zu definieren, werden wir uns im folgenden Kapitel Gedanken machen, welche zugrundeliegende Metrik wir auf dem Raum aller Formen annehmen, um mit dieser einen Gradienten in Anlehnung an den Riesz'schen Darstellungssatzes zu definieren. An dieser Stelle sei erwähnt, dass wir hier Gebrauch von der geschlossenen Darstellung der Formableitung machen, welche wir in späteren Kapiteln implementieren werden. 
+Diese Formableitungen lassen sich nun in ableitungsbasierten Optimierungsmethoden verwenden. Wie man sieht, muss man zum Auswerten der Formableitung in einer bestimmten Form $\partial\Omega_2$ die zugehörige Zustandsgleichung bei \ref{Modellproblem}, und die entsprechende adjungierte Gleichung \ref{adjoint equation} lösen. Weiter ließe sich dann aus der Ableitungsinformation ein Gradient erzeugen, mit dessen Hilfe man beispielsweise ein Verfahren des steilsten Abstiegs einsetzen kann. Um einen solchen Gradienten zu definieren, werden wir uns im folgenden Kapitel Gedanken machen, welche zugrundeliegende Metrik wir auf dem Raum aller Formen annehmen, um mit dieser einen Gradienten in Anlehnung an den Riesz'schen Darstellungssatzes zu definieren. An dieser Stelle sei erwähnt, dass wir hier Gebrauch von der geschlossenen Darstellung der Formableitung machen, welche wir in späteren Kapiteln implementieren werden. Die Formulierung der Formableitung der Perimeter-Regularisierung, welche ohne Krümmungsterm $\kappa$ auskommt, wird von uns bevorzugt implementiert, da dies die Berechnung der Krümmung vermeidet, und somit eine Verallgemeinerung unseres Programms auf 3 Dimensionen erleichtert.
 
 Ist die Formableitung bei einem gegebenen Problem nicht geschlossen angegeben, so lässt sich diese häufig numerisch mittels Techniken des \textit{automatischen Differenzierens} gewinnen. Diese Methoden, die eher aus der Numerik für Differentialgleichungen bekannt sind, lassen sich auch auf Formableitungen verallgemeinern. Dies tut beispielsweise der Autor von \cite{auto-diff}, um auf diesem Wege Hesse-Matrizen zu erzeugen. Hierzu wird die sogenannte \textit{Unified Form Language (UFL)} in der Programmiersprache Python verwendet, welche auch wesentlicher Bestandteil des Programmpackets FEniCS ist, für Details, siehe etwa die Quellen bei \cite{fenics}, S.25. 
 \colorbox{red}{muss ich volumenform mit perimeter coden?}

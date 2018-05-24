@@ -117,8 +117,9 @@
 \subsection{???}
 
 \colorbox{red}{mache 2 große sections bib und main, dann bei bib untersections gitter, lösen von pdes und berechnungen, und bfgs-step}
-\colorbox{red}{POWELL}
 \colorbox{red}{InitialData ordner anlegen??}
+\colorbox{red}{Hadamard abstand abwandlung erklären}
+\colorbox{red}{erwähne die Implementierung des Rn tests für die Architektur des BFGS-Verfahrens}
 
 Nachdem wir in vorigen Kapiteln den theoretischen Hintergrund der Formoptimierung und gradientenbasierte Verfahren, wie dem L-BFGS-Verfahren, gelegt haben, möchten wir in diesem Abschnitt die Implementierung des Algorithmus \colorbox{red}{cite} in Python 3.5 \colorbox{red}{Versicherung, dass es nur unter dieser Version läuft} mit Hilfe des Moduls FEniCS vorstellen. Im Folgenden werden wir die in den Dateien enthaltenen Kommentare nicht oder nicht in voller Länge in den Codeausschnitten aufführen, da wir Redundanz bei den Erklärungen vermeiden möchten. Selbstverständlich sind in den Quellcodes selber ausführliche Kommentierungen vorhanden. Die Implementierung in Python besteht im wesentlichen aus den beiden Dateien
 \begin{align*}
@@ -432,7 +433,7 @@ Abgebrochen wird die Optimierung, sobald der bei \ref{felas} eingeführte Wert d
 
 Als Parameter des Ausgangsproblems lassen sich außerdem noch die Werte der Zustandsgleichung \colorbox{red}{referenz} innerhalb und außerhalb der Form, \textsf{f\_1} und \textsf{f\_2} einstellen, sowie auch der Werte des Parameters der Périmeter-Regularisierung \textsf{nu}. Letzterer sollte problemabhängig nicht zu groß gewählt werden, um eine Optimalität des Zielgitters nicht stark zu verfälschen. Hinzu kommen zudem die minimalen und maximalen Werte der Lamé-Parameter \textsf{mu\_min} und \textsf{mu\_max}.
 
-Weiterhin besitzt das Programm die Möglichkeit auszuwählen, ob ein L-BFGS-Verfahren oder ein Gradientenabstieg zur Optimierung verwendet werden soll. Dies lässt sich mit dem Parameter \textsf{L\_BFGS} steuern, wobei \textsf{L\_BFGS = True} das L-BFGS-Verfahren einschaltet. Wird dieses Verfahren verwendet, so muss man mit \textsf{memory\_length} die Anzahl der gespeicherten und zur Berechnung verwendeten Gradienten und Deformationen einstellen.
+Weiterhin besitzt das Programm die Möglichkeit auszuwählen, ob ein L-BFGS-Verfahren oder ein Gradientenabstieg zur Optimierung verwendet werden soll. Dies lässt sich mit dem Parameter \textsf{L\_BFGS} steuern, wobei \textsf{L\_BFGS = True} das L-BFGS-Verfahren einschaltet. Wird dieses Verfahren verwendet, so muss man mit \textsf{memory\_length} die Anzahl der gespeicherten und zur Berechnung verwendeten Gradienten und Deformationen einstellen. Weiterhin stellt \textsf{curv\_break}, falls auf \textsf{False} eingstellt, die Möglichkeit zur Verfügung, bei Verletzung der Curvature Condition das Updaten auszulassen, jedoch einen Schritt mit den bisherigen Daten durchzuführen. Bei \textsf{True} wird bei selbiger Verletzung die Optimierung mit einer Fehlermeldung abgebrochen.
 
 Zu den beiden möglichen Optimierungsverfahren lässt sich jeweils eine Line-Search durch Backtracking einschalten, indem man den Parameter \textsf{Linesearch} auf \textsf{True} setzt. Die weiteren Parameter und die Implementierung der Line-Search werden weiter unten bei \colorbox{red}{Referenz}, und in der folgenden alle Parameter und Einstellungen umfassenden Tabelle näher erklärt
 
@@ -460,13 +461,13 @@ Ein programiertechnisch etwas aufwendiger Punkt ist die Berechnung der Curvature
 Dies vermeidet die Lösung einer weiteren linearen Elastizitätsgleichung. Nichts desto trotz \colorbox{blue}{rechtschreibung?} müssen wir zur Berechnung von $D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{k+1}(S_k)]$ eine Gitterverschiebung durchführen. Wir berechnen deshalb die Curvature Condition des $k$'ten Schrittes in Schritt Nummer $k+1$, da wir zuvor sowieso die passende Gitterverschiebung durchführen mussten. Die Deformation $S_k$ aus dem Schritt $k$ wird im Program unter \textsf{last\_defo} mitgeschleppt, der Wert der Ableitung $D\mathcal{J}(\Omega_k)[S_k]$ als Eintrag \textsf{curv\_cond[1]} gespeichert. Wir wählen diese kompliziert wirkende Iteration, um zu häufiges verschieben der Meshes zu vermeiden, denn FEniCS verschiebt auch das Ausgangsgitter, wenn ein anderes Gitter unter selber Initialisierung verschoben wird. Dies könnte man vermeiden, indem man eine Deep Copy anlegt, was bei großen Gittern speicherintensiv sein kann. Hinzu kommen Rundungsfehler, deren Ausmaß wir jedoch nicht einschätzen können.
 Als Folge der um einen Schritt verschobenen Berechnung printen wir im L-BFGS-Verfahren die Werte der Schleife $k$ in Schleife $k+1$, außerdem wird die Memory aus selbigen Gründen erst dann geupdatet. Bei Einhaltung der Curvature Condition findet der Update unter dem Abschnitt \textit{Update Step} statt, das Printen und die Berechnung der Curvature Condition unter dem Abschnitt \textit{Curvature Condition \& Printing}. 
 
-Im Falle, dass die Curvature Condition \colorbox{red}{ref} nicht erfüllt ist, verwenden wir das Verfahren, die Memory nicht einem Update zu unterziehen, d.h. es wurde lediglich ein Schritt mit schon vorhandenen Daten berechnet. Dieses Skipping findet im Program unter dem Abschnitt \textit{Non Update Step} statt. Da der Update sowieso einen Schritt verzögert stattfindet, wird dieser einfach ausgelassen, und das Program läuft weiter.  \colorbox{red}{vllt noch die möglichkeit break einzustellen falls curv cond nicht erfüllt und dann vergleich}
+Im Falle, dass die Curvature Condition \colorbox{red}{ref} nicht erfüllt ist, verwenden wir das Verfahren, die Memory nicht einem Update zu unterziehen, d.h. es wurde lediglich ein Schritt mit schon vorhandenen Daten berechnet. Dieses Skipping findet im Program unter dem Abschnitt \textit{Non Update Step} statt. Da der Update sowieso einen Schritt verzögert stattfindet, wird dieser einfach ausgelassen, und das Program läuft weiter. Diese Strategie lässt sich mit der Einstellung des Parameter \textsf{curv\_break = True} ausschalten, woraufhin der Algorithmus bei Verletzung der Curvature Condition aussteigt.
 
 \label{backtracking}
 Nachdem die Gradienten und Deformationen berechnet wurden, erfolgt je nach Einstellung eine Linesearch mittels Backtracking. Diese wird gesteuert durch die Parameter \textsf{Linesearch}, \textsf{shrinkage}, \textsf{c} und \textsf{start\_scale}. Ersterer schaltet die Linesearch bei \textsf{True} ein, \textsf{shrinkage} ist der Reskalierungsfaktor bei einem Backtracking-Schritt, \textsf{c} gibt den Faktor der Verbesserung im Zielfunktional im Vergleich zum derzeitigen Wert an, und \textsf{start\_scale} gibt den Faktor zur Hochskalierung zum Beginn des Backtracking an.
 
 Die Linesearch startet mit dem Berechnen der Hochskalierten Deformation.
-\colorbox{red}{AMIJO? ist die Initialisierung wirklich interessant? Name counterer?}
+\colorbox{red}{ARMIJO? ist die Initialisierung wirklich interessant? Name counterer?}
 \begin{lstlisting}
 if(Linesearch):
 	scale_parameter = start_scale
@@ -513,7 +514,7 @@ if(Resetcounter >= 2):
     break
 \end{lstlisting}
 
-Es ist außerdem möglich, statt der einfachen Backtracking Bedingung, die sogenannte \textit{Amijo-Bedingung} mit Hilfe eines Backtracking-Verfahrens zu implementieren.
+Es ist außerdem möglich, statt der einfachen Backtracking Bedingung, die sogenannte \textit{Armijo-Bedingung} mit Hilfe eines Backtracking-Verfahrens zu implementieren.
 Dies würde mit einer Schleife der Form
 \begin{lstlisting}
 while(bib.targetfunction(MeshData, S, y_z, f_values, nu)
@@ -541,7 +542,8 @@ zeigt, wobei die Norm wie in \ref{felas} erklärt berechnet wird. Um eine Analys
 \textsf{Iteration \hspace{0.1cm}  ||f\_elas||\_L2 \hspace{0.1cm}  J = j + j\_reg   \hspace{0.1cm} ||U||\_L2 \hspace{0.1cm}  Curv. Cond. \hspace{0.1cm} Meshdistance}
 \end{center}
 
-Falls das Gradientenverfahren ausgewählt wurde, so wird die Spalte mit der Curvature Condition weggelassen. Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
+Falls das Gradientenverfahren ausgewählt wurde, so wird die Spalte mit der Curvature Condition weggelassen. Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Sollte das Verfahren divergieren, etwa falls die Curvature Condition einige Schritte nicht erfüllt ist, so findet keine Speicherung der Konvergenzgraphen statt. Die \textsf{.cvd}-Datei wird trotzdem erstellt. 
+Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
  \colorbox{red}{sollte ich noch implementieren und checke, ob das nicht lohnenswert ist.}
 
 \newpage
