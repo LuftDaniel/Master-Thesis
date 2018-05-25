@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  24 MAY 2018 19:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.17)  25 MAY 2018 20:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1483,27 +1483,27 @@ Package babel Info: Redefining ngerman shorthand "~
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-<pic_smallcircle.jpg, id=30, 608.2725pt x 578.16pt>
+<pic_smallcircle.jpg, id=34, 608.2725pt x 578.16pt>
 File: pic_smallcircle.jpg Graphic file (type jpg)
  <use pic_smallcircle.jpg>
 Package pdftex.def Info: pic_smallcircle.jpg used on input line 148.
 (pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
 
-<pic_smallcircle_fine.jpg, id=31, 608.2725pt x 578.16pt>
+<pic_smallcircle_fine.jpg, id=35, 608.2725pt x 578.16pt>
 File: pic_smallcircle_fine.jpg Graphic file (type jpg)
 
 <use pic_smallcircle_fine.jpg>
 Package pdftex.def Info: pic_smallcircle_fine.jpg used on input line 153.
 (pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
 
-<pic_bigcircle_fine.jpg, id=32, 608.2725pt x 578.16pt>
+<pic_bigcircle_fine.jpg, id=36, 608.2725pt x 578.16pt>
 File: pic_bigcircle_fine.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_fine.jpg>
 Package pdftex.def Info: pic_bigcircle_fine.jpg used on input line 158.
 (pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
 
-<pic_brokendonut_fine.jpg, id=33, 608.2725pt x 578.16pt>
+<pic_brokendonut_fine.jpg, id=37, 608.2725pt x 578.16pt>
 File: pic_brokendonut_fine.jpg Graphic file (type jpg)
 
 <use pic_brokendonut_fine.jpg>
@@ -1529,7 +1529,7 @@ Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 175.
 [2 <./pic_smallcircle.jpg> <./pic_smallcircle_fine.jpg> <./pic_bigcircle_fine.j
 pg> <./pic_brokendonut_fine.jpg>]
-<pic_smallcircle_destroyed1.jpg, id=41, 608.2725pt x 578.16pt>
+<pic_smallcircle_destroyed1.jpg, id=45, 608.2725pt x 578.16pt>
 File: pic_smallcircle_destroyed1.jpg Graphic file (type jpg)
 
 <use pic_smallcircle_destroyed1.jpg>
@@ -1537,7 +1537,7 @@ Package pdftex.def Info: pic_smallcircle_destroyed1.jpg used on input line 184.
 
 (pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
 
-<pic_smallcircle_destroyed2.jpg, id=42, 608.2725pt x 578.16pt>
+<pic_smallcircle_destroyed2.jpg, id=46, 608.2725pt x 578.16pt>
 File: pic_smallcircle_destroyed2.jpg Graphic file (type jpg)
 
 <use pic_smallcircle_destroyed2.jpg>
@@ -1552,10 +1552,6 @@ Overfull \hbox (2.61107pt too wide) in paragraph at lines 182--192
 
 LaTeX Warning: Reference `Destroyed' on page 3 undefined on input line 196.
 
-
-LaTeX Warning: Reference `Destroyedbfgs' on page 3 undefined on input line 196.
-
-
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 197.
 Package babel Info: Redefining ngerman shorthand "~
@@ -1565,7 +1561,7 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 197.
 [3 <./pic_smallcircle_destroyed1.jpg> <./pic_smallcircle_destroyed2.jpg>]
-<pic_smallcircle_bfgsdestroyed1.jpg, id=48, 608.2725pt x 578.16pt>
+<pic_smallcircle_bfgsdestroyed1.jpg, id=53, 608.2725pt x 578.16pt>
 File: pic_smallcircle_bfgsdestroyed1.jpg Graphic file (type jpg)
 
 <use pic_smallcircle_bfgsdestroyed1.jpg>
@@ -1573,7 +1569,7 @@ Package pdftex.def Info: pic_smallcircle_bfgsdestroyed1.jpg used on input line
 201.
 (pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
 
-<pic_smallcircle_bfgsdestroyed2.jpg, id=49, 608.2725pt x 578.16pt>
+<pic_smallcircle_bfgsdestroyed2.jpg, id=54, 608.2725pt x 578.16pt>
 File: pic_smallcircle_bfgsdestroyed2.jpg Graphic file (type jpg)
 
 <use pic_smallcircle_bfgsdestroyed2.jpg>
@@ -1586,151 +1582,255 @@ Overfull \hbox (2.61107pt too wide) in paragraph at lines 199--209
  []
 
 
-LaTeX Warning: Reference `Destroyedkonstlame' on page 4 undefined on input line
- 213.
+Overfull \hbox (97.37486pt too wide) in paragraph at lines 213--214
+[][][][][][][] 
+ []
 
-<pic_bigcircle_constlame1.jpg, id=50, 608.2725pt x 578.16pt>
+<pic_bigcircle_constlame1.jpg, id=56, 608.2725pt x 578.16pt>
 File: pic_bigcircle_constlame1.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_constlame1.jpg>
-Package pdftex.def Info: pic_bigcircle_constlame1.jpg used on input line 218.
+Package pdftex.def Info: pic_bigcircle_constlame1.jpg used on input line 220.
 (pdftex.def)             Requested size: 121.65234pt x 115.62994pt.
 
-Overfull \hbox (2.14955pt too wide) in paragraph at lines 218--219
+Overfull \hbox (2.14955pt too wide) in paragraph at lines 220--221
  [][] 
  []
 
-<pic_bigcircle_constlame2.jpg, id=51, 608.2725pt x 578.16pt>
+<pic_bigcircle_constlame2.jpg, id=57, 608.2725pt x 578.16pt>
 File: pic_bigcircle_constlame2.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_constlame2.jpg>
-Package pdftex.def Info: pic_bigcircle_constlame2.jpg used on input line 221.
+Package pdftex.def Info: pic_bigcircle_constlame2.jpg used on input line 223.
 (pdftex.def)             Requested size: 121.65234pt x 115.62994pt.
 
-Overfull \hbox (2.14955pt too wide) in paragraph at lines 221--222
+Overfull \hbox (2.14955pt too wide) in paragraph at lines 223--224
  [][] 
  []
 
-<pic_bigcircle_constlame3.jpg, id=52, 608.2725pt x 578.16pt>
+<pic_bigcircle_constlame3.jpg, id=58, 608.2725pt x 578.16pt>
 File: pic_bigcircle_constlame3.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_constlame3.jpg>
-Package pdftex.def Info: pic_bigcircle_constlame3.jpg used on input line 226.
+Package pdftex.def Info: pic_bigcircle_constlame3.jpg used on input line 228.
 (pdftex.def)             Requested size: 121.65234pt x 115.62994pt.
 
-Overfull \hbox (2.14955pt too wide) in paragraph at lines 226--227
+Overfull \hbox (2.14955pt too wide) in paragraph at lines 228--229
  [][] 
  []
 
-<pic_bigcircle_constlame4.jpg, id=53, 608.2725pt x 578.16pt>
+<pic_bigcircle_constlame4.jpg, id=59, 608.2725pt x 578.16pt>
 File: pic_bigcircle_constlame4.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_constlame4.jpg>
-Package pdftex.def Info: pic_bigcircle_constlame4.jpg used on input line 229.
+Package pdftex.def Info: pic_bigcircle_constlame4.jpg used on input line 231.
 (pdftex.def)             Requested size: 121.65234pt x 115.62994pt.
 
-Overfull \hbox (2.14955pt too wide) in paragraph at lines 229--230
+Overfull \hbox (2.14955pt too wide) in paragraph at lines 231--232
  [][] 
  []
 
-<pic_bigcircle_constlame5.jpg, id=54, 608.2725pt x 578.16pt>
+<pic_bigcircle_constlame5.jpg, id=60, 608.2725pt x 578.16pt>
 File: pic_bigcircle_constlame5.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_constlame5.jpg>
-Package pdftex.def Info: pic_bigcircle_constlame5.jpg used on input line 234.
+Package pdftex.def Info: pic_bigcircle_constlame5.jpg used on input line 236.
 (pdftex.def)             Requested size: 121.65234pt x 115.62994pt.
 
-Overfull \hbox (2.14955pt too wide) in paragraph at lines 234--235
+Overfull \hbox (2.14955pt too wide) in paragraph at lines 236--237
  [][] 
  []
 
-<pic_bigcircle_constlame6.jpg, id=55, 608.2725pt x 578.16pt>
+<pic_bigcircle_constlame6.jpg, id=61, 608.2725pt x 578.16pt>
 File: pic_bigcircle_constlame6.jpg Graphic file (type jpg)
 
 <use pic_bigcircle_constlame6.jpg>
-Package pdftex.def Info: pic_bigcircle_constlame6.jpg used on input line 237.
+Package pdftex.def Info: pic_bigcircle_constlame6.jpg used on input line 239.
 (pdftex.def)             Requested size: 121.65234pt x 115.62994pt.
 
-Overfull \hbox (2.14955pt too wide) in paragraph at lines 237--238
+Overfull \hbox (2.14955pt too wide) in paragraph at lines 239--240
  [][] 
  []
 
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 252.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 252.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 252.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 252.
+[4 <./pic_smallcircle_bfgsdestroyed1.jpg> <./pic_smallcircle_bfgsdestroyed2.jpg
+>]
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 252.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 252.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 252.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 252.
+ [5 <./pic_bigcircle_constlame1.jpg> <./pic_bigcircle_constlame2.jpg> <./pic_bi
+gcircle_constlame3.jpg> <./pic_bigcircle_constlame4.jpg> <./pic_bigcircle_const
+lame5.jpg> <./pic_bigcircle_constlame6.jpg>]
+<pic_bigcircle_bfgs_linesearch.jpg, id=74, 608.2725pt x 578.16pt>
+File: pic_bigcircle_bfgs_linesearch.jpg Graphic file (type jpg)
 
-Overfull \hbox (766.7792pt too wide) in paragraph at lines 246--247
+<use pic_bigcircle_bfgs_linesearch.jpg>
+Package pdftex.def Info: pic_bigcircle_bfgs_linesearch.jpg used on input line 2
+56.
+(pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
+
+<pic_bigcircle_bfgs_linesearch_fine.jpg, id=75, 608.2725pt x 578.16pt>
+File: pic_bigcircle_bfgs_linesearch_fine.jpg Graphic file (type jpg)
+
+<use pic_bigcircle_bfgs_linesearch_fine.jpg>
+Package pdftex.def Info: pic_bigcircle_bfgs_linesearch_fine.jpg used on input l
+ine 261.
+(pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
+
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 254--264
+[]$[]$ $[]$ 
+ []
+
+
+Overfull \hbox (188.9414pt too wide) in paragraph at lines 270--271
+\T1/lmr/m/n/12 ben ver-schwin-den die-se Ef-fek-te wie-der, sie-he [][][][][][]
+.
+ []
+
+
+Overfull \hbox (237.56157pt too wide) in paragraph at lines 270--271
+\T1/lmr/m/n/12 Die-ses Ver-hal-ten soll-te auf-tre-ten, da [][][][][][]. 
+ []
+
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 273.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 273.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 273.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 273.
+[6 <./pic_bigcircle_bfgs_linesearch.jpg> <./pic_bigcircle_bfgs_linesearch_fine.
+jpg>]
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 291.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 291.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 291.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 291.
+ [7] <pic_brokendonut_gradient.jpg, id=94, 608.2725pt x 578.16pt>
+File: pic_brokendonut_gradient.jpg Graphic file (type jpg)
+
+<use pic_brokendonut_gradient.jpg>
+Package pdftex.def Info: pic_brokendonut_gradient.jpg used on input line 295.
+(pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
+
+<pic_brokendonut_gradient_fine.jpg, id=95, 608.2725pt x 578.16pt>
+File: pic_brokendonut_gradient_fine.jpg Graphic file (type jpg)
+
+<use pic_brokendonut_gradient_fine.jpg>
+Package pdftex.def Info: pic_brokendonut_gradient_fine.jpg used on input line 3
+00.
+(pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
+
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 293--303
+[]$[]$ $[]$ 
+ []
+
+
+Overfull \hbox (397.08899pt too wide) in paragraph at lines 307--308
+\T1/lmr/m/n/12 Git-ter-fein-heit. [][][][][][] 
+ []
+
+<pic_brokendonut_gradient_linesearch.jpg, id=97, 608.2725pt x 578.16pt>
+File: pic_brokendonut_gradient_linesearch.jpg Graphic file (type jpg)
+
+<use pic_brokendonut_gradient_linesearch.jpg>
+Package pdftex.def Info: pic_brokendonut_gradient_linesearch.jpg used on input 
+line 315.
+(pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
+
+<pic_brokendonut_gradient_linesearch_fine.jpg, id=98, 608.2725pt x 578.16pt>
+File: pic_brokendonut_gradient_linesearch_fine.jpg Graphic file (type jpg)
+
+<use pic_brokendonut_gradient_linesearch_fine.jpg>
+Package pdftex.def Info: pic_brokendonut_gradient_linesearch_fine.jpg used on i
+nput line 320.
+(pdftex.def)             Requested size: 152.06775pt x 144.53964pt.
+
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 313--323
+[]$[]$ $[]$ 
+ []
+
+
+Overfull \hbox (731.91277pt too wide) in paragraph at lines 329--330
 [][][][][][][] 
  []
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 248.
+(babel)             in language  on input line 332.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 248.
+(babel)             in language  on input line 332.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 248.
+(babel)             in language  on input line 332.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 248.
-[4 <./pic_smallcircle_bfgsdestroyed1.jpg> <./pic_smallcircle_bfgsdestroyed2.jpg
->]
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 248.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 248.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 248.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 248.
- [5 <./pic_bigcircle_constlame1.jpg> <./pic_bigcircle_constlame2.jpg> <./pic_bi
-gcircle_constlame3.jpg> <./pic_bigcircle_constlame4.jpg> <./pic_bigcircle_const
-lame5.jpg> <./pic_bigcircle_constlame6.jpg>] (./Resultate.bbl
+(babel)             in language  on input line 332.
+[8 <./pic_brokendonut_gradient.jpg> <./pic_brokendonut_gradient_fine.jpg>]
+(./Resultate.bbl
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 1.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 81.
+(babel)             in language  on input line 48.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 81.
+(babel)             in language  on input line 48.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 81.
+(babel)             in language  on input line 48.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 81.
- [6])
+(babel)             in language  on input line 48.
+ [9 <./pic_brokendonut_gradient_linesearch.jpg> <./pic_brokendonut_gradient_lin
+esearch_fine.jpg>]
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 253.
+(babel)             in language  on input line 121.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 253.
+(babel)             in language  on input line 121.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 253.
+(babel)             in language  on input line 121.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 253.
- [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 253.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 253.
+(babel)             in language  on input line 121.
+ [10])
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 337.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 337.
+Package babel Info: Redefining ngerman shorthand "|
+(babel)             in language  on input line 337.
+Package babel Info: Redefining ngerman shorthand "~
+(babel)             in language  on input line 337.
+ [11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 337.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 337.
+ (./Resultate.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 337.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 337.
+Package rerunfilecheck Info: File `Resultate.out' has not changed.
+(rerunfilecheck)             Checksum: BE4DDB5617A20732C4C94EB7421A77B7;141.
 
-(./Resultate.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 253.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 253.
-
-
-Package rerunfilecheck Warning: File `Resultate.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Resultate.out':
-(rerunfilecheck)             Before: 0882E396F8F8149D0CD7FF6698CDF12F;96
-(rerunfilecheck)             After:  9ABF9B5B070777A49767BDBFF436CF07;141.
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 253.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 337.
  ) 
 Here is how much of TeX's memory you used:
- 32598 strings out of 493029
- 731893 string characters out of 6136233
- 1061116 words of memory out of 5000000
- 35513 multiletter control sequences out of 15000+600000
+ 32639 strings out of 493029
+ 733243 string characters out of 6136233
+ 1062116 words of memory out of 5000000
+ 35541 multiletter control sequences out of 15000+600000
  50309 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,10n,81p,1073b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1744,10 +1844,10 @@ ype1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmro12.pfb></
 usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/
 public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Resultate.pdf (7 pages, 2232471 bytes).
+Output written on Resultate.pdf (11 pages, 2372327 bytes).
 PDF statistics:
- 155 PDF objects out of 1000 (max. 8388607)
- 119 compressed objects within 2 object streams
- 38 named destinations out of 1000 (max. 500000)
- 99 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 193 PDF objects out of 1000 (max. 8388607)
+ 147 compressed objects within 2 object streams
+ 45 named destinations out of 1000 (max. 500000)
+ 137 words of extra memory for PDF output out of 10000 (max. 10000000)
 

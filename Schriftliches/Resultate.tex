@@ -210,7 +210,9 @@ Auch bei Verfeinerung des Gitters um das 4-fache erhält man keine Konvergenz de
 \label{Destroyedbfgs}
 \end{figure}
 
-Wir haben auch versucht, die Gitterzerstörung durch Modifikation der lokal variierenden Lamé-Parameter zu begegnen. Alle bisher gezeigten Gitter hatten die Wahl des minimalen Lamé-Parameters von 0. Um zu beobachten, ob die Verfahren instabiler werden, wenn man konstante Lamé-Parameter wählt, haben wir diese konstant auf 30 gesetzt. Man erhält den Output \ref{Destroyedkonstlame}.
+\colorbox{red}{finde raus, warum nur auf der einen Seite kein Text angezeit wird; mache formatierung schöner}
+
+Wir haben auch versucht, die Gitterzerstörung durch Modifikation der lokal variierenden Lamé-Parameter zu begegnen. Alle bisher gezeigten Gitter hatten die Wahl des minimalen Lamé-Parameters von 0. Um zu beobachten, ob die Verfahren instabiler werden, wenn man konstante Lamé-Parameter wählt, haben wir diese konstant auf 30 gesetzt. Man erhält den Output \ref{Destroyedkonstlame}, wobei bei Schritt 5 und 6 die Curvature Condition verletzt sind.
 
 \begin{figure}
 	\begin{subfigure}{0.3\textwidth}
@@ -237,13 +239,95 @@ Wir haben auch versucht, die Gitterzerstörung durch Modifikation der lokal vari
 	\includegraphics[scale=0.2]{pic_bigcircle_constlame6.jpg}
 	\caption{}	
 	\end{subfigure}
-\caption{BFGS-Verfahren ohne Schrittweitensteuerung bei konstanten Lamé-Parametern mit Wert 30}
+\caption{BFGS-Verfahren ohne Schrittweitensteuerung bei konstanten Lamé-Parametern mit Wert 30; die ersten 6 Schritte}
 \label{Destroyedkonstlame}
 \end{figure}
 
-Ein komplett anderes Verhalten stellt sich bei Verwendung der Linesearch ein; in diesem Fall konvergiert das L-BFGS-Verfahren für beide Gitterfeinheiten.
+Ein komplett anderes Verhalten stellt sich bei Verwendung der Backtracking-Linesearch ein; in diesem Fall konvergiert das L-BFGS-Verfahren für beide Gitterfeinheiten.
+Zudem fällt eine erhebliche Steigerung der Konvergenzgeschwindigkeit auf; schon nach 5 Schritten auf dem groben, und nach 6 auf dem feinen Gitter. 
 
-\colorbox{red}{startscale bei bfgs skalierungsunabhängig; bfgs vs lbfgs kein unterschied --> 1 term fehlt; Plot mit Gradient und L-BFGS; zeroed erwähnen; perimeter klein kein unterschied(sogar 0); lok. Min., d.h. kein Abstieg in einem Fall; }
+\colorbox{red}{konvergenzplot der bfgs und gradientenverfahren mit linesearch}
+
+Die bei dem groben Gitter erzeugte optimale Form besitzt noch einen mit bloßem Auge sichtbaren Abstand zur Zielform. In diesem Fall hat unser L-BFGS-Algorithmus bei dem Backtracking maximal herunterskaliert, d.h. keine Abstiegsrichtung gefunden und ist ausgestiegen. Damit scheint ein lokales Minimum erreicht. Bei Verwendung des feinen Gitters ist bei selbem Ausstiegskriterium kein Abstand zur Zielform sichtbar, was man in \ref{Konvergenzbfgscircle} sehen kann.
+
+\begin{figure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_bigcircle_bfgs_linesearch.jpg}
+	\caption{}	
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_bigcircle_bfgs_linesearch_fine.jpg}
+	\caption{}	
+	\end{subfigure}
+\caption{(a) L-BFGS mit Backtracking bei grobem Gitter. Abweichung bei Ausstieg sichtbar. (b) L-BFGS mit Backtracking bei feinem Gitter. Abweichung bei Ausstieg nicht erkennbar.}
+\label{Konvergenzbfgscircle}
+\end{figure}
+
+Wir haben durch Veränderung der Perimeter-Regularisierung untersucht, ob sich durch diese der Abstand zur Zielform erklären lässt. Die Vermutung ist, dass die optimale Form etwas kleiner als die Zielform ist, da die Perimeter-Regularisierung kleinere Formen favorisiert. Die in diesem Fall entstehende optimale Lösung ist in diesem Fall symmetrisch mit gleichem Mittelpunkt wie die Zielform, jedoch besitzt sie fast den selben Abstand wie die optimale Form mit der Perimeterregularisierung. Für die Bilder verweisen wir auf die mitgelieferten Dateien auf der CD.
+
+Kontrollieren wir im Falle des BFGS-Algorithmus auf Veränderung bei Erhöhung des Hochskalierungsfaktors \textsf{starscale} des Backtracking, so stellen wir fest, dass die ersten Schritte stärkere Verbesserungen bringen, sobald sich jedoch eine gewisse Memorygröße, und damit eine Hesseapproximation, aufgebaut haben verschwinden diese Effekte wieder, siehe \colorbox{red}{plot beider Graphen; mit linesearch; fine; high und normal startscale}. Dieses Verhalten sollte auftreten, da \colorbox{blue}{BFGS-Schritte mit aufgebauter Hesseapproximation unabhängig einer Skalierung sind}.
+
+Zudem haben wir einen Vergleich zwischen der vollen BFGS-Methode, welche wir durch die \textsf{memory\_length} von 60 erzeugen, und der echten L-BFGS-Methode, mit \textsf{memory\_length} von 2 und 3, im Falle des feinen Gitters gezogen. Interessanterweise stellt sich hier kein merklicher Unterschied hinsichtlich Konvergenzgeschwindigkeit in, was man in \colorbox{red}{plot ref} erkennen kann. Dies lässt sich nach unserer Vermutung dadurch erklären, dass für einen korrekten BFGS-Schritt ein Term \colorbox{red}{ welcher Ordnung?} fehlt. Würde dieser ergänzt, so vermuten wir eine Verbesserung des Algorithmus bei höherer \textit{memory\_length}. Außerdem lässt sich in den Diagrammen keine superlineare Konvergenz nachweisen, welche sich bei korrektem Update möglicherweise einstellt.
+
+\colorbox{red}{hier plot; 3 L-BFGS Memlengths im Zielfunktional}
+
+Neben der bloßen Bedingung einer Verbesserung im Zielfunktional bei dem Backtracking besteht die Möglichkeit, die Amijo-Bedingung für die Linesearch zu verwenden. Diese haben wir nach \cite{Nocedal} implementiert. Verwendet man diese, so konvergiert die L-BFGS-Method nicht mehr, in einigen Fällen konvergiert das Gradientenverfahren. Jedoch würde wir eher behaupten, dass dies \textit{trotz} der Armijo-Bedingung konvergiert. Da diese Bedingung die Verbesserung mit Hilfe eines linearen Modells in der aktuellen Form betrachtet, wäre ein aus der Formoptimierung legitimes anderes Modell vorstellbar, um verbesserte Bedingungen zur Linesearch zu erzeugen. Hierzu hat uns leider die Zeit gefehlt, wir möchten an dieser Stelle jedoch die Relevanz eines solchen Resultats betonen. 
+
+Bei der Berechnung des Formgradienten in \colorbox{red}{referenz implementierung zeroed} haben wir ein Verfahren verwendet, welches in der linearen Elastizitätsgleichung die Punkte, welche nicht Träger des inneren Randes sind, auf Null gesetzt wurden. Schaltet man diese Nullsetzung aus, was durch die Wahl des Parameters \textsf{zeroed = False} möglich ist, so zerstört dies das Verfahren. Sowohl das L-BFGS, als auch das Gradientenverfahren divergieren in allen von uns getesteten Beispielen. Somit tritt des selbe Effekt wie in \cite{bfgs2}, welcher dort in Abschnitt 5, Fig. 2 zu sehen ist. Würde dieser Effekt durch ein Rundungsrauschen hervorgerufen sein, so vermuten wir, dass dieses weniger drastisch sichtbar würde. Bei uns ist schon nach den ersten Schritten das Gitter bis zur Unbrauchbarkeit entartet.
+
+\colorbox{red}{jetzt Donut}
+
+Wir haben die oben genannten Beobachtungen auch für das schwierigere Problem der nierenförmigen, nicht konvexen Form gesammelt. Die Ausgangsform, welcher den kleinen Kreis in \ref{Meshes} darstellt, bleibt gleich, wir wechseln also nur die Zielform, die auch in \ref{Meshes} zu sehen ist. 
+
+
+\colorbox{red}{zeige nicht alles in Vollem Detail; Bilder zu Konvergenz; Konvergenzplots}
+
+\colorbox{red}{Ausblick und Danksagung an Volker}
+
+Anders als bei dem einfacheren ersten Problem, erhalten wir für ein Gradientenverfahren ohne Backtracking-Linesearch, in den Fällen sowohl des groben, als auch des feinen Gitters, nach ca. 1200, respektive ca. 600 Schritten zwar Konvergenz, jedoch nicht zum globalen Optimum des Zielgitters. Wir vermuten, dass es sich hierbei um lokale Minima handelt, die resultierende optimale Form bleibt konvex, trotz des nicht konvexen Zielgitters, siehe Abbildung
+\ref{brokendonutgradient}.
+
+\begin{figure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_brokendonut_gradient.jpg}
+	\caption{}	
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_brokendonut_gradient_fine.jpg}
+	\caption{}	
+	\end{subfigure}
+\caption{(a) Optimale Form und Zielform bei Gradientenverfahren auf grobem Gitter (b) Selbiges auf feinem Gitter}
+\label{brokendonutgradient}
+\end{figure}
+
+Durch das Verwenden der Backtracking-Linesearch schafft es der Algorithmus näher an das globale Optimum zu gelangen. Dies gelingt jedoch ausschließlich bei dem feinen Gitter. Im Falle des groben Gitters erreichen wir auch mit Linesearch die selbe nicht konvexe Form, siehe Abbildung \ref{brokendonutgradient_linesearch}, wobei eine leichte Verbesserung zu sehen ist. Dies zeigt, dass das Verfahren stark abhängig ist von der Gitterfeinheit. \colorbox{red}{frag volker dazu, ob das invariant sein sollte. eigentlich nicht mit hesseinformation oder? oder bilinearform als rim metrik falsche ordnung?}
+
+Außerdem beobachten wir für das Gradientenverfahren, wie im ersten Problem, eine Skalieren der Konvergenzgeschwindigkeit durch das Hochskalieren der Suchrichtung bei dem Backtracking-Linesearch. Wir sparen uns an dieser Stelle die erneute Angabe eines zu \colorbox{red}{plot von skalierung bei erstem Problem} ähnlichen Graphen.
+Zudem haben wir in diesem Problem die gleichen Feststellungen bei Verwendung der Armijo-Bedingung bei der Linesearch gemacht, wie bei dem ersten Problem zuvor.
+
+\begin{figure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_brokendonut_gradient_linesearch.jpg}
+	\caption{}	
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_brokendonut_gradient_linesearch_fine.jpg}
+	\caption{}	
+	\end{subfigure}
+\caption{(a) Optimale Form und Zielform bei Gradientenverfahren mit Linesearch auf grobem Gitter (b) Selbiges auf feinem Gitter}
+\label{brokendonutgradient_linesearch}
+\end{figure}
+
+\colorbox{red}{jetzt bfgs}
+
+\colorbox{red}{plot von bfgs und gradienten im vergleich bei linesearch; Kommentar, das bei guter Linesearch vllt beide Verfahren kompetitiv? boosting des Gradienten; erwähne sequential sqp oder wie das heißt (für globable optima)}
+
 
 \newpage
 \nocite{*}
