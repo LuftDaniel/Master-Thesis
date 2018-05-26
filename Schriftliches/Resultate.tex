@@ -125,6 +125,8 @@
 \colorbox{red}{plotte l-BFGs vs Gradient}
 \colorbox{red}{mache Langzeit rechnung mit und ohne Line-search bei Pertubation}
 \colorbox{red}{Programme als Wort, Rechtschreibfehler in anderen Chaptern}
+\colorbox{red}{ eventuell bei Zeit die Hintergrundeinstellung bei Paraview bei allen Bildern gleich machen, sprich jedes mal X-Ray einstellen}
+
 
 Wie angekündigt möchten wir in diesem abschließenden Abschnitt die Resultate aus unserer Programmierung analysieren. Wir haben mehrere Problemgitter und Kombinationen aus Verfahren getestet, und dabei die Daten aufbereitet. \colorbox{red}{Diese Daten werden auf der beigelegten CD samt dem Programm enthalten sein.}
 Wir haben uns für die Analyse der Verfahren für zwei Testprobleme entschieden. Zum einen soll ein kleiner Kreis zu einem großen Kreis deformiert werden, wobei die Kreismittelpunkte jeweils gleich bleiben. Somit handelt es sich bei diesem Problem um Deformation einer konvexen Form ohne große Translation. Zum anderen soll ein kleiner Kreis zu einer nierenartigen Form deformiert werden. In diesem Problem findet eine verhätlnismäßig starke Translation statt, außerdem ist die Zielform ein nicht konvex, was dieses Problem deutlich schwieriger macht, als das erste. In beiden Fällen sind die Formen in dem Einheitsquadrat im $\mathbb{R}^2$ eingebettet. Diese sind abgebildet \ref{Meshes}. 
@@ -325,6 +327,59 @@ Zudem haben wir in diesem Problem die gleichen Feststellungen bei Verwendung der
 \end{figure}
 
 \colorbox{red}{jetzt bfgs}
+
+Bei Verwendung des L-BFGS-Verfahrens ohne Linesearch bemerken wir, ähnlich wie zu dem ersten Beispiel, dass sowohl beim groben, als auch beim feinen Gitter eine zu \ref{Destroyedbfgs} ähnliche Divergenz stattfindet, weshalb wir uns Graphiken hierzu sparen. Das Gitter ist nach nur wenigen Schritten, nachdem die Curvature Condition verletzt wurde, bis zur Unkenntlichkeit verformt, wobei das Verfahren auch nicht die lokalen Minima \ref{brokendonutgradient_linesearch} oder \ref{brokendonutgradient} erreicht. 
+
+Interessanterweise verbessert sich das Verhalten des L-BFGS-Verfahrens ohne Linesearch, wenn man statt lokal variierenden Lamé-Parametern konstante Lamé-Parameter mit Wert 30 wählt. Zuvor divergierte das Verfahren bei dem feinen Gitter nach nur 5 Schritten unter Verletzung der Curvature Condition der letzten 3 Schritte. Bei konstanten Lamé-Parametern findet zwar auch Divergenz statt, jedoch erst nach 14 Schritten, wobei zuvor sogar ein optimales Ergebniss, welches dem Gradientenverfahren mit Linesearch auf dem feinen Gitter nahe kommt. Zu sehen sind ausgewählte Schritte in \ref{brokendonut_bfgs_konstlame}. Man beachte jedoch den Vergleich zu dem Gitter, welches bei dem L-BFGS-Verfahren mit Linesearch und variierenden Lamé-Parametern erzeugt wird, bei dem geringere Entartung der Zellen des Gitters zu beobachten sind. Wir würden an dieser Stelle vorschlagen, ein Kriterium für die Entartung des Gitters, etwa dem Quotienten aus maximalem und minimalem Zellvolumen, zu verwenden, um bei Überschreitung eines festgelegten Entartungsgrades ein neues Gitter mit der aktuellen Form zu initialisieren. Dies ließe sich auch mit lokal variierenden Lamé-Parametern, sowie mit adaptiven Gittermethoden, kombinieren.
+
+\begin{figure}
+	\begin{subfigure}{0.3\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{pic_brokendonut_bfgs_konstlame_6.jpg}
+	\caption{}	
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{pic_brokendonut_bfgs_konstlame_12.jpg}
+	\caption{}	
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{pic_brokendonut_bfgs_konstlame_14.jpg}
+	\caption{}	
+	\end{subfigure}
+\caption{BFGS-Verfahren bei konstanten Lamé-Parameter von 30 (a) Schritt 6 (b) gute Form bei Schritt 12; man beachte die starke Stauchung/ Streckung der Zellen (c) Zerstörung des Gitters bei Schritt 14}
+\label{brokendonut_bfgs_konstlame}
+\end{figure}
+
+Verwendet man zusammen mit dem L-BFGS-Verfahren die Backtracking-Linesearch, so erhalten wir ähnliche Ergebnisse wie in dem ersten Problem. Eine deutliche Erhöhung der Konvergenzgeschwindigkeit, von ca. 900 Schritten des Gradientenverfahrens mit Linesearch und Startskalierung 5, auf 26 Schritte im Falle des L-BFGS mit Linesearch, auf dem feinen Gitter. Auch auf dem groben Gitter ist eine erhebliche Erhöhung der Konvergenzgeschwindigkeit zu beobachten, wobei auch hier lediglich das lokale Minimum des Gradientenverfahrens erreicht wird. Auf dem feinen Gitter wird, ähnlich dem Gradientenverfahren mit Linesearch, eine sehr gute Lösung erreicht, nahe des globalen Optimums. Damit scheint keine Gitterunabhängigke Konvergenz vorzuliegen. \colorbox{red}{Bilder ref, falls diese verschieden von denen des gradientenverfahrens oben sind, ansonsten auf diese Referenzieren} \colorbox{red}{hat das mit der Ordnung des Hessian zu tun?}
+\colorbox{red}{checke, ob konvergenz bei ausstieg, wenn curv. cond. nicht erfüllt ist, auch vorliegt.}
+Die Curvature Condition wird ab Schritt 17 verletzt, wobei schon in diesem Schritt eine fast vom Ergebniss kaum zu unterscheidene Lösung erzeugt wird. Die Ausstiegsbedingung war lediglich zu stark gewählt.
+Weiterhin stellen wir fest, dass durch das Weglassen der Perimeter-Regularisierung die Konvergenz im \colorbox{red}{perimeter zero vergleich; mit und ohne linesearch}
+erhalten bleibt. Lässt man zusätzlich die Lamé-Paramter nicht lokal variieren, so bleibt auch hier die Konvergenz erhalten, das Verfahren benötigt jedoch interessanterweise etwas mehr als die doppelte Anzahl an Schritten. Somit scheint in gewissen Fällen die lokal variierende Wahl der Lamé-Parameter die Konvergenzgeschwindigkeit zu erhöhen. Dieser Effekt tritt bei uns nur in Kombination mit dem Weglassen der Perimeter-Regularisierung auf, wobei in allen Fällen ohne Linesearch Divergenz vorliegt.
+
+Außerdem beobachten wir, dass bei einer Memory-Length von 3, sprich bei einem echte Limited-Memory Ansatz, die Anzahl der benötigten Schritte zur Konvergenz von 26 auf 35 auf dem feinen Gitter, und bei dem groben Gitter gleich bleibt. 
+\colorbox{red}{was ist die zugehörige Interpretation?} 
+\colorbox{red}{bleibt der Graph ähnlich? wenn ja auf den ersten verweisen}
+
+\begin{figure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_brokendonut_bfgs_linesearch.jpg}
+	\caption{}	
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+	\centering
+	\includegraphics[scale=0.25]{pic_brokendonut_bfgs_linesearch_fine.jpg}
+	\caption{}	
+	\end{subfigure}
+\caption{L-BFGS-Verfahren mit Linesearch (a) Form bei Ausstieg auf grobem Gitter (b) Form bei Ausstieg auf feinem Gitter}
+\label{brokendonut_bfgs_linesearch}
+\end{figure}
+
+Vergleich mit mem lengths
+
+\colorbox{red}{konvergenzplot von gradient und bfgs bei linesearch}
 
 \colorbox{red}{plot von bfgs und gradienten im vergleich bei linesearch; Kommentar, das bei guter Linesearch vllt beide Verfahren kompetitiv? boosting des Gradienten; erwähne sequential sqp oder wie das heißt (für globable optima)}
 
