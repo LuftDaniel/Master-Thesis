@@ -1,0 +1,148 @@
+
+\section{Grundlagen zu Differentialgleichungen}
+
+%%%%%%%%%%%%%%%%
+
+
+\colorbox{red}{schau nochmal drüber: zu redundant, zu ausführlich, Übergang zum nächsten Kapitel, etc...}
+\colorbox{red}{richtige Quelle zu Seminarpaper aus Slobodeckij, dortige Quellen z.b.}
+
+In diesem Abschnitt möchten wir eine kurze Einführung in die für diese Arbeit nötigen Grundlagen zur Theorie und Numerik partieller Differentialgleichungen geben. Im Folgenden werden wir uns an die Werke \cite{PDE1}, \cite{PDE2} und \cite{PDE3} halten, und verweisen für weitere Details und Beweise auch auf diese.
+
+Da wir in dieser Arbeit Formoptimierung bei Differentialgleichungen betreiben möchten, stellen wir hier die von uns ausgewählte Modellgleichung, später im Kontext der Formoptimierung auch \textit{Zustandsgleichung} (engl. \textit{state equation}) genannt, vor. Es handelt sich dabei um das bekannte \textit{Poisson-Problem}
+
+\begin{align}\label{Poissonproblem}
+	\begin{aligned}
+	-\Delta y &=  f  \text{ in } \Omega \; \\ y &= 0 \text{ auf } \partial \Omega,
+	\end{aligned}
+\end{align}
+
+wobei $\Delta$ den Laplace-Operator meint, und $\Omega$ ein offenes, beschränktes, zusammenhängendes Gebiet des $\mathbb{R}^n$ ist. Funktionen $y\in C^2(\Omega)$, welche die obigen Gleichungen erfüllen, werden klassische oder auch \textit{starke Lösungen} des Poissonproblems genannt. Betrachtet man das Poisson-Problem für kompliziertere Gebiete $\Omega$ und Funktionen $f$ auf $\Omega$, so ist im Allgemeinen nicht klar, ob eine Lösung existiert und welche Regularität diese besitzt. Aus diesem Grund führen wir die bekannten Sobolev-Räume und exemplarische Elemente der schwachen Lösungstheorie des Poisson-Problems ein. Wir beginnen mit der Definition von Sobolev-Räumen nach \cite{PDE3}.
+
+\begin{defi}[Sobolev-Räume]\label{Sobolevspace}
+Sei $\Omega \subseteq \mathbb{R}^n$ ein offenes, beschränktes, zusammenhängendes Gebiet, weiterhin sei $1 \leq p \leq \infty$, $m \in \mathbb{N}$. Wir definieren eine Norm durch
+
+\begin{align*}
+	\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}: C^\infty(\Omega) \rightarrow 
+	\mathbb{R},\; y \rightarrow \underset{\vert \alpha \vert \leq m}{\sum} 						\vert\vert D^\alpha y(x) \vert\vert_{\mathcal{L}^p},
+\end{align*}
+genannt \textit{m,p-Sobolev-Norm}, wobei $\alpha$ ein Multiindex ist. Dann heißt die Vervollständigung von $C^\infty(\Omega)$ bezüglich $\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}$ \textit{Sobolev-Raum der Ordnung m}, bezeichnet mit $W^{m,p}(\Omega)$. Die Vervollständigung von $C_0^\infty(\Omega)$ bezüglich $\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}$ bezeichnen wir mit $W_0^{m,p}(\Omega)$. Im Falle $p=2$ nennen wir diese Sobolev-Räume $H^m(\Omega)$, beziehungsweise  $H_0^m(\Omega)$.
+\end{defi}
+
+Beweise zu der in der obigen Definition getroffenen Behauptung, die Abbildung $\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}$ definiere eine Norm, finden sich in den Eingang dieses Abschnittes genannten Werken. Die so definierten Sobolev-Räume enthalten per Konstruktion die $C^\infty$- beziehungsweise $C_0^\infty$-Funktionen als dichte Teilmenge, was als Satz von Meyers-Serrin bekannt ist. Ein alternativer Zugang zu den Sobolev-Räumen bietet die Definition über Abbildungen mit existierenden schwachen Ableitungen. In der Tat sind diese Definitionen äquivalent, weshalb wir uns im Hinblick auf die weiteren Sätze hier eine kurze Definition geben. Bei Interesse verweisen wir auf \cite{PDE3}.
+
+\begin{defi}[schwache Ableitung]
+Sei ein $\Omega \subseteq \mathbb{R}^n$ beschränktes, offenes, zusammenhängendes Gebiet. Sei $f\in \mathcal{L}^1(\Omega)$ und $\alpha = (\alpha_1,\dots, \alpha_n)\in \mathbb{N}^n$ ein Multiindex. 
+Dann heißt eine Funktion $u \in \mathcal{L}^1(\Omega)$ \textit{ $\alpha$-te schwache Ableitung} von $f$, falls gilt
+
+\begin{align*}
+	\underset{\Omega}{\int}u(x)\varphi(x)dx = (-1)^{\vert \alpha \vert}\underset{\Omega}{\int}f(x)D^\alpha\varphi(x)dx \hspace{1cm} \forall \varphi \in C_c^\infty(\Omega),
+\end{align*}
+wobei $C_c^\infty(\Omega)$ der Raum aller $C^\infty(\Omega)$-Funktionen mit kompaktem Träger ist.
+\end{defi}
+
+In Anlehnung an das Fundementallemma der Variationsrechnung verwenden wir nun, ausgehend von \ref{Poissonproblem}, den Green'schen Formeln und Testfunktionen $v\in C_0^\infty(\Omega)$, um die sogenannte \textit{schwache Formulierung} des Poisson-Problems herzuleiten. Es sei $n$ das äußere Normalenvektorfeld von $\Omega$. Dann folgt
+
+\begin{align*}
+	& \underset{\Omega}{\int}(-\Delta y(x))v(x)dx  \\
+	\overset{ \text{Green}}{=} & \underset{\Omega}{\int} \nabla y(x) \nabla v(x)dx 
+	+ \underset{\partial\Omega}{\int}\frac{\partial y(s)}{\partial n(s)} v(s)ds \\
+	\overset{v_{\vert\partial\Omega}=0}{=} & \underset{\Omega}{\int} \nabla y(x) \nabla v(x)dx .
+\end{align*}
+
+Somit lässt sich Problem \ref{Poissonproblem} im schwachen Sinne wie folgt definieren, vgl. \cite{PDE3}:
+
+\begin{defi}[schwache Formulierung des Poisson-Problems]
+Sei $\Omega$ ein offenes, beschränktes Gebiet des $\mathbb{R}^n$. Sei $f\in \mathcal{L}^2(\Omega)$. Dann heißt $y\in H_0^1(\Omega)$ \textit{schwache Lösung} des Poisson-Problems, falls gilt:
+
+\begin{align}\label{schw. Poi}
+\underset{\Omega}{\int} \nabla y(x) \nabla v(x)dx  = \underset{\Omega}{\int} f(x)v(x)dx \hspace{1cm}\forall v\in H_0^1(\Omega).
+\end{align}
+\end{defi}
+
+Aus theoretischer Sicht ist es wichtig zu klären, unter welchen Bedingungen an das Gebiet $\Omega$ und die Funktion $f$, Lösungen und Eindeutigkeit dieser garantiert sind. Das klassische Theorem, welches Auskunft hierüber gibt, ist das Lemma von Lax-Milgram, vgl. \cite{PDE3}, welches wir hier nicht in vollster Allgemeinheit und ohne Beweis angeben.
+
+\begin{theorem}[Lemma von Lax-Milgram]
+Seien $H$ ein Hilbertraum, $H^*$ der zugehörige Dualraum und $a(\cdot, \cdot)$ eine stetige, \textit{koerzive} Bilinearform, d.h. es existiert eine Konstante $c > 0$, so dass gilt
+\begin{align*}
+	\vert a(y,y) \vert \geq c\vert\vert y \vert\vert^2 \hspace{1cm} \forall y \in V.
+\end{align*}
+Weiterhin sei $b\in H^*$. Dann gibt es genau ein $\tilde{y} \in V$, so dass gilt
+\begin{align*}
+a(\tilde{y},v) = b(v) \hspace{1cm} \forall v \in V.
+\end{align*}
+\end{theorem}
+
+Betrachtet man die linke Seite von \ref{schw. Poi}, so sieht man, dass das Integral eine Bilinearform auf dem zugehörigen Sobolevraum definiert. Die Koerzivität dieser Bilinearform ist gesichert durch eine Anwendung der sogenannten Poincaré-Ungleichung, siehe \cite{PDE3} Theorem 6.6.
+Das Lemma von Lax-Milgram sichert somit für das Poisson-Problem in schwacher Formulierung die Existenz und Eindeutigkeit der Lösung, und wir können im Laufe dieser Arbeit Wohlgestelltheit dieser Modellgleichung voraussetzen. Die Koerzivität als Bedingung an die Bilinearform $a(\cdot, \cdot)$ wird in diesem Kontext oft auch \textit{V-Elliptizität} genannt, da die Bilinearform Koerzivität bezüglich der Funktionen $y\in V$ erfüllt.
+
+Offensichtlich ist jede starke Lösung des Problems \ref{Poissonproblem} auch eine schwache Lösung in dem obigen Sinne. Andersherum gilt diese Aussage im Allgemeinen nicht, denn nicht alle schwach differenzierbaren Funktionen besitzen Ableitungen im herkömmlichen/ starken Sinne. Um sich Klarheit über die Regularität bestimmter Lösungen zu verschaffen führen wir hier die sogenannten Sobolev-Einbettungssätze zusammengefasst, und ohne Beweise, auf, vgl. \cite{PDE3}, sowie \cite{brokenSobolev}.
+
+\begin{theorem}[Einbettungssätze für Sobolevräume]\label{Embeddings}
+Sei $\Omega$ ein offenes, beschränktes Gebiet des $\mathbb{R}^n$ mit Lipschitz-Rand $\partial\Omega$. Seien $k,l, m\in \mathbb{N}$ und $\alpha \in (0,1]$, sowie $p,q \in [1,\infty)$. Bezeichne mit $C^{k,\alpha}(\Omega)$ den Hölderraum der Funktionen mit $\alpha$-hölderstetigen $m$-ten Ableitungen. Dann gilt:
+
+(i) (\textit{Morrey})
+
+Falls $p < n$ und $m - \frac{n}{p} \geq k + \alpha$, so existiert eine Einbettung
+\begin{align*}
+	W^{m, p}(\Omega) \hookrightarrow C^{k, \alpha}(\Omega).
+\end{align*}
+Falls $m - \frac{n}{p} > k + \alpha$, so ist die Einbettung kompakt.
+
+(ii) (\textit{Rellich-Kondrachov})
+
+Falls gilt $k > l$ und $m - \frac{n}{p} > l - \frac{n}{q}$, so existiert eine kompakte Einbettung
+\begin{align*}
+	W^{l, q}(\Omega) \hookrightarrow 	W^{m, p}(\Omega).
+\end{align*}
+\end{theorem}
+
+Diese Theoreme bieten uns die Möglichkeit, Aussagen über Regularität der Lösung einer PDE machen. Durch den Satz von Morrey wird auch klar, in welchen Fällen glatte, und somit starke Lösungen für das Poisson-Problem zu erhalten sind, d.h. schwache Lösungen auch starke Lösungen darstellen. Weiterhin möchten wir bemerken, dass die hier genannten Einbettungssätze auch für die sogenannten Sobolev-Slobodeckij-Räume, welche eine Verallgemeinerung der Sobolevräume auf gebrochene Ordnungen $s \in (0,\infty]$ sind, im selben Wortlaut gelten. Diese werden wir im Laufe dieser Arbeit bei der Einführung in L-BFGS-Methoden für die Formoptimierung benötigen, weshalb wir diese im Folgenden definieren, vgl \cite{brokenSobolev}.
+
+\begin{defi}[Sobolev-Slobodeckij-Räume]
+Sei $\Omega \subseteq \mathbb{R}^n$, $m\in\mathbb{N}$, sowie \newline $p\in [1, \infty)$ und $\sigma\in (0,1)$. Wir definieren für messbare Funktionen $u: \Omega \rightarrow \mathbb{R}$ die sogenannte \textit{Slobodeckij-Halbnorm} durch
+\begin{align*}
+	\vert u \vert _{\sigma, p} := \left(\underset{\Omega}{\int}\underset{\Omega}{\int} 
+	\frac{\vert u(x) - u(y)\vert^p}{\vert x-y \vert^{n + \sigma p}}dxdy\right)^{1/p}.
+\end{align*}
+Für $s = m + \sigma$ definieren wir den \textit{Sobolev-Slobodeckij-Raum} $W^{s,p}(\Omega)$ durch
+\begin{align*}
+	W^{s,p}(\Omega) := \{ u\in W^{m,p}(\Omega) : \vert D^\alpha u \vert _{\sigma, p} < \infty 				\quad \forall \;\vert\alpha\vert = m\},
+\end{align*}
+wobei $\alpha$ ein Muliindex, $W^{m,p}(\Omega)$ ein gewöhnlicher Sobolev-Raum und $D^\alpha u$ die $\alpha$-te schwache Ableitung von $u$ ist.
+Weiterhin definieren wir eine Norm auf diesem Raum durch
+\begin{align*}
+	\vert\vert u \vert\vert_{W^{s,p}(\Omega)} := (\vert\vert u \vert\vert_{W^{m,p}(\Omega)}^p + \underset{ \vert \alpha \vert = m}{\sum}\vert D^\alpha u \vert _{\sigma, p}^p)^{1/p}.
+\end{align*}
+Mit dieser Norm ist $W^{s,p}$ ein separabler Banachraum, welcher im Falle $p > 1$ auch reflexiv ist.
+\end{defi}
+
+Man sieht, dass in dieser Definition Räume für $s\in\mathbb{N}$ nicht definiert wurden. Aus diesem Grund verwenden wir im Falle $s\in\mathbb{N}$ die klassische Definition der Sobolevräume aus \ref{Sobolevspace}, womit die Sobolev-Slobodeckij-Räume für alle $s\in[0,\infty)$
+definiert sind. Die Intuition hinter der definierten Halbnorm ist eine Quantifizierung der Regularität der Ableitungen der Ordnung $m$. In gewisser Hinsicht sind die Sobolev-Slobodeckij-Räume somit eine Analogie der Hölderräume $C^{m, \alpha}(\Omega)$ für schwach differenzierbare Funktionen, für Details siehe etwa \cite{brokenSobolev}. Da die Einbettungssätze \ref{Embeddings} wie erwähnt auch für beliebige Ordnungen $s\in[0,\infty)$ gültig sind, rechtfertigt sich auch die Bezeichnung \textit{Interpolationsraum} für diese Art von Räumen. Zum Abschluss sei zu bemerken, dass die Sobolev-Slobodeckij-Räume nicht mit den Bessel'schen Potentialräumen zu verwechseln sind, welche auch oft die Bezeichnung $W^{s,p}(\Omega)$ tragen, und die klassichen Sobolevräume für gebrochene Ordnungen mittels Fourriermethoden verallgemeinern.
+
+Wir kommen nun abschließend zu dem Spursatz, welcher die Auswertung von schwach differenzierbaren Funktionen auf einem Rand betrachtet. Dieser ist für uns deshalb von Interesse, da im Rahmen der Formoptimierung Auswertungen auf dem Rand, einer Form, natürlich auftreten. Er beschreibt, welches Maß an Regularität bei Auswertung auf dem Rand verloren geht. Die hier aufgeführte Variante betrachtet allgemeine $C^{m,1}$-Ränder, d.h. Ränder die sich als Graph einer Funktion mit Lipschitz-stetiger $m-ten$ Ableitung darstellen lassen, vgl. \cite{brokenSobolev}. Wir beschränken uns auf den für unsere Zwecke ausreichenden Hilbertraumfall $p=2$, für allgemeinere Varianten und Bedingungen hierzu, siehe etwa \cite{tracetheorem} oder \cite{brokenSobolev}.
+
+
+%sicher richtig in dieser allgmeinheit für banachspaces p unl 2????
+\begin{theorem}[Spursatz]
+	Sei $\Omega \subseteq \mathbb{R}^n$ offen und zusammenhängend mit $C^{m,1}$-Rand $\partial\Omega$.
+	Zudem sei $s = m + \sigma > \frac{1}{2}$ mit $m\in\mathbb{N}$, $\sigma\in[0,1)$. Dann gilt
+	\begin{itemize}
+		\item[(i)]	Es existiert ein eindeutiger, stetiger Spuroperator $S: H^{s}(\Omega) \rightarrow H^{s-\frac{1}{2}}(\partial\Omega)$, mit $S(u) = u_{\vert \partial \Omega}$ für alle $u\in C^\infty(\bar{\Omega})$.
+		\item[(ii)] Es existiert ein eindeutiger, stetiger Fortsetzungsoperator \newline $F: H^{s-\frac{1}{2}}(\partial\Omega) \rightarrow  H^{s}(\Omega)$ mit $S\circ F = \text{id}_{H^{s-\frac{1}{2}}(\Omega)}$.
+	\end{itemize}
+\end{theorem}
+%broken sobolev und spursatz + sagen das einbettungssätze auch für diese gelten
+
+Der Spursatz (engl. \textit{trace theorem}) besagt also unter anderem, dass bei Auswertung einer $H^{s}(\Omega)$-Funktion auf dem Rand eine halbe Ordnung verloren geht. Aus diesem Grunde werden in folgenden Kapiteln die Räume $H^{\frac{1}{2}}(\partial \Omega)$ als die natürlichen Räume für die meisten auf Formen definierten Funktionen auftauchen.
+
+Zuletzt werden wir im Laufe der Arbeit noch hinreichend starke Regularität für Lösungen des Poisson-Problems benötigen. Aus diesem Grund führen wir hier noch den Satz über Regularität von schwachen Lösungen auf, vgl. \cite{shape_space} 2.13., wobei wir hier den Satz auf den Fall unseres Poisson-Problems spezialisieren.
+
+\begin{theorem}[höhere Regularität schwacher Lösungen]
+	Betrachte das Poisson-Problem \ref{Poissonproblem} in schwacher Formulierung. 
+	Sei $m\in\mathbb{N}$, $f\in H^m(\Omega)$ und der Rand $\partial\Omega$ sei von der Ordnung $C^{m+2}$. Sei $y\in H^1_0(\Omega)$ die schwache Lösung des Poisson-Problems. Dann gilt $y\in H^{m+2}(\Omega)$.
+\end{theorem}
+
+Im allgemeineren Fall elliptischer Probleme gilt der Satz weiterhin, falls die Koeffizientenfunktionen $a^{i,j}, b^j, c\in C^{m+1}(\bar{\Omega})$ sind, vgl. die oben genannte Quelle, wobei $\bar{\Omega}$ wie üblich der Abschluss von $\Omega$ bezüglich der euklidischen Metrik ist. Fordert man keine Regularität des Randes $\partial\Omega$, so gilt die obige Aussage zwar nicht bis zum Rand, jedoch lokal im Sinne $y\in H^{m+2}_{loc}(\Omega)$.
+\newpage
+
