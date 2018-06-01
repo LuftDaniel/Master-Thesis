@@ -154,7 +154,9 @@ wobei diese Gleichung, welche als Nebenbedingung in \ref{PDE constrained equatio
 \end{defi}
 
 Wie man unschwer erkennt, entstehen die notwendigen Bedingungen aus den Ableitungen der Lagrangefunktion \ref{lagrangefunction} nach dem Zustand $y$, dem Gebiet $\Omega$ und dem adjungierten Zustand $p$. Fasst man diese Bedingung in einer Gleichung zusammen, so erhält man das KKT-System
-\begin{align*}
+\begin{equation}
+\label{KKT}
+\begin{aligned}
 	D\mathcal{L}(\tilde{y},\tilde{\Omega},\tilde{p})\left(
 	\begin{matrix}
 	h_y \\
@@ -162,7 +164,8 @@ Wie man unschwer erkennt, entstehen die notwendigen Bedingungen aus den Ableitun
 	h_p
 	\end{matrix}\right)	 = 0 \quad \forall h_{\Omega} \in C^{\infty}(\tilde{\Omega},\tilde{\Omega})\;
 	\forall h_y, h_p \in H(\tilde{\Omega})
-\end{align*}
+\end{aligned}
+\end{equation}
 als notwenige Bedingung zur Lösung von \ref{PDE constrained equation}, siehe \cite{LagrangeNewton}, wobei wir die dortige Formulierung mit Hilfe von Vektorbündeln auf die hier angepasste Notation übersetzt haben, was aufgrund der Definition des Tangentialbündels mittels von Formen abhängiger Kreuzprodukte von Hilberträumen  möglich ist. An dieser Stelle wäre es möglich einen Lagrange-Newton Ansatz durchzuführen, und ein Verfahren zur Lösung des Problems \ref{PDE constrained equation} mit quadratischer Konvergenz zu gewinnen, was die Autoren von \cite{LagrangeNewton} getan haben. Diesen führen wir kurz im nächsten Kapitel unter \ref{shapenewtonproblem} auf.
 
 Wir führen jetzt noch eine technische Notation zur Beschreibung von Sprüngen auf Rändern ein, vgl. \cite{LagrangeNewton}, woraufhin wir unser Modellproblem definieren.

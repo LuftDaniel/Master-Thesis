@@ -3,16 +3,17 @@
 \subsection{Shape Spaces und Formgradienten}
 \label{Chap_shapespaces}
 
-\colorbox{red}{mathcal J und Omega2 zu Omega}
-\colorbox{red}{habe ich sicher das Kapitel zu Rn BFGS? falls nicht korrigiere text}
-\colorbox{red}{soll ich 2 dimensional oder beliebig dimensional machen? habe hier bisschen von beidem...}
-\colorbox{red}{ statt jedes mal die voraussetzunge zu überprüfen, also zsmhgd, beschr,... nutze lieber vllt einfach die Definition von regulärem Gebiet aus anderem Chapter?}
-\colorbox{red}{Notation: einmal Gradient H, dann später U... mache das einheitlich!}
+\colorbox{red}{mathcal J und Omega2 zu Omega} \newline
+\colorbox{red}{habe ich sicher das Kapitel zu Rn BFGS? falls nicht korrigiere text}  \newline
+\colorbox{red}{soll ich 2 dimensional oder beliebig dimensional machen? habe hier bisschen von beidem...} \newline
+\colorbox{red}{ statt jedes mal die voraussetzunge zu überprüfen, also zsmhgd, beschr,... nutze lieber vllt einfach die Definition von regulärem Gebiet aus anderem Chapter?} \newline
+\colorbox{red}{Notation: einmal Gradient H, dann später U... mache das einheitlich!} \newline
 \colorbox{red}{erkläre, dass broyden symm rank 1 vllt nicht schlecht ist, falls großer kern der hesse bei optimierung entsteht und p.d. nicht gewährleistet ist,
-daher aber auch trust region nötig}
-\colorbox{red}{line search: amijo und backtracking}
-\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)}
-\colorbox{red}{reguläre form statt immer voraussetzungen einzeln...}
+daher aber auch trust region nötig} \newline
+\colorbox{red}{line search: amijo und backtracking} \newline
+\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)} \newline
+\colorbox{red}{reguläre form statt immer voraussetzungen einzeln...} \newline
+\colorbox{red}{hesse ist doch sparse außerhalb vom Rand, lohnt sich da voller aufbau mit sparse strukture?}
 
 Nachdem wir in die Grundlagen der Formoptimierung, möchten wir in diesem Abschnitt weiter auf den Grundlagen aufbauen und Rahmenbedingungen schaffen, unter welchen das endlich-dimensionale BFGS-Verfahren in den Kontext von Formen abstrahiert werden können. Dies ist nicht ohne weiteres möglich, da a priori nicht klar ist, wie Gradienten von Formen definiert werden sollen, insbesondere deshalb, weil wir uns in unendlich-dimensionalen \textit{Formräumen (engl. shape-spaces)} befinden. Erschwert wird dies weiter dadurch, dass, wie eingangs bemerkt, keine natürliche Vektorraumstruktur auf dem betrachteten Shape-space vorhanden ist. Ziel dieses Abschnittes wird es sein zunächst die Wahl einer geeigneten Metrik im Sinne der Riemannschen Geometrie zu treffen, wodurch die Definition eines Gradienten überhaupt erst möglich wird. Im $\mathbb{R}^n$ würden wir zur Darstellung solcher Gradienten stets stillschweigend die euklidische Metrik verwenden, diese lässt sich jedoch offensichtlich nicht einfach im Shape-setting verwenden. Anschließend übertragen wir den BFGS-Algorithmus auf die Formoptimierung. In diesem Abschnitt halten wir uns vorallem an \cite{bfgs2}, sowie an \cite{shape_space} und \cite{bfgs1}.
 
@@ -61,7 +62,7 @@ Sei $\mathcal{D} \subset \mathbb{R}^n$ eine beschränktes, offenes Gebiet. Sei $
 \textit{verallgemeinerte Spurabbildung}, wobei $\frac{\partial}{\partial n} U_{\vert\partial\Omega}$ die Ableitung von $U$ auf der Form $\partial \Omega$ in Richtung des äußeren Normalenvektorfeldes $n$ ist.
 \end{defi}
 
-Wir erinnern an dieser Stelle, das diese Abbildung aufgrund der verallgemeinerten Spursätze \ref{tracetheorem} wohldefiniert ist. Nun geben wir uns eine symmetrische, koerzive Bilinearform $a: H^1(\mathcal{D}, \mathbb{R}^n)\times H^1(\mathcal{D}, \mathbb{R}^n) \rightarrow \mathbb{R}$ vor. Diese werden wir später gemeinsam mit der zu definierenden Riemannschen Metrik verwenden, um aus gegebenen Formableitungen Gradienten zu konstruieren. Gegeben einer solchen Bilinearform $a$ definieren wir die zugehörigen Lösungsoperatoren zu folgendem Variationsproblem.
+Wir erinnern an dieser Stelle, dass diese Abbildung aufgrund der verallgemeinerten Spursätze \ref{tracetheorem} wohldefiniert ist. Nun geben wir uns eine symmetrische, koerzive Bilinearform $a: H^1(\mathcal{D}, \mathbb{R}^n)\times H^1(\mathcal{D}, \mathbb{R}^n) \rightarrow \mathbb{R}$ vor. Diese werden wir später gemeinsam mit der zu definierenden Riemannschen Metrik verwenden, um aus gegebenen Formableitungen Gradienten zu konstruieren. Gegeben einer solchen Bilinearform $a$ definieren wir die zugehörigen Lösungsoperatoren zu folgendem Variationsproblem.
 
 \colorbox{red}{Notation: alpha oder u ???!!! n den folgenden Definitionen} \newline
 \colorbox{red}{muss die bilinearform auch stetig sein? oder ist sie es automatisch}
@@ -92,8 +93,6 @@ ist.
 \end{defi}
 
 Wir fahren fort und definieren die projezierten Neumann-zu-Dirichlet und Dirichlet-zu-Neumann-Operatoren, welche wir zur Konstruktion der Riemannschen Metrik benötigen, siehe \cite{bfgs2}.
-
-\colorbox{red}{sind die Namen richtig?, soll ich den unnötigen Operator nicht definieren?}
 
 \begin{defi}[projezierte Randwertoperatoren]\label{Randoperatoren}
 Seien die Voraussetzungen von Definition \ref{Sproperatoren} und \ref{Llsgsoperatoren} gegeben. Dann heißt der Operator
@@ -253,10 +252,7 @@ berücksichtigt. Wir werden in der Implementierung äquivalent hierzu die folgen
 
 \subsection{Quasi-Newton-Verfahren}
 
-\colorbox{blue}{definiere ineare, quad, und superlineare konvergenz, dazu noch bilder von typischen konvergenzgraphiken}
-
-
-Nun besitzen wir alle theoretischen Hintergründe aus dem Bereich der Formoptimierung, um auf Ableitungen basierte Optimierungsverfahren einzuführen. Im Rahmen dieser Arbeit konzentrieren wir uns auf das sogenannte \textit{Limited-Memory-Broyden-Fletcher-Goldfarb-Shanno-Verfahren (L-BFGS-Verfahren)}. Dieses Verfahren ist ein sogenanntes \textit{Quasi-Newton-Verfahren}, welche wir im Folgenden nach \cite{Nocedal} erläutern möchten. Bevor wir dies tun, geben wir noch Definitionen von Konvergenzgeschwindigkeiten numerischer Optimierungsmethoden an, vgl. \cite{Nocedal}, Appendix A2. \colorbox{red}{schaue, ob nicht problem mit formuliert werden muss, denke so ist es aber übersichtlicher, dann noch das mit der beliebigen Norm klären}
+Nun besitzen wir alle theoretischen Hintergründe aus dem Bereich der Formoptimierung, um für uns interessante, auf Ableitungen basierte Optimierungsverfahren einzuführen. Im Rahmen dieser Arbeit konzentrieren wir uns auf das sogenannte \textit{Limited-Memory-Broyden-Fletcher-Goldfarb-Shanno-Verfahren \newline (L-BFGS-Verfahren)}. Dieses Verfahren ist ein sogenanntes \textit{Quasi-Newton-Verfahren}, welche wir im Folgenden nach \cite{Nocedal} erläutern möchten. Bevor wir dies tun, geben wir noch Definitionen von Konvergenzgeschwindigkeiten numerischer Optimierungsmethoden an, vgl. \cite{Nocedal}, Appendix A2. 
 
 \begin{defi}[Konvergenzraten]
 	Betrachte ein Minimierungsproblem, wobei $x^*$ eine optimale Lösung ist. Sei $\{x_n\}_{n\in\mathbb{N}}$ eine Folge mit $x_n \rightarrow x^*$ in geeignetem Sinne. Dann heißt die Folge
@@ -279,19 +275,13 @@ Nun besitzen wir alle theoretischen Hintergründe aus dem Bereich der Formoptimi
 
 \end{defi}
 
-\colorbox{red}{erklärung + evtl diagramme, damit man weiß, was typisch ist}
-\colorbox{red}{Übergang besser, auch zu newton}
-
-
-Bevor wir die Quasi-Newton- und Newton-Verfahren in Shape spaces diskutieren, beginnen wir mit der theoretisch gesicherten Betrachtung der Verfahren in endlich dimensionalen Vektorräumen. Das klassische Newton-Verfahren versucht, im Gegensatz zu einem Gradientenverfahren, auch Informationen zweiter Ordnung des Zielfunktionals in Form eines Hesseoperators $\text{Hess} \mathcal{J}$ bei der Bildung eines Schrittes miteinzubeziehen. Verwendet die übliche Notation im endlich-dimensionalen Fall, so geschieht dies über das Lösen des Problems
+Bevor wir den Fall der Quasi-Newton- und Newton-Verfahren in Shape spaces diskutieren, beginnen wir mit der theoretisch gesicherten Betrachtung der Verfahren in endlich-dimensionalen Vektorräumen. Das klassische Newton-Verfahren versucht, im Gegensatz zu einem Gradientenverfahren, auch Informationen zweiter Ordnung des Zielfunktionals in Form des Hesseoperators $\text{Hess} \mathcal{J}$ bei der Bildung eines Schrittes miteinzubeziehen. Verwendet man die übliche Notation im endlich-dimensionalen Fall, bei der $x_k \in \mathbb{R}^n$ der Wert bei Schritt $k$ ist, so berechnet sich der Schritt $\Delta x$ über Lösen des Problems
 \begin{equation}\label{newtonfinite}
 	\text{Hess} \mathcal{J} (x_k)\Delta x = - \nabla \mathcal{J}(x_k).
 \end{equation}
-\colorbox{red}{gefällt noch nicht ganz}
-Verwendet man dieses Verfahren zur Lösung eines endlich-dimensionalen Optimierungsproblems mit geeigneter Schrittweitensteuerung, so besitzt das volle Newton-Verfahren bei geeigneten Voraussetzungen quadratische Konvergenz, siehe \cite{Nocedal}. Quasi-Newton-Verfahren ergeben sich nun aus dem Newton-Ansatz, indem man statt der Hessematrix $\text{Hess}\mathcal{J}(x_k)$ eine Approximation $B_k$ für diese verwendet. Hierzu gibt es eine Vielzahl von Möglichkeiten. Genannt seien hier unter anderem die \textit{Symmetric Rank 1 (SR1)} Updateformel und das \textit{DFP-Verfahren}, siehe etwa \cite{Nocedal}. Die BFGS-Update-Formeln für die Hessematrix und ihre Inverse, falls existent, sind im endlich-dimensionalen Fall wie folgt definiert, vgl. \cite{Nocedal}, 6.1.
+Verwendet man dieses Verfahren mit geeigneter Schrittweitensteuerung, so besitzt das volle Newton-Verfahren bei geeigneten Voraussetzungen quadratische Konvergenz, siehe \cite{Nocedal}. Quasi-Newton-Verfahren ergeben sich nun aus dem Newton-Ansatz, indem man statt der Hessematrix $\text{Hess}\mathcal{J}(x_k)$ eine Approximation $B_k$ für diese verwendet. Hierzu gibt es eine Vielzahl von Möglichkeiten. Genannt seien hier unter anderem die \textit{Symmetric Rank 1 (SR1)} Updateformel und das \textit{DFP-Verfahren}, siehe etwa \cite{Nocedal}. Die BFGS-Update-Formeln für die Hessematrix und ihre Inverse, falls existent, sind im endlich-dimensionalen Fall wie folgt definiert, vgl. \cite{Nocedal}, 6.1.
 
-\begin{defi}[BFGS-Updates (endl. Dim.)]\label{BFGS-updates}
-	\colorbox{red}{soll ich vllt noch dein endl. dim. Optimierungsproblem hinschreiben? Dyadische Produkt wird später ersetzt, auch kennzeichnen, auch erwähnen das später Metriken statt der eukl skalarprodukte verwendet werden}	
+\begin{defi}[BFGS-Updates (endl. Dim.)]\label{BFGS-updates}	
 	Sei $B_k$ die Approximation der Hessematrix $\text{Hess}\mathcal{J}(x_k)$, weiterhin seien 
 	\begin{align*}
 		s_k &:= x_{k+1} - x_k \\ y_k &:= \nabla \mathcal{J}(x_{k+1}) - \nabla \mathcal{J}(x_k) \\ \rho_k &:= \frac{1}{y_k^T s_k }.
@@ -307,7 +297,8 @@ Verwendet man dieses Verfahren zur Lösung eines endlich-dimensionalen Optimieru
 \end{defi}
 In der Definition ist nicht klar, was die natürliche Wahl für ein $B_0$, beziehungsweise $B_0^{-1}$ ist. Hier gibt es mehrere Möglichkeiten, beispielsweise kann man eine mittels automatischem Differenzieren gewonnene Hesseapproximation als Start $B_0$ wählen. Alternativ kann man die skalierte Identität $\alpha I$ mit $\alpha \in [0,\infty)$ wählen, um eine positiv definite Startmatrix zu erhalten.
 
-Diese Formeln sind sogenannte \textit{symmetric rank 2 Updates}, da diese eine symmetrische Approximation der Hessematrix mit Updates vom Rang 2 sind. Leitet man die Updates auf abstraktem Wege her, so bietet sich die Möglichkeit an, zuerst $B_{k+1}^{-1}$ zu definieren, und mit Hilfe der sogennanten Sherman–
+Weiterhin sei bemerkt, dass man die DFP-Updates erhält, falls man die Inverse Updateformel für die eigentliche Hesseapproximation $B_k$ benutzt. Aufgrund dieser Tatsache nennt man die beiden Updates auch zueinander dual.
+Diese Formeln sind sogenannte \textit{symmetric rank 2 Updates}, da sie eine symmetrische Approximation der Hessematrix mit Updates vom Rang 2 erzeugen. Leitet man die BFGS-Updates auf abstraktem Wege her, so bietet sich die Möglichkeit an, zuerst $B_{k+1}^{-1}$ zu definieren, und mit Hilfe der sogennanten Sherman–
 Morrison–Woodbury Formel den Update für $B_{k+1}$ aus $B_{k+1}^{-1}$ herzuleiten. Wir geben an dieser Stelle genau diese abstrakte definierende Eigenschaft der BFGS-Approximation $B_{k+1}^{-1}$ an, vgl. \cite{Nocedal}, da wir in dieser eine mögliche Chance zur Verallgemeinerung einer Hesseapproximation im Shape Space sehen.
 
 \begin{theorem}[Definierende Eigenschaft des BFGS-Updates]
@@ -315,28 +306,31 @@ Morrison–Woodbury Formel den Update für $B_{k+1}$ aus $B_{k+1}^{-1}$ herzulei
 	Es gelte die Notation aus \ref{BFGS-updates}. Betrachte das Optimierungsproblem
 	\begin{equation}\label{Frobeniusproblem}
 	\begin{aligned}
-		\underset{H}{\min} \vert\vert H - B_k^{-1} \vert\vert _{WFrob} \\
-		\text{s.t. } H^T = H \text{und } H y_k = s_k,
+		\underset{H}{\min}\; \vert\vert H - B_k^{-1} \vert\vert _{WFrob} \\
+		\text{s.t. } H^T = H\; \text{und } H y_k = s_k,
 	\end{aligned}
 	\end{equation}
-	wobei $B_k^{-1}$ die in \ref{BFGS-updates} definierte Inverse des $k$'ten BFGS-Updates ist, und 
-
-$\vert\vert \cdot \vert\vert_{WFrob}$ die gewichtete Frobeniusnorm ist, siehe \cite{Nocedal}, 6.1. Dann ist der BFGS-Update der Inversen $B_{k+1}^{-1}$ die eindeutige Lösung des Problems \ref{Frobeniusproblem}.
+	wobei $B_k^{-1}$ die in \ref{BFGS-updates} definierte Inverse des $k$'ten BFGS-Updates ist, und \newline
+$\vert\vert \cdot \vert\vert_{WFrob}$ 
+eine gewichtete Frobeniusnorm ist, siehe \cite{Nocedal}, 6.1. Dann ist der BFGS-Update der Inversen $B_{k+1}^{-1}$ die eindeutige Lösung des Problems \ref{Frobeniusproblem}.
 \end{theorem}
 Wie man sieht, lässt sich die Inverse der BFGS-Approximation der Hessematrix als Lösung eines beschränktes Optimierungsproblems für Matrizen definieren. Die einschränkenden Bedingungen entstehen hierbei auf natürliche Weise. Zum einen beschreibt die erste Nebenbedingung lediglich die Forderung einer symmetrichen Approximation, die zweite Nebenbedingung lässt sich, unter Verwendung der eingeführten Notation aus \ref{BFGS-updates}, äquivalent umformen zu
 \begin{equation}
 	B_k (x_{k+1} - x_k) = \nabla \mathcal{J}(x_{k+1}) - \nabla \mathcal{J}(x_k),
 \end{equation}
-was bekannt ist als \textit{Sekantengleichung}. Diese ergibt sich als natürliche Forderung, was man direkt sieht, wenn man $B_k$ durch die eigentliche Hessematrix $\text{Hess}\mathcal{J}(x_k)$ ersetzt. \colorbox{red}{rly? :D} Um Existenz einer Inversen zu gewährleisten ist als Bedingung hinreichend, dass die Matrix $B_k$ positiv definit ist. Setzt man dies voraus, so ergibt sich aus der Sekantengleichung als notwendige Bedingung
+was bekannt ist als \textit{Sekantengleichung}. Um Existenz einer positiv definiten Inversen zu gewährleisten ist als Bedingung hinreichend, dass die Matrix $B_k$ positiv definit ist. Setzt man dies voraus, so ergibt sich aus der Sekantengleichung als notwendige Bedingung
 \begin{equation}
 	s_k^T y_k = s_k^T B_k s_k > 0.
 \end{equation}
-Diese sogenannte \textit{curvature condition} muss also notwendigerweise erfüllt sein, wenn man positive Definitheit von $B_k$ erhofft. Andererseits führt diese auch dazu, dass ein BFGS-Update-Schritt, angewandt auf eine positiv definite Matrix $B_k$ oder ihr Inverses $B_k^{-1}$, erneut eine positiv definite Matrix erzeugt. Trivialerweise ist die bei konvexen Problemen die curvature condition immer erfüllt. Im nicht-konvexen Fall ist es trotzdem möglich mit Hilfe von Line-search-Techniken, etwa der Wolfe oder starken Wolfe-Bedingungen, vgl. \cite{Nocedal}, die curvature condition zu erfüllen. Zu der Konvergenzgeschwindigkeit des BFGS-Verfahens in endlicher Dimension lässt sich sagen, dass unter Voraussetzungen, wie etwa Liptschitz-stetige Hessematrizen, superlineare Konvergenz vorhanden ist, siehe \cite{Nocedal}, Theorem 6.6.
-Sind die genannten Bedingungen nicht erfüllt, so ist die Konvergenz des BFGS-Verfahrens nicht gewährleistet. Es fällt auf, dass man zur Berechnung eines BFGS-Updates die volle $nxn$-Matrix $B_k$ speichern muss, da diese in der Regel keine dünn-besetztheit aufweisen, siehe \cite{Nocedal}, 7.2. Da dies vor allem im Fall großer $n$, etwa bei feinen, höherdimensionalen Gittern in der Formoptimierung, beträchliche Kosten verursacht, bedient man sich der sogenannten \textit{Limited Memory} Variante der Verfahren. Hierzu wird eine Approximation an $B_k$ erzeugt, indem man eine vorgegebene Anzahl $l$ der letzten Vektoren, welche bei Erzeugung der letzten Updates verwendet wurden, benutzt und speichert. Dies spart Speicherkapazität auf dem Rechner. Die formale Definition der approximativen Update-Schritte findet sich in \cite{Nocedal}, 7.(19), welche wir hier nicht angeben, da wir diese, ohne die BFGS-Approximationen $B_k$ zuvor auf Shape spaces verallgemeinert zu haben, sowieso nicht verallgemeinern können. Stattdessen verwenden wir die sogenannte \textit{2-Schleifen-L-BFGS Rekursion}, welche wir später, siehe \colorbox{red}{cite später}, auf den Formfall unter Vermeidung der Operatoren $B_k$ verallgemeinern können.
+Diese sogenannte \textit{curvature condition} muss also notwendigerweise erfüllt sein, wenn man positive Definitheit von $B_k$ erhofft. Andererseits führt diese auch dazu, dass ein BFGS-Update-Schritt, angewandt auf eine positiv definite Matrix $B_k$ oder ihr Inverses $B_k^{-1}$, erneut eine positiv definite Matrix erzeugt, somit auch hinreichend für positive Definitheit ist. 
+
+Trivialerweise ist die bei konvexen Problemen die curvature condition immer erfüllt. Im nicht-konvexen Fall ist es trotzdem möglich mit Hilfe von Linesearch-Techniken, etwa der Wolfe oder starken Wolfe-Bedingungen, vgl. \cite{Nocedal}, die curvature condition zu erfüllen. Zu der Konvergenzgeschwindigkeit des BFGS-Verfahens in endlicher Dimension lässt sich sagen, dass unter Voraussetzungen, wie etwa Liptschitz-stetige Hesseoperatoren, superlineare Konvergenz vorhanden ist, siehe \cite{Nocedal}, Theorem 6.6. Sind die genannten Bedingungen nicht erfüllt, so ist die Konvergenz des BFGS-Verfahrens im Allgemeinen, wie wir in unserer Implementierung zeigen werden, nicht gewährleistet.
+
+Es fällt auf, dass man zur Berechnung eines BFGS-Updates die volle $n\times n$-Matrix $B_k$ speichern muss, da diese in der Regel keine Dünnbesetztheit aufweisen, siehe \cite{Nocedal}, 7.2. Da dies vor allem im Fall großer $n$, etwa bei feinen, höherdimensionalen Gittern in der Formoptimierung beträchliche Kosten verursacht, bedient man sich der sogenannten \textit{Limited Memory} Variante der Verfahren. Hierzu wird eine Approximation an die BFGS-Matrix $B_k$ erzeugt, indem man eine vorgegebene Anzahl $l$ gespeicherten Schritte benutzt. Dies spart Speicherkapazität auf dem Rechner. Die formale Definition der approximativen Update-Schritte findet sich in \cite{Nocedal}, 7.(19), welche wir hier nicht angeben. Stattdessen verwenden wir die sogenannte \textit{2-Schleifen-L-BFGS Rekursion}, welche wir weiter unten in \ref{2loopbfgs} auf den Formfall übertragen können.
 
 Wir führen nun in analoger Weise zu dem klassischen Newton Verfahren von zuvor ein Lagrange-Newton-Verfahren in Falle der Formoptimierung ein, um anschließend mögliche Verallgemeinerungen des BFGS-Verfahrens auf den Formfall zu diskutieren.
 Da wir in Formräumen keine kanonische Vektorraumstruktur besitzen, benötigt man zur Verallgemeinerung des Newton-Verfahrens auf diese zusätzliche Techniken.
-Die Autoren von \cite{LagrangeNewton} liefern dafür einen Zugang unter Ausnutzung der Mannigfaltigkeitsstruktur, welche wir bereits zuvor in dieser Arbeit zur Konstruktion eines Formgradienten eingeführt haben. Hierzu konstruieren die Autoren auf Grundlage des Raums aller Formen eine neue Mannigfaltigkeit, welche im wesentlichen ein Produkt aus Bündeln von den Formen $\partial\Omega_2$ abhängiger Hilberträume, wie in \colorbox{red}{referenz als Beispiel wie in Kapitel zu Formableitung bei Lagrangefunktion}, und dem Shape space selber sind, siehe \cite{LagrangeNewton}, unter Remark 1.  Nun verwenden die Autoren Tangentialvektoren auf eben dieser Mannigfaltigkeit, um Richtungen zu gewinnen, mit derer Hilfe mittels der Exponentialabbildung auf dem Raum der Formen ein Optimierungsschritt definiert werden kann. Formal lässt sich dies wie folgt notieren, wobei $\zeta = (h_y, h_{\Omega_2}, h_p)$ ein Tangentialvektor der oben genannten Mannigfaltigkeit, von der Form analog zu \colorbox{red}{zitiere Lagrangefunktion}, ist:
+Die Autoren von \cite{LagrangeNewton} liefern dafür einen Zugang unter Ausnutzung der Mannigfaltigkeitsstruktur, welche wir bereits zuvor in dieser Arbeit zur Konstruktion eines Formgradienten eingeführt haben. Hierzu konstruieren die Autoren auf Grundlage des Raums aller Formen eine neue Mannigfaltigkeit, welche im Wesentlichen ein Produkt aus Bündeln von den Formen $\partial\Omega$ abhängiger Hilberträume $H(\Omega)$ und dem Formraum $B_e$ selber sind, siehe \cite{LagrangeNewton}, unter Remark 1.  Nun verwenden die Autoren Tangentialvektoren auf eben dieser Mannigfaltigkeit, um Richtungen zu gewinnen, mit derer Hilfe durch die Exponentialabbildung auf dem Formraum $B_e$ ein Optimierungsschritt definiert werden kann. Formal lässt sich dies wie folgt notieren, wobei $\zeta = (h_y, h_{\Omega}, h_p)$ ein Tangentialvektor der oben genannten Mannigfaltigkeit von der Form analog zu \ref{KKT} ist:
 
 \begin{itemize}
 	\item[i)] Löse das Newton-Problem \\
@@ -348,35 +342,34 @@ Die Autoren von \cite{LagrangeNewton} liefern dafür einen Zugang unter Ausnutzu
 	\zeta_{k+1} := exp_{\zeta_k}(\alpha_k \Delta \zeta).
 	\end{equation}
 \end{itemize}
-Wir haben das Lagrange-Newton-Verfahren im Shape-space ausformuliert, um auf die offenen Schwierigkeiten und Fragestellungen der Übertragung des Quasi-Newton-Ansatzes aus \colorbox{red}{...} aufmerksam zu machen. Da es sich bei 
-\ref{shapenewtonproblem} um eine Operatorgleichung handelt, anders als bei \ref{newtonfinite}, welches ein LGS darstellt, ist nicht klar, welche Arten von Updates eine sinnvolle Verallgemeinerung der Updates \colorbox{red}{referenz bfgs updates} im endlich-dimensionalen Fall für die Approximation des Hesseoperators im Shape Space sind. \colorbox{red}{dies müsste ja auch von der Metrik abhängen, oder??},
-\colorbox{green}{man könnte versuchen in analogie zu der Konstruktion von bfgs und dfp aus nocedal vorgehen. approxima gewinnen mittels bestapproximationen unter frobennius norm (bräuchte was ähnliches für mannigfaltigkeiten...) der Hesse durch mittels bedingungen eingeschränkte Kandidatenmengen. (ähnlich wie bei projektionssatz) Problem könnte nicht eindeutigkeit, da vllt keine konvexität, sein. weiterhin müsste man das konzept irgendwie auf mannigfaltigkeiten aufziehen, was lokal eigentlich gehen sollte, da tangentialräume die (konvexe) hilbertraumstruktur besitzen. fragt sich wie dies global mit der Mannigfaltigkeitsstruktur möglich wäre...}
-\colorbox{green}{man muss auch die curvature Bedingung für bfgs in shape metriken übersetzen richtig? da in nocedal implizit das euklidische skalarprodukt verwendet wird}
+Wir haben das Lagrange-Newton-Verfahren im Shape-space ausformuliert, um auf die offenen Schwierigkeiten und Fragestellungen der Übertragung der BFGS-Updates aus \ref{BFGS-updates} aufmerksam zu machen. Da es sich bei 
+\ref{shapenewtonproblem} um eine Operatorgleichung handelt, anders als bei \ref{newtonfinite}, welches ein LGS darstellt, ist nicht klar, welche Arten von Updates eine sinnvolle Verallgemeinerung der Updates \ref{BFGS-updates} im endlich-dimensionalen Fall für die Approximation des Hesseoperators im Shape Space sind. Bei den Updates im endlich-dimensionalen Fall wird stillschweigend eine euklidisches Skalarprodukt vorausgesetzt. Im Shape-Fall dürfte dieses durch eine geeignet gewählte Riemannsche Metrik, etwa $g^S$ aus \ref{Stek-Poi-metrik}, ersetzt werden, \colorbox{red}{was bei direkter Übertragung einen fehlerhaften Update liefert}. Dies sorgt dafür, dass keine asymptotische superlineare Konvergenz zu erwarten ist. Außerdem überträgt sich die Curvature Condition durch ersetzen des euklidischen Skalarprodukts mit $g^S$. Genau diesen Ansatz haben die Autoren von \cite{diffusion} in ihrem Paper unter Abschnitt 3 getan. Alternativ könnte man den Ansatz zur abstrakten Konstruktion \ref{Frobeniusproblem} auf das Setting in Formräumen übertragen. Hierzu müsste man die Sekantengleichung mit Hilfe von Transporten in die richtigen Tangentialräume, welche weiter unten bei dem 2-Schleifen Algorithmus angegeben sind, formulieren. Fraglich ist die Bedingung der Symmetrie im Formraum-Fall, da der Hesseoperator im Allgemeinen keine Symmetrie aufweist. Welche Bedingungen dann nötig wären, um Eindeutigkeit der Lösung zu erzwingen, ist offen. Weiterhin Bedarf es zur Formulierung des Problems einen geeigneten Abstand auf dem Raum aller linearen und \colorbox{red}{stetigen} Operatoren auf dem Tangentialbündel des Formraums. Wäre dies alles geschafft, so könnte man zumindest für abstrakte theoretische Untersuchungen an Quasi-Newton-Methoden die Existenz eines BFGS-Operators sichern. Wenn sich dieser Ansatz als fruchtbar erweisen sollte, so könnte sich dieser mit wahrscheinlich geringem Aufwand auf die gesamte Broyden-Klasse erweitern, da der DFP-Update als Lösung des selben Problems \ref{Frobeniusproblem} erzeugt werden kann, wobei lediglich $B_k^{-1}$ durch $B_k$ ersetzt werden muss. Leider fehlt uns die Zeit für die Verfolgung dieses Ansatztes, zweitens ist der numerische Nutzen fragwürdig, da wahrscheinlich keine Verbesserung der Verfahren dabei entdeckt würde. 
 
-Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragung der 2-Schleifen-L-BFGS Rekursion auf den Formfall begnügen. Hierzu haben die Autoren von \cite{bfgs1} den Algorithmus aus \cite{Nocedal}, 7.4, unter Verwendung des Zusammenhangs \ref{zentraleDeformation} und der dort vorkommenden Metrik $g^S$, sowie der Bilinearform $a$, angepasst. Zu beachten ist, dass hier die Tangentialvektoren Elemente verschiedener Tangentialräumen sind, weshalb diese noch zuerst in die richtigen Räume transportiert werden müssen. Für die differentialgeometrische Definition der Transporte $\mathcal{T}$, siehe etwa \cite{LeeDGEO} oder \cite{shape_space}, 2.3.1. Der klassische Algorithmus entsteht, wenn man statt der Metrik $g^S$ im endlich-dimensionalen Fall das euklidische Skalarprodukt verwendet, wobei keine Transporte von Tangentialvektoren anfallen. Es folgt die Definition nach \cite{bfgs1}, Kapitel 4.
+Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragung der 2-Schleifen-L-BFGS Rekursion auf den Formfall begnügen. Hierzu haben die Autoren von \cite{bfgs1} den Algorithmus aus \cite{Nocedal}, 7.4, unter Verwendung des Zusammenhangs \ref{zentraleDeformation} und der dort vorkommenden Metrik $g^S$, sowie der Bilinearform $a$, angepasst. Zu beachten ist, dass hier die Tangentialvektoren Elemente verschiedener Tangentialräumen sind, weshalb diese noch zuerst in die richtigen Räume transportiert werden müssen. Für die differentialgeometrische Definition der Transporte $\mathcal{T}$, siehe etwa \cite{LeeDGEO} oder \cite{diffusion} Abschnitt 3. Der klassische Algorithmus entsteht, wenn man statt der Metrik $g^S$ im endlich-dimensionalen Fall das euklidische Skalarprodukt verwendet, wobei keine Transporte von Tangentialvektoren anfallen. Es folgt die Definition nach \cite{bfgs1}, Kapitel 4.
 
-\colorbox{red}{notation hj lieber zu grad (partial omega j) ???}
 \colorbox{red}{ achtung: länge l oder länge m oder was genau}
 \colorbox{red}{referenz zu den verwendeten Randauswertungen gamma aus vorigem Kapitel}
 
 \begin{defi}[2-Schleifen-L-BFGS Rekursion im Formfall]
-	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $h_i \in T_{partial\Omega_i}B_e$ Formgradienten der Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{h_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor} , sowie den zugehörigen Darstellungen $H_i \in H^1_0(\Omega, \mathbb{R}^2)$ auf dem ganzen Gebiet, nach \ref{zentraleDeformation}. Weiterhin seien $S_i \in H^1_0(\Omega, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := H_{i+1} - \mathcal{T}_{S_i}H_i \in H^1_0(\Omega, \mathbb{R}^2)$ die entlang der Deformation $\mathcal{J}_{S_i}$ transportierte Differenz der Gradienten. Sei $m \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
+\label{2loopbfgs}
+	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $h_i \in T_{\partial\Omega_i}B_e$ Formgradienten der in den L-BFGS-Schritten erzeugten Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{h_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor}. Weiterhin seien $H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die zugehörigen Darstellungen auf der Hold-all-Domain $\mathcal{D}$ nach \ref{zentraleDeformation}. Zudem seien $S_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := H_{i+1} - \mathcal{T}_{S_i}H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die entlang der Deformation $S_i$ transportierte Differenz der Gradienten. Sei $l \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
 
 \colorbox{red}{hier lieber alphas statt gamma verwenden?? also die definition wie wir sie zuvor gemacht haben}
 \colorbox{red}{format: einrücken bei code wie in python}
 \colorbox{red}{stimmt das mit den Vorzeichen hier: hatt ja den Fehler}
+\colorbox{blue}{Transporte müssen so sein, dass man in der aktuellen form Omega j landet, wenn ich um q verschiebe, so lande ist aber irgendwo}
 
 \begin{align*}
 	\rho_j \leftarrow g^S((\gamma_0 Y_j)^Tn, (\gamma_0 S_j)^Tn)^{-1} = a(Y_j, S_j)^{-1} \\
 		q \leftarrow H_j \\
-	\textbf{for } i = j - 1, \dots, j - m \textbf{ do} \\
+	\textbf{for } i = j - 1, \dots, j - l \textbf{ do} \\
 		S_i \leftarrow \mathcal{T}_q S_i \\
 		Y_i \leftarrow \mathcal{T}_q Y_i \\
 		\alpha_i \leftarrow \rho_i g^S((\gamma_0 S_i)^Tn, (\gamma_0 q)^T n) = \rho_i a(S_i, q) \\
 				q \leftarrow q - \alpha_i Y_i \\
 	\textbf{end for} \\
 	q \leftarrow \frac{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 S_{j-1})^Tn)}{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 Y_{j-1})^Tn)}q = \frac{a(Y_{j-1}, S_{j-1})}{a(Y_{j-1}, Y_{j-1})}q \\	
-	\textbf{for } i = j - m, \dots, j - 1 \textbf{ do} \\
+	\textbf{for } i = j - l, \dots, j - 1 \textbf{ do} \\
 		\beta_i \leftarrow \rho_i g^S((\gamma_0 Y_i)^Tn, (\gamma_0 q)^Tn) = \rho_i a(Y_i, q) \\
 		q \leftarrow q + (\alpha_i - \beta_i)S_i \\
 		\textbf{end do.}
