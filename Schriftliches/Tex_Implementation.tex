@@ -2,12 +2,13 @@
 \section{Implementierung in Python mit FEniCS}
 \subsection{???}
 
-\colorbox{red}{mache 2 große sections bib und main, dann bei bib untersections gitter, lösen von pdes und berechnungen, und bfgs-step}
-\colorbox{red}{InitialData ordner anlegen??}
-\colorbox{red}{Hadamard abstand abwandlung erklären}
-\colorbox{red}{erwähne die Implementierung des Rn tests für die Architektur des BFGS-Verfahrens}
-\colorbox{red}{mathcal J und Omega2 zu Omega}
-\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)}
+\colorbox{red}{mache 2 große sections bib und main, dann bei bib untersections gitter, lösen von pdes und berechnungen, und bfgs-step} \newline
+\colorbox{red}{InitialData ordner anlegen??} \newline
+\colorbox{red}{Hadamard abstand abwandlung erklären} \newline
+\colorbox{red}{erwähne die Implementierung des Rn tests für die Architektur des BFGS-Verfahrens}\newline
+\colorbox{red}{mathcal J und Omega2 zu Omega}\newline
+\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)}\newline
+\colorbox{red}{erwähne lokale lame parameter aus kapitel bfgs-shape bei impl mit ref}
 
 Nachdem wir in vorigen Kapiteln den theoretischen Hintergrund der Formoptimierung und gradientenbasierte Verfahren, wie dem L-BFGS-Verfahren, gelegt haben, möchten wir in diesem Abschnitt die Implementierung des Algorithmus \colorbox{red}{cite} in Python 3.5 \colorbox{red}{Versicherung, dass es nur unter dieser Version läuft} mit Hilfe des Moduls FEniCS vorstellen. Im Folgenden werden wir die in den Dateien enthaltenen Kommentare nicht oder nicht in voller Länge in den Codeausschnitten aufführen, da wir Redundanz bei den Erklärungen vermeiden möchten. Selbstverständlich sind in den Quellcodes selber ausführliche Kommentierungen vorhanden. Die Implementierung in Python besteht im wesentlichen aus den beiden Dateien
 \begin{align*}

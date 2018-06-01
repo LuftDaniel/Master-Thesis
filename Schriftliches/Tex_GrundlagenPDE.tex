@@ -10,12 +10,12 @@ In diesem Abschnitt möchten wir eine kurze Einführung in die für diese Arbeit
 
 Da wir in dieser Arbeit Formoptimierung bei Differentialgleichungen betreiben möchten, stellen wir hier die von uns ausgewählte Modellgleichung, später im Kontext der Formoptimierung auch \textit{Zustandsgleichung} (engl. \textit{state equation}) genannt, vor. Es handelt sich dabei um das bekannte \textit{Poisson-Problem}
 
-\begin{align}\label{Poissonproblem}
+\begin{equation}
+\label{Poissonproblem}
 	\begin{aligned}
 	-\Delta y &=  f  \text{ in } \Omega \; \\ y &= 0 \text{ auf } \partial \Omega,
 	\end{aligned}
-\end{align}
-
+\end{equation}
 wobei $\Delta$ den Laplace-Operator meint, und $\Omega$ ein offenes, beschränktes, zusammenhängendes Gebiet des $\mathbb{R}^n$ ist. Funktionen $y\in C^2(\Omega)$, welche die obigen Gleichungen erfüllen, werden klassische oder auch \textit{starke Lösungen} des Poissonproblems genannt. Betrachtet man das Poisson-Problem für kompliziertere Gebiete $\Omega$ und Funktionen $f$ auf $\Omega$, so ist im Allgemeinen nicht klar, ob eine Lösung existiert und welche Regularität diese besitzt. Aus diesem Grund führen wir die bekannten Sobolev-Räume und exemplarische Elemente der schwachen Lösungstheorie des Poisson-Problems ein. Wir beginnen mit der Definition von Sobolev-Räumen nach \cite{PDE3}.
 
 \begin{defi}[Sobolev-Räume]\label{Sobolevspace}

@@ -43,7 +43,7 @@ Somit ermöglicht diese isomorphe Darstellung es uns, Tangentialvektoren $v \in 
 
 \colorbox{red}{Diagramm ??}
 
-Hierzu gibt es verschiedene Möglichkeiten, je nachdem auf welche künftige Anwendung man abzielt. Nach \cite{shape_space} scheint eine Sobolev-Metrik, definiert mittels des Laplace-Beltrami-Operators, für unser Modellproblem natürlich zu erscheinen. Der Nachteil ist, das erheblicher Rechenaufwand beim Ermitteln des Gradienten aus einer Formableitung entsteht. Aus diesem Grund führen die Autoren von \cite{bfgs1} eine Riemannsche Metrik auf Grundlage der sogenannten Dirichlet-zu-Neumann Abbildung ein, weshalb wir uns Ausführungen zu Sobolev-Metriken an dieser Stelle sparen, und für diese auf \cite{bfgs1} und \cite{shape_space}  verweisen. Im Folgenden führen wir eine sogenannte \textit{Stekolov-Poincaré-Metrik} ein, und verweisen für die hierzu nötigen Grundlagen der Differentialgleichungen und Sobolev-Slobodeckij-Räumen auf das Kapitel \ref{Chapter_grundlagenpde}. Zunächst definieren wir die nötigen Abbildungen, vgl. \cite{bfgs2}.
+Hierzu gibt es verschiedene Möglichkeiten, je nachdem auf welche künftige Anwendung man abzielt. Nach \cite{shape_space} scheint eine Sobolev-Metrik, definiert mittels des Laplace-Beltrami-Operators, für unser Modellproblem natürlich zu erscheinen. Der Nachteil ist, das erheblicher Rechenaufwand beim Ermitteln des Gradienten aus einer Formableitung entsteht. Aus diesem Grund führen die Autoren von \cite{bfgs1} eine Riemannsche Metrik auf Grundlage der sogenannten Dirichlet-zu-Neumann Abbildung ein, weshalb wir uns Ausführungen zu Sobolev-Metriken an dieser Stelle sparen, und für diese auf \cite{bfgs1} und \cite{shape_space}  verweisen. Im Folgenden führen wir eine sogenannte \textit{Steklov-Poincaré-Metrik} ein, und verweisen für die hierzu nötigen Grundlagen der Differentialgleichungen und Sobolev-Slobodeckij-Räumen auf das Kapitel \ref{Chapter_grundlagenpde}. Zunächst definieren wir die nötigen Abbildungen, vgl. \cite{bfgs2}.
 
 \begin{defi}[Verallgemeinerte Spurabbildung]\label{Sproperatoren}
 Sei $\mathcal{D} \subset \mathbb{R}^n$ eine beschränktes, offenes Gebiet. Sei $\Omega \subset \mathcal{D}$ zusammenhängend, offen und habe einen Lipschitzrand, und $\partial \Omega$ sei eine Form in diesem Gebiet. Dann heißt die Abbildung
@@ -114,116 +114,112 @@ heißt \textit{projezierter Dirichlet-zu-Neumann-Operator}.
 
 %Randwertoperatoren eigenschaften aus dem Paper zitieren, auf dortige Quelle verweisen.
 
-Die hier definierten Operatoren sind nicht die klassischen Dirichlet-zu-Neumann-Operatoren, welche auch \textit{Stekolov-Poincaré-Operatoren} genannt werden, da diese nicht in projezierter Variante definiert werden. Was die Operatoren im Wesentlichen tun, ist für gegebene Dirichlet- bzw. Neumann-Bedingung die Lösung des durch die Bilinearform $a$ definierten Problems zu finden, und die entsprechende andere, automatisch konsistente, Neumann- bzw. Dirichlet-Bedingung zurückzugeben. Das heißt, für gegebene Dirichlet-Bedingung liefert der projezierte Dirichlet-zu-Neumann-Operator die Neumann-Bedingung, welche die selbe Lösung erzeugt, und vice versa.
+Die hier definierten Operatoren sind nicht die klassischen Dirichlet-zu-Neumann-Operatoren, welche auch \textit{Steklov-Poincaré-Operatoren} genannt werden, da diese nicht in projezierter Variante definiert werden. Was die Operatoren im Wesentlichen tun, ist für gegebene Dirichlet- bzw. Neumann-Bedingung die Lösung des durch die Bilinearform $a$ definierten Problems zu finden, und die entsprechende andere, automatisch konsistente, Neumann- bzw. Dirichlet-Bedingung zurückzugeben. Das heißt, für gegebene Dirichlet-Bedingung liefert der projezierte Dirichlet-zu-Neumann-Operator die Neumann-Bedingung, welche die selbe Lösung erzeugt, und vice versa.
 
-Die klassischen Stekolov-Poincaré-Operatoren sind zueinander invers, beide koerziv, symmetrisch in dualer Paarung und stetig \colorbox{red}{aufgrund der Koerzivität und Symmetrie der Bilinearform $a$,} siehe die Quellen bei \cite{bfgs2}, Def. 3.1. Die projezierten Operatoren besitzen weiterhin alle genannten Eigenschaften, bis auf die des Inversen. Um Rechenaufwand einzusparen, und Glättungseigenschaften auszunutzen, fällt die Wahl des Operators zur Definition des Skalarproduktes auf den Tangentialräumen auf $(S^p)^{-1}$, für Details, unter anderem zu spektraler Äquivalenz der Kanditaten, siehe \cite{bfgs1} und die dort genannten Quellen. Wir kommen nun zu unserem Etappenziel, eine Riemannsche Metrik auf dem Shape-space für den $\mathbb{R}^2$ zu definieren, vgl. \cite{bfgs2}.
+Die klassischen Steklov-Poincaré-Operatoren sind zueinander invers, beide koerziv, symmetrisch in dualer Paarung und stetig \colorbox{red}{aufgrund der Koerzivität und Symmetrie der Bilinearform $a$,} siehe die Quellen bei \cite{bfgs2}, Def. 3.1. Die projezierten Operatoren besitzen weiterhin alle genannten Eigenschaften, bis auf die des Inversen. Um Rechenaufwand einzusparen, und Glättungseigenschaften auszunutzen, fällt die Wahl des Operators zur Definition des Skalarproduktes auf den Tangentialräumen auf $(S^p)^{-1}$, für Details, unter anderem zu spektraler Äquivalenz der Kanditaten, siehe \cite{bfgs1} und die dort genannten Quellen. Wir kommen nun zu unserem Etappenziel, eine Riemannsche Metrik auf dem Shape-space für den $\mathbb{R}^2$ zu definieren, vgl. \cite{bfgs2}.
 
-\begin{defi}[Stekolov-Poincaré-Metrik]\label{Stek-Poi-metrik}
+\begin{defi}[Steklov-Poincaré-Metrik]\label{Stek-Poi-metrik}
 Seien die Voraussetzungen wie in \ref{Randoperatoren}. Dann heißt das Skalarprodukt
 \begin{align*}
-	g^S: H^{1/2}(\partial \Omega) \times H^{1/2}(\partial \Omega) \rightarrow \mathbb{R} \\
-	(\alpha,\beta) \mapsto \langle \alpha, (S^p)^{-1}\beta \rangle = \underset{\partial \Omega}{\int} \alpha(s)\cdot((S^p)^{-1}\beta)(s)ds,
+	g^S: H^{1/2}(\partial \Omega) \times H^{1/2}(\partial \Omega) &\rightarrow \mathbb{R} \\
+	(\alpha,\beta) &\mapsto \langle \alpha, (S^p)^{-1}\beta \rangle = \underset{\partial \Omega}{\int} \alpha(s)\cdot((S^p)^{-1}\beta)(s)ds,
 \end{align*}
-\textit{Stekolov-Poincaré-Metrik}, wobei die Produkte auf der rechten Seite als duale Paarungen zu verstehen sind. 
+\textit{Steklov-Poincaré-Metrik}, wobei die Produkte auf der rechten Seite als duale Paarungen zu verstehen sind. 
 \end{defi}
 
-Das so definierte Skalarprodukt ist auf allgemeinen Sobolev-Slobodeckij-Räumen definiert, da Lösungen der Zustandsgleichung bei Auswertung auf dem Rand in der Regel Ordnung $1/2$ besitzen, siehe Kapitel \ref{Chapter_grundlagenpde}. Diese Räume enthalten, wie wir in der Einführung zu Differentialgleichungen gezeigt haben, die $C^\infty$-Funktionen auf dem Rand. Somit ist das Skalarprodukt für Tangentialvektoren aller Formen aus $B_e(S^1, \mathbb{R}^2)$ wohldefiniert, da wir erneut Tangentialvektoren mit den Koeffizientenfeldern der äußeren Normalenvektorfelder identifizieren.
+Das so definierte Skalarprodukt ist auf allgemeinen Sobolev-Slobodeckij-Räumen definiert, da Lösungen der Zustandsgleichung bei Auswertung auf dem Rand in der Regel Ordnung $1/2$ besitzen, siehe Kapitel \ref{Chapter_grundlagenpde}. Diese Räume enthalten, wie wir in der Einführung zu Differentialgleichungen gezeigt haben, die $C^\infty$-Funktionen auf dem Rand. Somit ist das Skalarprodukt für Tangentialvektoren aller Formen aus $B_e(S^1, \mathbb{R}^2)$ wohldefiniert, da wir erneut Tangentialvektoren wie in der Definition \ref{Tangentialvektor} mit den Koeffizientenfeldern der äußeren Normalenvektorfelder identifizieren.
 
 Wir kommen nun zu dem Zusammenhang des in Kapitel \ref{Chapter_formopt} definierten Formkalküls und der soeben konstruierten Riemannschen Mannigfaltigkeit $(B_e(S^1,\mathbb{R}^2),g^S)$.
-Für die in dieser Arbeit genutzten Algorithmen ist die Gewinnung von Gradienten aus der Formableitung eines Zielfunktionals, welche wir für die Generierung von Deformationen nutzen wollen, von zentraler Bedeutung. Das Skalarprodukt $g^S$ bietet genau hierzu das geeignete Mittel.
+Für die in dieser Arbeit genutzten Algorithmen ist die Gewinnung von Gradienten aus der Formableitung eines Zielfunktionals, welche wir für die Generierung von Deformationen nutzen wollen, von zentraler Bedeutung. Das Skalarprodukt $g^S$ bietet genau hierzu das geeignete Mittel, vgl. \cite{bfgs2}.
 
 \begin{defi}[Formgradient]\label{Formgradientdefi}
 Seien die Voraussetzungen wie in \ref{Sproperatoren} und \ref{Llsgsoperatoren}.
-Sei $\mathcal{J}$ ein formdifferenzierbares Formfunktional und die zugehörige Formableitung $D\mathcal{J}$. Betrachte die zu $c\in B_e(S^1,\mathbb{R}^2)$ gehörige Form $\partial\Omega_2$, mit Tangentialraum $T_cB_e$. Dann heißt der Tangentialvektor $h\in T_cB_e$ \textit{Formgradient von} $\mathcal{J}$ \textit{in c}, falls seine Darstellung $\alpha_h$ als Skalarvektorfeld, gemäß \ref{Tangentialvektor},
+Sei $\mathcal{J}$ ein formdifferenzierbares Formfunktional und die zugehörige Formableitung $d\mathcal{J}$. Betrachte die zu $c\in B_e(S^1,\mathbb{R}^2)$ gehörige Form $\partial\Omega$, mit Tangentialraum $T_cB_e$. Dann heißt der Tangentialvektor $h\in T_cB_e$ \textit{Formgradient von} $\mathcal{J}$ \textit{in c}, falls seine Darstellung $\alpha_h$ als Skalarvektorfeld, gemäß \ref{Tangentialvektor}, 
 
 \colorbox{red}{stimmt hier für alle Cinfty V? eigentlich H10, aber das ersteres dicht liegt und gS bzw a stetig sind, egal?}
 
 \begin{align}\label{Gradientengleichung}
-	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\partial \Omega_2)[V] \quad \forall V\in C^\infty(\Omega,\mathbb{R}^2)
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\Omega)[V] \quad \forall V\in C^\infty(\mathcal{D},\mathbb{R}^2)
 \end{align}
-erfüllt, wobei $\alpha_V = \langle V_{\vert \partial\Omega_2}, n\rangle$ das Koeffizientenfeld des äußeren Normalenanteils $n$ von $V$ auf dem Rand $\partial \Omega_2$ ist.
+erfüllt, wobei $\alpha_V = \langle V_{\vert \partial\Omega}, n\rangle$ das Koeffizientenfeld des äußeren Normalenanteils $n$ von $V$ auf dem Rand $\partial \Omega$ ist.
 
 \end{defi}
 
-Die hier gemachte Definition ist als eine duale Repräsentation der Formableitung $D\mathcal{J}$ in dem Skalarprodukt $g^S$ zu sehen. Damit folgen wir nicht der typischen Definition eines gewöhnlichen Gradienten, wie diese oft in der elementaren Analysis stattfindet, sondern betrachten diese in Anlehnung an den  Riesz'schen Darstellungssatzes. Der Aufwand bis zur Definition des Formgradienten macht auch deutlich, wie wesentlich die Art des Gradienten vom zugrunde liegenden Skalarprodukt abhängt, ganz im Gegenteil zur Formableitung, für welche kein zugrunde liegendes Skalarprodukt benötigt wird. Somit ergeben sich für die selbe Formableitung, je nachdem welche Metrik man für den Shape-space verwendet, andere Gradienten und somit andere numerische Verfahren. Für eine Auswahl weiterer Alternativen, siehe \cite{shape_space}, Kapitel 3.2.
+Die hier gemachte Definition ist als eine duale Repräsentation der Formableitung $D\mathcal{J}$ in dem Skalarprodukt $g^S$ zu sehen. Damit folgen wir nicht der typischen Definition eines gewöhnlichen Gradienten, wie diese oft in der elementaren Analysis stattfindet, sondern betrachten diese in Anlehnung an den  Riesz'schen Darstellungssatz. Der Aufwand bis zur Definition des Formgradienten macht auch deutlich, wie wesentlich die Art des Gradienten vom zugrunde liegenden Skalarprodukt abhängt, ganz im Gegenteil zur Formableitung, für welche kein zugrunde liegendes Skalarprodukt benötigt wird. Somit ergeben sich für die selbe Formableitung, je nachdem welche Metrik man für den Shape-space verwendet, andere Gradienten und somit andere numerische Verfahren. Für eine Auswahl weiterer Alternativen, siehe \cite{shape_space}, Kapitel 3.2.
 
-Es fällt weiterhin auf, dass die hier geforderte Gleichung \ref{Gradientengleichung} nicht in dualer Paarung mit Skalarfeldern, welche in die Ableitung $D\mathcal{J}$ einfließen, sondern in deren Koeffizientenfeldern der Normalenkomponente auf der Form berücksichtigt werden. Dies lässt sich mit dem Hadamard'schen Darstellungssatz begründen:
+Es fällt weiterhin auf, dass die hier geforderte Gleichung \ref{Gradientengleichung} nicht in dualer Paarung mit Skalarfeldern, welche in die Ableitung $D\mathcal{J}$ einfließen, sondern durch deren Koeffizientenfeldern der Normalenkomponente auf der Form berücksichtigt werden. Dies lässt sich mit dem Hadamard'schen Darstellungssatz begründen:
 \begin{align*}
-	D\mathcal{J}(\partial\Omega_2)[V] &= \underset{\partial\Omega_2}{\int}f(s)\langle V(s),n(s)\rangle ds \\
-	&=\underset{\partial\Omega_2}{\int}f(s) \alpha_V(s)\langle n(s),n(s)\rangle ds \\
-	&=\underset{\partial\Omega_2}{\int}f(s) \alpha_V(s) ds \\
-	&= (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega_2)}
+	D\mathcal{J}(\Omega)[V] &= \underset{\partial\Omega}{\int}f(s)\langle V(s),n(s)\rangle ds \\
+	&=\underset{\partial\Omega}{\int}f(s) \alpha_V(s)\langle n(s),n(s)\rangle ds \\
+	&=\underset{\partial\Omega}{\int}f(s) \alpha_V(s) ds \\
+	&= (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega)}
 \end{align*}
-Damit wird klar, dass Vektorfelder $V\in C^\infty(\Omega,\mathbb{R}^2)$ mit gleichen Werten in äußerer Normalenrichtung $n$ auf $\partial\Omega_2$ auch den selben Wert bei Ableitung erhalten, und somit lediglich die Koeffizientenfelder $\alpha$ relevant sind. Die Identifikation mit diesen ist auch nötig, da wir das Skalarprodukt $g^S$ für gerade diese Funktionen definiert haben, und nicht bezüglich der echten Tangentialvektoren, welche Vektorfelder sind.
+Damit wird klar, dass Vektorfelder $V\in C^\infty(\mathcal{D},\mathbb{R}^2)$ mit gleichen Werten in äußerer Normalenrichtung $n$ auf $\partial\Omega$ auch den selben Wert bei Ableitung erhalten, und somit lediglich die Koeffizientenfelder $\alpha_V$ auf der Form relevant sind. Die Identifikation mit diesen ist auch nötig, da wir das Skalarprodukt $g^S$ für gerade diese Funktionen definiert haben, und nicht bezüglich der hierzu isomorphen echten Tangentialvektoren, welche Vektorfelder sind.
 
-\colorbox{red}{Erklärung, warum das alles ok ist mit dem Koeffizientenfeld, und das Cinfty R2 nicht so stark ist, sondern nur Rand relevant wegen hadamard, dann überleitung als Satz für Darstellung mit bilinform a }
+Mit diesem Zusammenhang lässt sich auch leicht der Bezug zu auf ganz $\mathcal{D}$ definierten Vektorfeldern $U,V$, und der Bilinearform $a$, welche $g^S$ zu Grunde liegt, beschreiben. Wir formulieren die Zusammenhänge aus \cite{bfgs2} für unsere Situation und Notation als Satz um, und geben einen Beweis. 
 
-Mit diesem Zusammenhang lässt sich auch leicht der Bezug zu auf ganz $\Omega$ definierten Vektorfeldern $U,V$, und der Bilinearform $a$, welche $g^S$ zu Grunde liegt, beschreiben. Wir formulieren die Zusammenhänge aus \cite{bfgs1} für unsere Situation und Notation als Satz um, und geben einen Beweis. 
-
-\colorbox{red}{vielleicht h = grad J nenne?}
-
-\begin{theorem}[Formgradienten und Deformationsfelder]
-Seien die Voraussetzungen wie in \ref{Formgradientdefi}. Sei $a$ eine koerzive, beschränkte, symmetrische Bilinearform, und $g^S$ die zugehörige Stekolov-Poincaré-Metrik. Weiterhin sei $h$ der zu einer Form $\partial\Omega_2$ und Formfunktional $\mathcal{J}$ gehörige Formgradient. Dann existiert ein zu $h$ gehöriges Vektorfeld $H \in H^1_0(\Omega, \mathbb{R}^n)$, so dass gilt
-\begin{align}\label{zentraleDeformation}
-	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\partial\Omega_2)[V] = a(H,V) \quad \forall C^\infty(\Omega,\mathbb{R}^2)
-\end{align}
+\begin{theorem}[Formgradienten und Deformationsfelder \label{zentraleDeformationTheorem}]
+Seien die Voraussetzungen wie in Definition \ref{Formgradientdefi}. Sei $a$ eine koerzive, beschränkte, symmetrische Bilinearform, und $g^S$ die zugehörige Steklov-Poincaré-Metrik. Weiterhin sei $h$ der zu einer Form $\partial\Omega$ und Formfunktional $\mathcal{J}$ gehörige Formgradient. Dann existiert ein zu $h$ gehöriges Vektorfeld $H \in H^1_0(\mathcal{D}, \mathbb{R}^n)$, so dass gilt
+\begin{equation}
+\label{zentraleDeformation}
+\begin{aligned}
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\Omega)[V] = a(H,V) \quad \forall  V \in C^\infty(\mathcal{D},\mathbb{R}^2)
+\end{aligned}
+\end{equation}
 und, mit Notation aus \ref{Sproperatoren},
 \begin{align*}
 	(\gamma_0\circ H)^T n = \alpha_h.
 \end{align*}
 \end{theorem}
 
-\colorbox{red}{ sicher das hier Omega = R2 sein kann?? muss ich nicht zuerst eine Hold-all-domain definieren.... weil sonst ja Randbedingungen keinen Sinn machen.. vllt ist auch auf Omega2 das H definiert? weil dirrandbedingunen ja partialOmega2 sind}
-
 \begin{proof}
-Seien die Voraussetzungen wie oben. Nach der zuvor geführten Rechnung gilt
+Seien die Voraussetzungen wie oben. Nach der zuvor geführten Rechnung und mit der Definition des Formgradienten \ref{Formgradientdefi} gilt
 \begin{align*}
-	g^S(\alpha_h, \alpha_V) = (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega_2)},
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\Omega)[V] = (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega_2)},
 \end{align*}
 wobei $f$ aus der Randdarstellung von $D\mathcal{J}$ mittels Hadamard'schem Darstellungssatz stammt. Verwendet man die Definition \ref{Stek-Poi-metrik} von $g^S$, so erhält man
 \begin{align*}
-	\underset{\partial\Omega_2}{\int} \alpha_h (S^p)^{-1}(\alpha_V)ds = 				\underset{\partial\Omega_2}{\int} f \alpha_V ds
+	\underset{\partial\Omega}{\int} \alpha_h (S^p)^{-1}(\alpha_V)ds = 				\underset{\partial\Omega}{\int} f \alpha_V ds
 \end{align*}
-für beliebige Vektorfelder $V\in C^\infty(\Omega, \mathbb{R}^2)$. Wegen der Invertierbarkeit von $S^P$, welche wegen \colorbox{red}{Stetigkeit} und Koerzivität der Bilinearform $a$ und Regularität des Randes \colorbox{red}{ mit dem Lemma von Lax-Milgram,sicher auch für neumann??, REFERNZ} gilt, sowie der Symmetrie von $g^S$, folgt mit dem Fundamentallemma der Variationsrechnung
+für beliebige Vektorfelder $V\in C^\infty(\mathcal{D}, \mathbb{R}^2)$. Wegen der Invertierbarkeit von $S^P$, welche wegen \colorbox{red}{Stetigkeit} und Koerzivität der Bilinearform $a$ und Regularität des Randes gilt, sowie der Symmetrie von $g^S$, folgt mit dem Fundamentallemma der Variationsrechnung
 \begin{align*}
 	S^p(f) = \alpha_h.
 \end{align*}
-Nun folgt mit der Definition von $S^p$, siehe \ref{Llsgsoperatoren}, und mit der \colorbox{red}{Stetigkeit} und Symmetrie von $a$, dass ein $H \in H^1_0(\Omega,\mathbb{R}^2)$ \colorbox{red}{checke ob wirklich auf Omega, oder nur Omega2} existiert, so dass gilt
+Nun folgt mit der Definition von $S^p$, siehe \ref{Llsgsoperatoren}, und mit der \colorbox{red}{Stetigkeit} und Symmetrie von $a$, dass ein $H \in H^1_0(\mathcal{D},\mathbb{R}^2)$ existiert, so dass gilt
 \begin{align*}
-	a(H,V) = \underset{\partial\Omega_2}{\int} f \alpha_V ds \quad \forall V\in C^\infty(\Omega,\mathbb{R}^2),
+	a(H,V) = \underset{\partial\Omega}{\int} f \alpha_V ds \quad \forall V\in C^\infty(\mathcal{D},\mathbb{R}^2),
 \end{align*}
-woraus insgesamt die erste Gleichung \colorbox{red}{vllt ref? label?} folgt. Die zweite Gleichung folgt direkt aus der Definition des projezierten Operators $S^p$ , siehe \ref{Randoperatoren}, und des Neumann-Lösungsoperators $E_N$, denn
+woraus insgesamt die erste Gleichung \ref{zentraleDeformation} folgt. Die zweite Gleichung folgt direkt aus der Definition des projezierten Operators $S^p$ , siehe \ref{Randoperatoren}, und des Neumann-Lösungsoperators $E_N$, denn
 \begin{align*}
-	\alpha_h = S^p(f) = n^T(\gamma_0\circ E_N(f\cdot n)) = n^T(\gamma_0 \circ H)
+	\alpha_h = S^p(f) = n^T(\gamma_0\circ E_N(f\cdot n)) = n^T(\gamma_0 \circ H).
 \end{align*}
 \end{proof}
 
-Mit diesem Resultat haben wir nun mehrere Möglichkeiten, aus gegebener Formableitung $D\mathcal{J}$ eine Deformation einer Form $\partial\Omega_2$ zu erzeugen. Zum einen besteht die Möglichkeit, auf dem Rand $\partial\Omega_2$ zu agieren, indem man ein Normalenvektorfeld $h = \alpha_h \cdot n$ auf diesem mittels des Variationsproblems \ref{zentraleDeformation} auf Basis der linken Gleichheit erzeugt. Zu beachten ist, dass die so erzeugte Deformation lediglich auf dem Rand definiert ist, womit dann in der Anwendung das Gitter im Inneren und Äußeren nicht bewegt wird. Aus diesem Grund bezeichnen wir diese Art der Deformationsgewinnung \textit{Randformulierung}. Die andere Variante ist, eine Deformation auf dem gesamten Gebiet $\Omega$ zu gewinnen, indem man das Variationsproblem \ref{zentraleDeformation} auf Basis der rechten Gleichung mittels der Bilinearform 
-$a$ zu erzeugen. Im Gegensatz zur ersten Variante können hier potentiell alle Punkte des Gitters verschoben werden, trotz dessen, dass lediglich die Randpunkte zur Änderung des Zielfunktionals beitragen. Diese Variante bezeichnen wir als \textit{Volumenformulierung}, angelehnt an die Arten der Darstellung der Formableitung \colorbox{red}{REFERENZ Kapitel}. Beide Varianten verwenden als zur Erzeugung des Gradienten die Ableitungsinformation, welche physikalische als Kraft interpretierbar ist. Wählt man als Beispiel für die Bilinearform $a$ die lineare Elastizitätsgleichung, so wird diese Interpretation noch deutlicher. Genau diese Bilinearform werden wir in der später \colorbox{red}{wirklich später oder wann? lage anschauen, wo Definiere ich mal diese lineare Elastizität? vllt als beispiel einer bilinearform direkt nach Definition?} folgenden praktischen Implementierung wählen, um in Volumenformulierung Formgradienten zu erzeugen.
+Mit diesem Resultat haben wir nun mehrere Möglichkeiten, aus gegebener Formableitung $D\mathcal{J}$ eine Deformation einer Form $\partial\Omega$ zu erzeugen. Zum einen besteht die Möglichkeit, auf dem Rand $\partial\Omega$ zu agieren, indem man ein Normalenvektorfeld $h = \alpha_h \cdot n$ auf diesem mittels des Variationsproblems \ref{zentraleDeformation} auf Basis der linken Gleichheit erzeugt. Zu beachten ist, dass die so erzeugte Deformation lediglich auf dem Rand definiert ist, womit dann in der Anwendung das Gitter im Inneren und Äußeren nicht bewegt wird. Aus diesem Grund bezeichnen wir diese Art der Deformationsgewinnung \textit{Randformulierung}. Die andere Variante ist, eine Deformation auf dem gesamten Gebiet $\Omega$ zu gewinnen, indem man das Variationsproblem \ref{zentraleDeformation} auf Basis der rechten Gleichung mit der Bilinearform 
+$a$ löst. Im Gegensatz zur ersten Variante können hier potentiell alle Punkte des Gitters verschoben werden, trotz dessen, dass lediglich die Randpunkte zur Änderung des Zielfunktionals beitragen. Diese Variante bezeichnen wir als \textit{Volumenformulierung}, angelehnt an die Arten der Darstellung der Formableitung \ref{VolumenRandformulierung} aus dem vorigen Kapitel. Beide Varianten verwenden zur Erzeugung des Gradienten die Ableitungsinformation, welche physikalisch als Kraft interpretierbar ist. Wählt man als Beispiel für die Bilinearform $a$ die lineare Elastizitätsgleichung, welche wir weiter unten definieren, so wird diese Interpretation noch deutlicher. Genau diese Bilinearform werden wir in der praktischen Implementierung wählen, um in Volumenformulierung Formgradienten zu erzeugen.
 
-Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{zentraleDeformation} erzeugte Deformationen $h$ im Allgemeinen nicht in $C^\infty(\Omega,\mathbb{R}^2)$ sind, siehe \cite{bfgs1}. Dies liegt daran, dass im Allgemeinen je nach Wahl der Bilinearform $a$, welche den Operator $S^p$ und somit das Skalarprodukt $g^S$ erzeugt, sowie der rechten Seite der Gleichung und der Regularität des Gebietes auf der diese definiert sind, lediglich eine Lösung in $H^1_0(\Omega,\mathbb{R}^2)$ existiert. Aus diesem Grunde ist nach unserer Definition \ref{Tangentialvektor} $h$ nicht immer Element des Tangentialraums $T_cB_e$, was Probleme theoretischer Natur macht. Unter anderem deshalb besteht an dieser Stelle der Bedarf eines allgemeineren Formraumes. Beispielsweise wäre eine Möglichkeit, Formen mit $H^{1/2}$-Rändern zuzulassen, was in \cite{shape_space}, Kapitel 7, kurz erläutert wird. Hierbei entstehen allerdings neue Schwierigkeiten theoretischer Natur, welche noch nicht völlig erforscht sind. Für eine Einführung in diese Thematik und zugehörige Konzepte verweisen wir auf \cite{diffeology}.
+Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{zentraleDeformation} erzeugte Deformationen des Randes $h$ im Allgemeinen nicht in $C^\infty(\partial\Omega,\mathbb{R}^2)$ sind, siehe \cite{bfgs2}. Je nach Wahl der Bilinearform $a$, welche den Operator $S^p$ und somit das Skalarprodukt $g^S$ erzeugen, sowie der rechten Seite der Gleichung und der Regularität des Gebietes auf der diese definiert sind, existiert lediglich eine Lösung in $H^{1/2}(\partial\Omega,\mathbb{R}^2)$. Aus diesem Grunde ist nach unserer Definition \ref{Tangentialvektor} $h$ nicht immer Element des Tangentialraums $T_cB_e$, was Probleme theoretischer Natur macht. Unter anderem deshalb besteht an dieser Stelle der Bedarf eines allgemeineren Formraumes. Beispielsweise wäre eine Möglichkeit, Formen mit $H^{1/2}$-Rändern zuzulassen, was in \cite{shape_space}, Kapitel 7, kurz erläutert wird. Hierbei entstehen allerdings neue Schwierigkeiten theoretischer Natur, welche noch nicht völlig erforscht sind. Für eine Einführung in diese Thematik und zugehörige Konzepte verweisen wir auf \cite{diffeology}.
 
-Da wir nun mit \ref{zentraleDeformation} verstanden haben, wie Formgradienten mit Hilfe von Metriken $g^S$ und Bilinearformen $a$ erzeugt werden können, möchten wir für dieses ein Beispiel angeben. Die Wahl einer solchen Bilinearform $a$, und damit die einer Metrik $g^S$, ist in der Tat nicht trivial, und mehrere Möglichkeiten mit unterschiedlichen Eigenschaften bestehen hier. Die Wahl hängt unter anderem davon ab, welche \colorbox{red}{Ordnung der Hesse-Operator des betrachteten Problems hat.} Eine mögliche Wahl hierzu, wäre die zur schwachen Formulierung der \textit{biharmonischen Gleichung} gehörende Bilinearform \colorbox{red}{soll ich die konkret angeben? vllt mit Quelle?}. Wir werden für die Gewinnung von Formgradienten im Nachfolgenden die lineare Elastizitätsgleichung verwenden, welche wir nun einführen, wobei wir uns an \cite{bfgs1} und \cite{bfgs2} halten. \colorbox{red}{auf beliebigem gebiet Omega oder auf (0,1)2? und Form dazu definieren?}
+Da wir nun mit \ref{zentraleDeformation} verstanden haben, wie Formgradienten mit Hilfe von Metriken $g^S$ und Bilinearformen $a$ erzeugt werden können, möchten wir für dieses ein Beispiel angeben. Die Wahl einer solchen Bilinearform $a$, und damit die einer Metrik $g^S$, ist in der Tat nicht trivial, und mehrere Möglichkeiten mit unterschiedlichen Eigenschaften bestehen. Die Wahl hängt unter anderem davon ab,
+\colorbox{red}{oder Symbol? Gitterunabhängig, welches Paper?} welche Ordnung der Hesse-Operator des betrachteten Problems in der Lösung hat. Würde man eine Bilinearform wählen, sodass die selbe Ordnung eingehalten wird, so kann man nach \colorbox{red}{Paper gitterunabhängig} gitterunabhängige Konvergenz des Verfahrens erwarten. Wir werden für die Gewinnung von Formgradienten im Nachfolgenden die lineare Elastizitätsgleichung verwenden, welche wir nun für unser Modellproblem einführen, wobei wir uns an \cite{bfgs1} und \cite{bfgs2} halten. 
 
 \begin{defi}[Lineare Elastizitätsgleichung]
 	Betrachte das Gebiet $(0,1)^2 \subset \mathbb{R}^2$. Sei $f_{elas}: (0,1)^2 \rightarrow \mathbb{R}$ eine Funktion. Dann heißt die Differentialgleichung
 	\begin{equation}\label{linelas}
 		\begin{aligned}
 		\text{div}(\sigma) &= f_{elas} \quad \text{in } (0,1)^2 \\
-		U &= 0 \quad \hspace{0.2cm} \text{auf } \partial([0,1]^2)
+		U &= 0 \quad \hspace{0.2cm} \;\;\text{ auf } \partial([0,1]^2)
 		\end{aligned}
 	\end{equation}	 
-	\colorbox{red}{mit,}
+	mit,
 	\begin{align*}
 		\sigma &:= \lambda_{elas} \text{Tr}(\epsilon)I + 2\mu_{elas}\epsilon \\
 		\epsilon &:= \frac{1}{2}(\nabla U + \nabla U^T),
 	\end{align*}
-	\textit{lineare Elastizitätsgleichung} in starker Formulierung, wobei $\text{Tr}(\epsilon)$ die Spur der Matrix $\epsilon$ ist, und $\lambda_{elas} \in \mathbb{R}$, sowie $\mu_{elas} \in [0,\infty)$, die sogenannten \textit{Lamé-Parameter} sind. $\sigma$ wird als Dehnungs-, $\epsilon$ als Spannungstensor bezeichnet. \colorbox{red}{brauche ich das mit dem young modul und poisson zahl unbedingt? oder sollte ich vollständig sein, obwohl wir diese ja eigentlich nicht gebrauchen}
+	\textit{lineare Elastizitätsgleichung} in starker Formulierung, wobei $\text{Tr}(\epsilon)$ die Spur der Matrix $\epsilon$ ist, und $\lambda_{elas} \in \mathbb{R}$, sowie $\mu_{elas} \in [0,\infty)$, die sogenannten \textit{Lamé-Parameter} sind. $\sigma$ wird als Dehnungs-, $\epsilon$ als Spannungstensor bezeichnet. 
 \end{defi}
 
-Die Lösung $U: \Omega \rightarrow \mathbb{R}^2$ in dieser Differentialgleichung lässt sich als \colorbox{red}{physikalische} Deformation auf dem Gebiet $\Omega$ auffassen, \colorbox{red}{wobei $f_{elas}$ sich als physikalische Kraft interpretiert werden kann}. 
-
-\colorbox{red}{LOKAL VARIIERENDE LAME-PARAMETER SIND IMPLEMENTIERT. SOLL ICH DIESE BENUTZEN? FALLS JA, ERKLÄRE DIES HIER}
+Die Lösung $U: \Omega \rightarrow \mathbb{R}^2$ in dieser Differentialgleichung lässt sich als physikalische Deformation auf dem Gebiet $\Omega$ auffassen, wobei $f_{elas}$ als auf das Gebiet wirkende physikalische Kraft interpretiert werden kann. 
 
 Die Lamé-Parameter $\lambda_{elas}, \epsilon_{elas}$ besitzen hier keine physikalische Bedeutung, jedoch lassen haben diese Einfluss auf die Gitterdeformation, indem sie indirekt die Schrittweite steuern. Sie sind mit Hilfe des sogenannten \textit{Young'schen Elastizitätsmoduls} $E$ und der \textit{Poissonzahl} $\nu$ durch
 \begin{align*}
@@ -231,21 +227,30 @@ Die Lamé-Parameter $\lambda_{elas}, \epsilon_{elas}$ besitzen hier keine physik
 	\epsilon_{elas} = \frac{E}{2(1+\nu)}
 \end{align*}
 darstellbar. Das Elastizitätsmodul $E$ lässt sich als Steifigkeit des Materials interpretieren. Die Poissonzahl $\nu$ gibt an, in welchem Verhältniss sich das einen Gitterpunkt umgebende Gitter ausdehnt, falls dieser Gitterpunkt in eine Richtung verschoben wird. Insgesamt lassen also die Lamé-Parameter durch ihre Wahl die Möglichkeit einer Art Schrittweitensteuerung zu. Im weiteren Verlauf dieser Arbeit wählen wir $\lambda_{elas} = 0$.
-
-Möchte man nun mit Hilfe der linearen Elastizitätsgleichung auf Basis von Theorem \ref{zentraleDeformation} einen Formgradienten bestimmen, so besitzt man zwei Möglichkeiten. Zum einen lässt sich der Gradient mittels der Randformulierung der Formableitung $D\mathcal{J}$ bilden. Hierzu wird eine weitere Dirichlet-Randbedinungung bei der lineare Elastizitätsgleichung \ref{zentraleDeformation}, welche den Formgradienten bezüglich einer Sobolevmetrik auf der Form $\partial\Omega_2$ repräsentiert gebildet, und $f_{elas}$ wird auch $0$ gesetzt. Für Details hierzu, siehe \cite{bfgs1}.
-Als andere Variante lässt sich die Volumenformulierung der Formableitung $D\mathcal{J}$ verwenden. Hierzu assembliert man bei der linearen Elastizitätsgleichung \ref{linelas} die rechte Seite $f_{elas}$ als den Volumenanteil $D\mathcal{J}_{target}$ \colorbox{red}{referenz auf Volumenform anderes Kapitel}. Die Perimeter-Regularisierung, welche nur von der Form $\partial\Omega_2$ abhängt, wird mit Hilfe einer zusätzlichen von-Neumann-Randbedingung der Form
-\begin{align*}
-	\frac{\partial U}{\partial n} = f^{surf} \quad \text{auf } \partial\Omega_2
-\end{align*}
-berücksichtigt. Formuliert man nun die so erhaltene lineare Elastizitätsgleichung in schwacher Formulierung um und verwendet als rechte Seite \colorbox{red}{zitiere anders Kapitel Formableitung}, so erhält man
-\begin{equation}\label{finalformgradient}
+Wir werden eine etwas erweiterte Variante der Linearen Elastizitätsgleichung zur Schrittsteuerung verwenden, welche \textit{lokal variierende Lamé-Parameter} verwendet. Dabei wird das $\mu_{elas}$ als Koeffizientenfunktion $\mu_{elas}: (0,1)^2 \rightarrow [0,\infty)$ aufgefasst. Diese erzeugen wir für $\mu_{min}, \mu_{max} \in [0,\infty)$ durch das Lösen des Poissonproblems 
+\begin{equation}
+\label{loclame}
 	\begin{aligned}
-		a_{elas}(U,V) := \underset{(0,1)^2}{\int}\sigma(U):\epsilon(V) \;dx = D\mathcal{J}(\Omega_2)[V] \quad \forall V\in H^1_0((0,1)^2, \mathbb{R}^2).
+	-\Delta \mu_{elas} &=  0  \hspace{0.95cm}\text{ in } \mathcal{D} \\ 
+	\mu_{elas} &= \mu_{max}   \hspace{0.3cm}\text{ auf } \partial\Omega \\
+	\mu_{elas} &= \mu_{min}   \hspace{0.35cm}\text{ auf } \partial\mathcal{D}.
 	\end{aligned}
 \end{equation}
-\ref{finalformgradient} ermöglicht nun bei relativ leichter Assemblierung die Berechnung eines Formgradienten durch lösen einer aus der linearen Elastizitätsgleichung erzeugten Variationsproblems, wobei wir die Rechtfertigung hierfür wie bei der Herleitung erwähnt in \ref{zentraleDeformation} finden. Wir werden für die praktische Implementierung \ref{finalformgradient} verwenden, wobei die Randformulierung prinzipiell Alternative zur Verfügung stände. 
+Hierdurch lässt sich lokale Steifigkeit des Gitters gewährleisten, und somit der späteren Entartung von Gitterzellen etwas entgegensetzen. Je näher die Werte $\mu_{elas}(x)$ nahe $0$, desto steifer bewegt sich der zugehörige Punkt $x$.
 
-\colorbox{red}{vllt. Bereiche trennen, evlt unterabschnitte?}
+Möchte man nun mit Hilfe der linearen Elastizitätsgleichung auf Basis von Theorem \ref{zentraleDeformation} einen Formgradienten bestimmen, so besitzt man zwei Möglichkeiten. Zum einen lässt sich der Gradient mittels der Randformulierung der Formableitung $D\mathcal{J}$ bilden. Hierzu wird eine weitere Dirichlet-Randbedinungung bei der lineare Elastizitätsgleichung \ref{zentraleDeformation}, welche den Formgradienten bezüglich einer Sobolevmetrik auf der Form $\partial\Omega$ repräsentiert, gebildet, und $f_{elas}$ wird $0$ gesetzt. Für Details hierzu, siehe \cite{bfgs2}.
+Als andere Variante lässt sich die Volumenformulierung der Formableitung $D\mathcal{J}$ verwenden. Hierzu assembliert man bei der linearen Elastizitätsgleichung \ref{linelas} die rechte Seite $f_{elas}$ als den Volumenanteil $D\mathcal{J}_{target}(\Omega)[V]$, welchen wir in \ref{shapederivvolume} angegeben haben . Die Perimeter-Regularisierung, welche nur von der Form $\partial\Omega$ abhängt, wird mit Hilfe einer zusätzlichen von-Neumann-Randbedingung der Form
+\begin{align*}
+	\frac{\partial U}{\partial n} = f^{surf} \quad \text{auf } \partial\Omega
+\end{align*}
+berücksichtigt. Wir werden in der Implementierung äquivalent hierzu die folgende schwache Formulierung der linearen Elastizitätsgleichung nutzen, wobei wir als rechte Seite die leichter auf mehrere Dimensionen verallgemeinerbaren Randformulierungen \ref{shaperderivsurfacetarget} und \ref{shapederivsurfaceperimeter} verwenden. Die schwache Formulierung lautet dann
+\begin{equation}\label{finalformgradient}
+	\begin{aligned}
+		a_{elas}(U,V) := \underset{(0,1)^2}{\int}\sigma(U):\epsilon(V) \;dx = D\mathcal{J}(\Omega)[V] \quad \forall V\in H^1_0((0,1)^2, \mathbb{R}^2).
+	\end{aligned}
+\end{equation}
+\ref{finalformgradient} ermöglicht nun bei relativ leichter Assemblierung die Berechnung eines Formgradienten durch lösen einer aus der linearen Elastizitätsgleichung erzeugten Variationsproblems, wobei wir die Rechtfertigung hierfür wie bei der Herleitung erwähnt in Theorem \ref{zentraleDeformationTheorem} finden. Wir werden für die praktische Implementierung \ref{finalformgradient} verwenden, wobei die Randformulierung prinzipiell Alternative zur Verfügung stände. 
+
 \subsection{Quasi-Newton-Verfahren}
 
 \colorbox{blue}{definiere ineare, quad, und superlineare konvergenz, dazu noch bilder von typischen konvergenzgraphiken}

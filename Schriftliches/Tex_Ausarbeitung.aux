@@ -69,29 +69,33 @@
 \citation{bfgs2}
 \citation{bfgs2}
 \citation{shape_space}
+\newlabel{VolumenRandformulierung}{{2.1}{12}{Einführung in die Formoptimierung}{equation.2.1}{}}
 \citation{Shape_diff}
 \citation{Shape_diff}
 \citation{LagrangeNewton}
 \newlabel{Pde constrained shape}{{14}{13}{PDE beschränktes Formoptimierungsproblem}{defi.14}{}}
-\newlabel{PDE constrained equation}{{2.1}{13}{PDE beschränktes Formoptimierungsproblem}{equation.2.1}{}}
+\newlabel{PDE constrained equation}{{2.2}{13}{PDE beschränktes Formoptimierungsproblem}{equation.2.2}{}}
+\newlabel{lagrangefunction}{{15}{13}{Lagrangefunktion}{defi.15}{}}
 \citation{LagrangeNewton}
-\newlabel{lagrangefunction}{{15}{14}{Lagrangefunktion}{defi.15}{}}
-\newlabel{adjointequation}{{2.2}{14}{Adjungierte und Design-Gleichung}{equation.2.2}{}}
-\newlabel{Design equation}{{2.3}{14}{Adjungierte und Design-Gleichung}{equation.2.3}{}}
+\newlabel{adjointequation}{{2.3}{14}{Adjungierte und Design-Gleichung}{equation.2.3}{}}
+\newlabel{Design equation}{{2.4}{14}{Adjungierte und Design-Gleichung}{equation.2.4}{}}
 \citation{LagrangeNewton}
 \citation{LagrangeNewton}
 \citation{LagrangeNewton}
 \citation{shape_space}
 \citation{LagrangeNewton}
 \citation{LagrangeNewton}
-\newlabel{Modellproblem}{{2.5}{16}{Modellproblem}{equation.2.5}{}}
-\newlabel{Interfacecondition}{{2.6}{16}{Modellproblem}{equation.2.6}{}}
-\newlabel{Modelladjoint}{{2.8}{16}{Modellproblem}{equation.2.8}{}}
+\newlabel{Modellproblem}{{2.6}{16}{Modellproblem}{equation.2.6}{}}
+\newlabel{Interfacecondition}{{2.7}{16}{Modellproblem}{equation.2.7}{}}
+\newlabel{Modelladjoint}{{2.9}{16}{Modellproblem}{equation.2.9}{}}
 \citation{shape_space}
 \citation{shape_space}
 \citation{multigrid}
 \citation{auto-diff}
 \citation{fenics}
+\newlabel{shapederivvolume}{{2.10}{18}{Formableitung für das Modellproblem}{equation.2.10}{}}
+\newlabel{shaperderivsurfacetarget}{{2.11}{18}{Formableitung für das Modellproblem}{equation.2.11}{}}
+\newlabel{shapederivsurfaceperimeter}{{2.13}{18}{Formableitung für das Modellproblem}{equation.2.13}{}}
 \citation{bfgs2}
 \citation{shape_space}
 \citation{bfgs1}
@@ -115,31 +119,34 @@
 \citation{bfgs2}
 \citation{bfgs1}
 \citation{bfgs2}
-\newlabel{Stek-Poi-metrik}{{25}{23}{Stekolov-Poincaré-Metrik}{defi.25}{}}
+\citation{bfgs2}
+\newlabel{Stek-Poi-metrik}{{25}{23}{Steklov-Poincaré-Metrik}{defi.25}{}}
 \citation{shape_space}
 \newlabel{Formgradientdefi}{{26}{24}{Formgradient}{defi.26}{}}
 \newlabel{Gradientengleichung}{{3.1}{24}{Formgradient}{equation.3.1}{}}
-\citation{bfgs1}
+\citation{bfgs2}
+\newlabel{zentraleDeformationTheorem}{{27}{25}{Formgradienten und Deformationsfelder}{defi.27}{}}
 \newlabel{zentraleDeformation}{{3.2}{25}{Formgradienten und Deformationsfelder}{equation.3.2}{}}
-\citation{bfgs1}
+\citation{bfgs2}
 \citation{shape_space}
 \citation{diffeology}
 \citation{bfgs1}
 \citation{bfgs2}
-\citation{bfgs1}
-\newlabel{linelas}{{3.3}{28}{Lineare Elastizitätsgleichung}{equation.3.3}{}}
+\newlabel{linelas}{{3.3}{27}{Lineare Elastizitätsgleichung}{equation.3.3}{}}
+\citation{bfgs2}
+\newlabel{loclame}{{3.4}{28}{Shape Spaces und Formgradienten}{equation.3.4}{}}
 \citation{Nocedal}
 \citation{Nocedal}
-\newlabel{finalformgradient}{{3.4}{29}{Shape Spaces und Formgradienten}{equation.3.4}{}}
+\newlabel{finalformgradient}{{3.5}{29}{Shape Spaces und Formgradienten}{equation.3.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Quasi-Newton-Verfahren}{29}{subsection.3.2}}
 \citation{Nocedal}
 \citation{Nocedal}
 \citation{Nocedal}
-\newlabel{newtonfinite}{{3.8}{30}{Quasi-Newton-Verfahren}{equation.3.8}{}}
+\newlabel{newtonfinite}{{3.9}{30}{Quasi-Newton-Verfahren}{equation.3.9}{}}
 \newlabel{BFGS-updates}{{30}{30}{BFGS-Updates (endl. Dim.)}{defi.30}{}}
 \citation{Nocedal}
 \citation{Nocedal}
-\newlabel{Frobeniusproblem}{{3.11}{31}{Definierende Eigenschaft des BFGS-Updates}{equation.3.11}{}}
+\newlabel{Frobeniusproblem}{{3.12}{31}{Definierende Eigenschaft des BFGS-Updates}{equation.3.12}{}}
 \citation{Nocedal}
 \citation{Nocedal}
 \citation{Nocedal}
@@ -151,7 +158,7 @@
 \citation{LeeDGEO}
 \citation{shape_space}
 \citation{bfgs1}
-\newlabel{shapenewtonproblem}{{3.14}{33}{Quasi-Newton-Verfahren}{equation.3.14}{}}
+\newlabel{shapenewtonproblem}{{3.15}{33}{Quasi-Newton-Verfahren}{equation.3.15}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Implementierung in Python mit FEniCS}{35}{section.4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}???}{35}{subsection.4.1}}
 \citation{Unifiedformlanguage}

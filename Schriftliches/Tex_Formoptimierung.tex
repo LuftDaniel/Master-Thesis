@@ -97,11 +97,14 @@ stetig und linear für alle $V \in C^2(\mathbb{R}^d,\mathbb{R}^d)$ ist, so heiß
 
 Die Formableitung besitzt zwei äquivalente Formulierungen, die sogenannte \textit{Volumenformulierung}, gekennzeichnet durch $\Omega$, und die \textit{Randformulierung}, gekennzeichnet durch $\Gamma := \partial \Omega$, siehe \cite{bfgs2}:
 
-\begin{align*}
+\begin{equation}
+\label{VolumenRandformulierung}
+\begin{aligned}
 	d\mathcal{J}_\Omega(\Omega)[V] &= \underset{\Omega}{\int}F(x)V(x)dx\\
 	\vspace{0.5cm}
 	d\mathcal{J}_\Gamma(\Omega)[V] &= \underset{\Gamma}{\int}f(s)\langle V(s),n(s)\rangle ds,
-\end{align*}
+\end{aligned}
+\end{equation}
 
 wobei $F(x)$ ein (Differential-) Operator ist, welcher linear auf das Richtungsvektorfeld $V$ wirkt, sowie einer Funktion $f: \Gamma \rightarrow \mathbb{R}$. Die Existenz einer zur Volumenform äquivalenten Randformulierung ist gesichert durch den \textit{Hadamard'schen Darstellungssatz}. Dieser liefert im Allgemeinen die Existenz einer Distribution $f$, so dass Volumen- und Randformulierung der  Formableitung äquivalent sind, für die genaue Aussage, siehe \cite{shape_space}, Theorem 4.7. Wir werden in dieser Arbeit stets voraussetzen, dass genügend Regularität vorhanden ist, so dass $d\mathcal{J}$ in der Tat mittels einer Funktion $f$ auf dem Rand darstellbar ist.
 
@@ -185,10 +188,10 @@ Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehö
 		f(x) &= f_1 \in \mathbb{R} \quad \forall x \in (0,1)^2\setminus \Omega \\
 		f(x) &= f_2 \in \mathbb{R} \quad \forall x \in \Omega.
 	\end{align*}
-	Sei $\hat{y} \in \mathcal{L}^2((0,1)^2)$ und $\mu > 0$. Dann heißt das nun folgende Problem \textit{Modellproblem}:
+	Sei $\hat{y} \in \mathcal{L}^2((0,1)^2)$ und $\nu > 0$. Dann heißt das nun folgende Problem \textit{Modellproblem}:
 	\begin{equation}\label{Modellproblem}
 	\begin{aligned}
-	\underset{\Omega\in \mathcal{O}}{\min}\; \mathcal{J}(\Omega) :&= \frac{1}{2}\underset{\mathcal{D}}{\int} (y - \hat{y})^2 dx + \mu\underset{\partial\Omega}{\int} 1 ds \\
+	\underset{\Omega\in \mathcal{O}}{\min}\; \mathcal{J}(\Omega) :&= \frac{1}{2}\underset{\mathcal{D}}{\int} (y - \hat{y})^2 dx + \nu\underset{\partial\Omega}{\int} 1 ds \\
 	\text{s.t.} -\Delta y &= f \quad \text{in } \;\mathcal{D} \\
 	y &= 0  \quad \text{auf } \partial\mathcal{D}.
 	\end{aligned}
@@ -216,9 +219,9 @@ Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehö
 
 Wie wir sehen, besteht das Zielfunktional $\mathcal{J}$ aus zwei Komponenten. Der erste Summand bildet das eigentliche Funktional von Interesse, welches wir von nun an mit $\mathcal{J}_{target}$ bezeichnen werden, wobei die optimale Form $\partial\tilde{\Omega}$ möglichst einen Zustand $\tilde{y}$ erzeugen soll, welcher einem gegebenen Sollzustand $\hat{y}$ entspricht. Der zweite Summand
 \begin{align*}
-	\mu\underset{\partial\Omega}{\int} 1 ds =: \mathcal{J}_{reg}(\Omega)
+	\nu\underset{\partial\Omega}{\int} 1 ds =: \mathcal{J}_{reg}(\Omega)
 \end{align*}
-wird gemeinhin als \textit{Perimeter-Regularisierung} bezeichnet, wobei $\mu > 0$. Diese hat den Nutzen, Regularität und somit Existenz und Eindeutigkeit des Modellproblems \ref{Modellproblem} zu gewährleisten. Ohne die Regularisierung wären beispielsweise entartete Formen, deren Rand als Funktion unendlicher Variation darstellbar sind, zugelassen, siehe zum Beispiel die angegebene Quelle bei \cite{LagrangeNewton}, unter Remark 2.
+wird gemeinhin als \textit{Perimeter-Regularisierung} bezeichnet, wobei $\nu > 0$. Diese hat den Nutzen, Regularität und somit Existenz und Eindeutigkeit des Modellproblems \ref{Modellproblem} zu gewährleisten. Ohne die Regularisierung wären beispielsweise entartete Formen, deren Rand als Funktion unendlicher Variation darstellbar sind, zugelassen, siehe zum Beispiel die angegebene Quelle bei \cite{LagrangeNewton}, unter Remark 2.
 
 Die Zustandsgleichung ist ein gewöhnliches Poisson-Problem mit Dirichlet-Randwerten, welches wir hier symbolisch in starker Form notiert haben. Die starke Notation repräsentiert hier also die Variationsformulierung des Poisson-Problems mit Dirichlet Randwerten, wobei gleiches für die adjungierte Gleichung gilt. Für die Herleitung der adjungierten Gleichung, welche mittels \ref{adjointequation} erfolgt, verweisen wir auf \cite{shape_space}, 4.2.1. Die Existenz einer Lösung der  Zustands- als auch adjungierten Gleichung sind gesichert durch das in \ref{LaxMilgram} eingeführte Lemma von Lax-milgram.
 
@@ -232,22 +235,22 @@ Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung a
 
 \begin{theorem}[Formableitung für das Modellproblem]
 	Betrachte das Modellproblem \ref{Modellproblem} mit Interface condition. Sei $y\in H^1_0((0,1)^2)$ Lösung der Zustandsgleichung aus \ref{Modellproblem} und $p\in H^1_0((0,1)^2)$ Lösung der adjungierten Gleichung \ref{Modelladjoint}. Dann hat das Zielfunktional aus \ref{Modellproblem} \textit{ohne} Perimeter-Regularisierung $\mathcal{J}_{target}$ folgende Volumenformulierung für alle $\Omega \in \mathcal{O}$ und Richtungen $V \in C^\infty(\mathcal{D})$:
-	\begin{equation}
+	\begin{equation}\label{shapederivvolume}
 	\begin{aligned}
 		D\mathcal{J}_{target}(\Omega)[V] = \underset{\mathcal{D}}{\int} -\nabla y^T (\nabla V + \nabla V^T) \nabla p - p V^T \nabla f \\ + \text{div} (V) \left(\frac{1}{2}(y-\bar{y})^2 + \nabla y^T \nabla p - fp\right)\; dx.
 	\end{aligned}
 	\end{equation}
 	Falls sogar genügend Regularität vorhanden ist, so dass $y \in H^2((0,1)^2)$ und $p \in H^2((0,1)^2)$, so besitzt die Formableitung die Randformulierung
-	\begin{equation}
+	\begin{equation}\label{shaperderivsurfacetarget}
 	D\mathcal{J}_{target}(\Omega)[V] = -\underset{\partial\Omega}{\int} [[f]]p \langle V,n \rangle ds.
 	\end{equation}
 	Zusammen mit der Perimeter-Regularisierung erhält man
 	\begin{equation}
-	D\mathcal{J}_{target}(\Omega)[V] = \underset{\partial\Omega}{\int} (-[[f]]p  + \mu\kappa )\langle V,n \rangle ds 
+	D\mathcal{J}_{target}(\Omega)[V] = \underset{\partial\Omega}{\int} (-[[f]]p  + \nu\kappa )\langle V,n \rangle ds 
 	\end{equation}
 	wobei $\kappa := \text{div}_{\partial\Omega}(n)$ die mittlere Krümmung von $\partial\Omega$ definiert über die tangentiale Divergenz ist. Außerdem besitzt die Perimeter-Regularisierung alternative  Randformulierung
-	\begin{equation}
-	D\mathcal{J}_{reg}(\Omega)[V] = \mu\underset{\partial\Omega}{\int} \text{div}(V) - \langle\frac{\partial V}{\partial n}, n\rangle ds,
+	\begin{equation}\label{shapederivsurfaceperimeter}
+	D\mathcal{J}_{reg}(\Omega)[V] = \nu\underset{\partial\Omega}{\int} \text{div}(V) - \langle\frac{\partial V}{\partial n}, n\rangle ds,
 	\end{equation}
 	wobei $n$ erneut das äußere Normalenvektorfeld von $\partial\Omega$ ist.
 \end{theorem}
