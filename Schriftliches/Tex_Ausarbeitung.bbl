@@ -1,0 +1,132 @@
+\begin{thebibliography}{10}
+
+\bibitem{tracetheorem}
+G.~Geymonat.
+\newblock {T}race {T}heorems for {S}obolev {S}paces on {L}ipschitz {D}omains.
+  {N}ecessary {C}onditions.
+\newblock 2007.
+
+\bibitem{multigrid}
+{K. Welker, M. Siebenborn}.
+\newblock {Algorithmic aspects of multigrid methods for optimization in shape
+  spaces}.
+\newblock 2017, ar{X}iv: 1611.05272v3.
+
+\bibitem{LeeDGEO}
+J.~M. Lee.
+\newblock {\em Introduction to {S}mooth {M}anifolds{,}, {S}econd {E}dition}.
+\newblock Springer{,} {G}raduate {T}exts in {M}athematics, 2013.
+
+\bibitem{fenics}
+H.~P. Langtangen{,}~A. Logg.
+\newblock {\em Solving {P}{D}{E}s in {P}ython - {T}he {F}{E}ni{CS} {T}utorial
+  {V}olume {I}}.
+\newblock Springer, 2017.
+
+\bibitem{Unifiedformlanguage}
+M.~S. Alnæs{,}~A. Logg.
+\newblock {\em {UFL} Specification and User Manual 0.3}.
+\newblock www.fenics.org, 2010.
+
+\bibitem{Powell}
+{M. J. D. Powell}.
+\newblock Algorithms for nonlinear constraints that use lagrangian functions.
+\newblock {\em Mathematical Programming {14}}, 1976.
+
+\bibitem{PDE2}
+K.~Burg{,} H. Haf{,} F. Wille{,}~A. Meister.
+\newblock {\em Partielle Differentialgleichungen und funktionalanalytische
+  Grundlagen{,} 5. Auflage}.
+\newblock Vieweg +Teubner Verlag{,} Springer Fachmedien, 2010.
+
+\bibitem{b-spline}
+B.~Zhong P.A. Sherar{,} C.P.Thompson{,} B.~Xu.
+\newblock An optimization method based on b-spline shape functions \& the knot
+  insertion algorithm.
+\newblock {\em Proceedings of the World Congress on Engineering}, II, 2007.
+
+\bibitem{auto-diff}
+S.~Schmidt.
+\newblock Weak and strong form shape hessians and their automatic generation.
+\newblock 2018{,} SIAM J. Sci. Comput.{,} Vol. 40{,} No.2, pp. C210-C233.
+
+\bibitem{riemann}
+Volker Schulz.
+\newblock A riemannian view on shape optimization.
+\newblock {\em Foundations of computational Mathematics}, 14:483-501, 2014.
+
+\bibitem{PDE3}
+B.~Schweizer.
+\newblock {\em Partielle Differentialgleichungen - Eine anwendungsorientierte
+  Einführung}.
+\newblock Springer Spektrum, 2013.
+
+\bibitem{bfgs1}
+Volker Schulz{,}~Martin Siebenborn.
+\newblock Computational comparison of surface metrics for pde constrained shape
+  optimization.
+\newblock {\em Comput. Methods Appl. Math 2016}, 2016.
+
+\bibitem{Shape_diff}
+Kevin Sturm.
+\newblock {\em On shape optimization with non-linear partial differential
+  equations}.
+\newblock PhD thesis, Technische Universität Berlin, 2015.
+
+\bibitem{brokenSobolev}
+T.~Tartar.
+\newblock An introduction to {S}obolev and interpolation spaces.
+\newblock 2007, {S}pringer, {B}erlin, {H}eidelberg.
+
+\bibitem{PDE1}
+W.~Arendt{,}~K. Urban.
+\newblock {\em Partielle Differenzialgleichungen - Eine Einführung in
+  analytische und numerische Methoden}.
+\newblock Spektrum Akademischer Verlag Heidelberg, 2010.
+
+\bibitem{diffeology}
+K.~Welker.
+\newblock Suitable {S}paces for {S}hape {O}ptimization.
+\newblock 2017{,} ar{X}iv: 1702.07579v2.
+
+\bibitem{shape_space}
+Kathrin Welker.
+\newblock {\em Efficient PDE Constrained Shape Optimization in Shape Spaces}.
+\newblock PhD thesis, Universität Trier, 2016.
+
+\bibitem{LagrangeNewton}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Towards a lagrange-newton approach for constrained shape
+  optimization.
+\newblock {\em arXiv: 1405.3266v2}, 2014.
+
+\bibitem{riemann2}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Pde constrained shape optimization as optimization on shape
+  manifolds.
+\newblock {\em Geometric Science of Information{,} Lecture Notes in Computer
+  Science}, 9389:pp. 499--508, 2015.
+
+\bibitem{diffusion}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Structured inverse modeling in parabolic diffusion problems.
+\newblock 2015.
+
+\bibitem{bfgs2}
+Volker Schulz{,} Martin Siebenborn{,}~Kathrin Welker.
+\newblock Efficient pde constrained shape optimization based on
+  steklov-poincaré-type metrics.
+\newblock {\em SIAM J. OPTIM.}, Vol. 26, No. 4, pp. 2800-2819, 2016.
+
+\bibitem{Nocedal}
+Jorge Nocedal{,} Stephen~J. Wright.
+\newblock {\em Numerical Optimization{,} Second Edition}.
+\newblock Springer, 2006.
+
+\bibitem{shapeopt}
+M.~C. Delfour{,} J.~P. Zolésio.
+\newblock {\em Shapes and Geometries: Metrics, Analysis, Differential Calculus,
+  and Optimization, 2nd ed.}
+\newblock SIAM Advances in Design and Control, 2011.
+
+\end{thebibliography}

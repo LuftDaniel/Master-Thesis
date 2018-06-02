@@ -1,0 +1,390 @@
+
+\section{BFGS-Algorithmus in der Formoptimierung}
+\subsection{Shape Spaces und Formgradienten}
+\label{Chap_shapespaces}
+
+\colorbox{red}{mathcal J und Omega2 zu Omega} \newline
+\colorbox{red}{habe ich sicher das Kapitel zu Rn BFGS? falls nicht korrigiere text}  \newline
+\colorbox{red}{soll ich 2 dimensional oder beliebig dimensional machen? habe hier bisschen von beidem...} \newline
+\colorbox{red}{ statt jedes mal die voraussetzunge zu überprüfen, also zsmhgd, beschr,... nutze lieber vllt einfach die Definition von regulärem Gebiet aus anderem Chapter?} \newline
+\colorbox{red}{Notation: einmal Gradient H, dann später U... mache das einheitlich!} \newline
+\colorbox{red}{erkläre, dass broyden symm rank 1 vllt nicht schlecht ist, falls großer kern der hesse bei optimierung entsteht und p.d. nicht gewährleistet ist,
+daher aber auch trust region nötig} \newline
+\colorbox{red}{line search: amijo und backtracking} \newline
+\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)} \newline
+\colorbox{red}{reguläre form statt immer voraussetzungen einzeln...} \newline
+\colorbox{red}{hesse ist doch sparse außerhalb vom Rand, lohnt sich da voller aufbau mit sparse strukture?} \newline
+\colorbox{red}{linesearch aufschreiben}
+
+
+Nachdem wir in die Grundlagen der Formoptimierung, möchten wir in diesem Abschnitt weiter auf den Grundlagen aufbauen und Rahmenbedingungen schaffen, unter welchen das endlich-dimensionale BFGS-Verfahren in den Kontext von Formen abstrahiert werden können. Dies ist nicht ohne weiteres möglich, da a priori nicht klar ist, wie Gradienten von Formen definiert werden sollen, insbesondere deshalb, weil wir uns in unendlich-dimensionalen \textit{Formräumen (engl. shape-spaces)} befinden. Erschwert wird dies weiter dadurch, dass, wie eingangs bemerkt, keine natürliche Vektorraumstruktur auf dem betrachteten Shape-space vorhanden ist. Ziel dieses Abschnittes wird es sein zunächst die Wahl einer geeigneten Metrik im Sinne der Riemannschen Geometrie zu treffen, wodurch die Definition eines Gradienten überhaupt erst möglich wird. Im $\mathbb{R}^n$ würden wir zur Darstellung solcher Gradienten stets stillschweigend die euklidische Metrik verwenden, diese lässt sich jedoch offensichtlich nicht einfach im Shape-setting verwenden. Anschließend übertragen wir den BFGS-Algorithmus auf die Formoptimierung. In diesem Abschnitt halten wir uns vorallem an \cite{bfgs2}, sowie an \cite{shape_space} und \cite{bfgs1}.
+
+Zunächst definieren wir, was wir unter dem Raum aller Formen verstehen, vgl. \cite{bfgs1}. Hierzu bleiben wir in zwei Dimensionen, da hier schon wesentliche Elemente und Zusammenhänge klar werden. Prinzipiell ist ein betrachten von höherdimensionalen Objekten auch möglich, sofern unter anderem die zugrundeliegende Topologie der Formen beachtet wird.
+
+\begin{defi}[Shape-space für den $\mathbb{R}^2$]
+Bezeichne mit $\text{Emb}(S^1, \mathbb{R}^2)$ die Menge aller $C^\infty$-Einbettungen von $S^1$ in den $\mathbb{R}^2$, und mit $\text{Diff}(S^1)$ die Menge aller Diffeomorphismen von $S^1$ in sich selber. Dann heißt der Quotientenraum
+\begin{align*}
+	B_e(S^1,\mathbb{R}^2) := \text{Emb}(S^1, \mathbb{R}^2) / \text{Diff}(S^1)
+\end{align*}
+\textit{Shape-space} für den $\mathbb{R}^2$.
+\end{defi}
+
+Man sieht, dass die Elemente von $B_e(S^1,\mathbb{R}^2)$ Äquivalenzklassen sind. In ihnen sind jeweils unter anderem Umparametrisierungen der selben geschlossenen $C^\infty$-Kurven $c: \mathbb{R} \rightarrow \mathbb{R}^2$ enthalten. Das bedeutet, dass ein Punkt in $B_e(S^1,\mathbb{R}^2)$ als eine geschlossene, geometrische Kurve im $\mathbb{R}^2$ interpretiert werden kann. Betrachtet man nun die durch eine beschränkte Menge $\mathcal{D}\subset\mathbb{R}^2$ mit Lipschitz-Rand definierte Hold-all-Domain, so lassen sich Ränder $\partial\Omega$ von kompakten, beschränkten, zusammenhängenden Mengen $\Omega\subset \mathcal{D}$ mit $C^\infty$-Rand genau mit solchen geschlossenen Kurven identifizieren. Zudem gilt außerdem, dass $B_e(S^1,\mathbb{R}^2)$ eine Mannigfaltigkeit bildet, siehe \cite{bfgs1}, was wesentlich von der Glattheit der Einbettungen abhängt.
+
+Wir fahren fort mit unserer Konstruktion, und geben hier eine Darstellung des Tangentialbündels auf $B_e(S^1,\mathbb{R}^2)$ an. Wir verwenden hier explizit die Strukturen des $\mathbb{R}^2$ und $B_e(S^1,\mathbb{R}^2)$ für die Darstellung der Tangentialräume, wobei es sich bei unserer Definition um zu den üblichen Tangentialräumen der Differentialgeometrie isomorphe Objekte handelt. Für eine Definition der klassischen Tangentialräume, sowie eine tiefgreifende Einführung in die Differentialgeometrie, empfehlen wir \cite{LeeDGEO}, Kapitel 3.
+
+\begin{defi}[Tangentialbündel]\label{Tangentialvektor}
+Sei $B_e(S^1, \mathbb{R}^2)$ der Shape-space für den $\mathbb{R}^2$. Betrachte einen Repräsentant $c: S^1 \rightarrow \mathbb{R}^2$ eines Punktes in $B_e(S^1, \mathbb{R}^2)$, sowie das zugehörige äußere Normalenvektorfeld $n$ der mit der geschlossenen Kurve $c$ identifizierten Form $\partial\Omega$. Dann gilt für den \textit{Tangentialraum} $T_cB_e$
+\begin{align*}
+	T_cB_e \cong \{h : h = \alpha n \text{ für } \alpha \in C^\infty(\Omega,\mathbb{R})\}.
+\end{align*}
+
+\end{defi}
+
+Diese Darstellung gilt, da die Quotientenstruktur von $B_e$ die Isomorphie der Immersionen von $S^1$ nach $\mathbb{R}^2$ mit den $C^\infty$-Funktionen von $S^1$ nach $\mathbb{R}^2$ vererbt, für Details siehe \cite{shape_space}, Kapitel 3.
+Somit ermöglicht diese isomorphe Darstellung es uns, Tangentialvektoren $v \in T_cB_e$ mit Hilfe von $C^\infty(\Omega, \mathbb{R})$-Funktionen zu beschreiben. Das nutzen wir aus, um auf $B_e$ eine für unsere Zwecke geeignete Riemannsche Metrik zu definieren.
+
+\colorbox{red}{Diagramm ??}
+
+Hierzu gibt es verschiedene Möglichkeiten, je nachdem auf welche künftige Anwendung man abzielt. Nach \cite{shape_space} scheint eine Sobolev-Metrik, definiert mittels des Laplace-Beltrami-Operators, für unser Modellproblem natürlich zu erscheinen. Der Nachteil ist, das erheblicher Rechenaufwand beim Ermitteln des Gradienten aus einer Formableitung entsteht. Aus diesem Grund führen die Autoren von \cite{bfgs1} eine Riemannsche Metrik auf Grundlage der sogenannten Dirichlet-zu-Neumann Abbildung ein, weshalb wir uns Ausführungen zu Sobolev-Metriken an dieser Stelle sparen, und für diese auf \cite{bfgs1} und \cite{shape_space}  verweisen. Im Folgenden führen wir eine sogenannte \textit{Steklov-Poincaré-Metrik} ein, und verweisen für die hierzu nötigen Grundlagen der Differentialgleichungen und Sobolev-Slobodeckij-Räumen auf das Kapitel \ref{Chapter_grundlagenpde}. Zunächst definieren wir die nötigen Abbildungen, vgl. \cite{bfgs2}.
+
+\begin{defi}[Verallgemeinerte Spurabbildung]\label{Sproperatoren}
+Sei $\mathcal{D} \subset \mathbb{R}^n$ eine beschränktes, offenes Gebiet. Sei $\Omega \subset \mathcal{D}$ zusammenhängend, offen und habe einen Lipschitzrand, und $\partial \Omega$ sei eine Form in diesem Gebiet. Dann heißt die Abbildung
+\begin{align*}
+	\gamma: H^{1}_0(\mathcal{D}, \mathbb{R}^n) &\rightarrow H^{1/2}(\mathcal{D}, \mathbb{R}^n)\times H^{-1/2}(\mathcal{D}, \mathbb{R}^n) \\
+	U &\mapsto 
+	\left(\begin{matrix}
+	U_{\vert \partial\Omega} \\ \frac{\partial}{\partial n} U_{\vert \partial\Omega}
+	\end{matrix}\right)
+	=:
+	\left(\begin{matrix}
+	\gamma_0 U \\ \gamma_1 U
+	\end{matrix}\right)	 ,
+\end{align*}
+\textit{verallgemeinerte Spurabbildung}, wobei $\frac{\partial}{\partial n} U_{\vert\partial\Omega}$ die Ableitung von $U$ auf der Form $\partial \Omega$ in Richtung des äußeren Normalenvektorfeldes $n$ ist.
+\end{defi}
+
+Wir erinnern an dieser Stelle, dass diese Abbildung aufgrund der verallgemeinerten Spursätze \ref{tracetheorem} wohldefiniert ist. Nun geben wir uns eine symmetrische, koerzive Bilinearform $a: H^1(\mathcal{D}, \mathbb{R}^n)\times H^1(\mathcal{D}, \mathbb{R}^n) \rightarrow \mathbb{R}$ vor. Diese werden wir später gemeinsam mit der zu definierenden Riemannschen Metrik verwenden, um aus gegebenen Formableitungen Gradienten zu konstruieren. Gegeben einer solchen Bilinearform $a$ definieren wir die zugehörigen Lösungsoperatoren zu folgendem Variationsproblem.
+
+\colorbox{red}{Notation: alpha oder u ???!!! n den folgenden Definitionen} \newline
+\colorbox{red}{muss die bilinearform auch stetig sein? oder ist sie es automatisch}
+
+\begin{defi}[Lösungsoperatoren]\label{Llsgsoperatoren}
+Sei $\mathcal{D}\subset\mathbb{R}^n$ offen, zusammenhängend, beschränkt, und sei $\Omega\subset \mathcal{D}$ offen, zusammenhängend und habe einen $C^\infty$-Rand $\partial\Omega$.
+Weiterhin sei $a: H^1(\mathcal{D}, \mathbb{R}^n)\times H^1(\mathcal{D}, \mathbb{R}^n) \rightarrow \mathbb{R}$ eine koerzive, symmetrische Bilinearform. Dann heißt der Operator 
+\begin{align*}
+	E_N: H^{-1/2}(\partial\Omega, \mathbb{R}^n) &\rightarrow H^{1}_0(\mathcal{D}, \mathbb{R}^n) \\
+	u &\mapsto U,
+\end{align*}
+\textit{Neumann-Lösungsoperator}, wobei $U$ die Lösung des Problems
+\begin{align*}
+	a(U,V) = \underset{\partial\Omega}{\int}u^T(\gamma_0 V)ds \quad \forall V \in H^1_0(\mathcal{D},\mathbb{R}^n)
+\end{align*}
+mit der dualen Paarung $u^T(\gamma_0 V)$ ist. Außerdem heißt der Operator
+\begin{align*}
+	E_D: H^{1/2}(\partial\Omega, \mathbb{R}^n) &\rightarrow H^{1}_0(\mathcal{D}, \mathbb{R}^n) \\
+	u &\mapsto U,
+\end{align*}
+\textit{Dirichlet-Lösungsoperator}, wobei $U$ die Lösung des Problems
+\begin{align*}
+	\begin{matrix} a(U,V) = 0 \\
+	\text{unter } U_{\vert \partial\Omega} = u 
+	\end{matrix} \quad\; \forall V \in H^1_0(\mathcal{D},\mathbb{R}^n),
+\end{align*}
+ist.
+\end{defi}
+
+Wir fahren fort und definieren die projezierten Neumann-zu-Dirichlet und Dirichlet-zu-Neumann-Operatoren, welche wir zur Konstruktion der Riemannschen Metrik benötigen, siehe \cite{bfgs2}.
+
+\begin{defi}[projezierte Randwertoperatoren]\label{Randoperatoren}
+Seien die Voraussetzungen von Definition \ref{Sproperatoren} und \ref{Llsgsoperatoren} gegeben. Dann heißt der Operator
+\begin{align*}
+	S^p: H^{-1/2}(\partial\Omega) &\rightarrow H^{-1/2}(\partial\Omega, \mathbb{R}^n) \rightarrow H^1_0(\mathcal{D},\mathbb{R}^n) \rightarrow H^{1/2}(\partial\Omega, \mathbb{R}^n) \rightarrow H^{1/2}(\partial\Omega) \\
+	\alpha &\mapsto n^T[\gamma_0 \circ E_N(\alpha \cdot n)]
+\end{align*}
+\textit{projezierter Neumann-zu-Dirichlet-Operator}, wobei $n^T$ eine duale Paarung meint.
+\colorbox{red}{ist es richtig, wie linearformen und normale abbildungen miteinander verkettet werden. gibt es duale operatoren zu H(omega, Rn)?? ist oben  }
+Der Operator
+\begin{align*}
+	T^p: H^{1/2}(\partial\Omega) &\rightarrow H^{1/2}(\partial\Omega,\mathbb{R}^n) \rightarrow H^1_0(\mathcal{D},\mathbb{R}^n) \rightarrow H^{-1/2}(\partial\Omega,\mathbb{R}^n) \rightarrow H^{-1/2}(\partial\Omega) \\
+	\alpha &\mapsto n^T[\gamma_1 \circ E_D(\alpha \cdot n)]
+\end{align*}
+heißt \textit{projezierter Dirichlet-zu-Neumann-Operator}.
+\end{defi}
+
+
+%Randwertoperatoren eigenschaften aus dem Paper zitieren, auf dortige Quelle verweisen.
+
+Die hier definierten Operatoren sind nicht die klassischen Dirichlet-zu-Neumann-Operatoren, welche auch \textit{Steklov-Poincaré-Operatoren} genannt werden, da diese nicht in projezierter Variante definiert werden. Was die Operatoren im Wesentlichen tun, ist für gegebene Dirichlet- bzw. Neumann-Bedingung die Lösung des durch die Bilinearform $a$ definierten Problems zu finden, und die entsprechende andere, automatisch konsistente, Neumann- bzw. Dirichlet-Bedingung zurückzugeben. Das heißt, für gegebene Dirichlet-Bedingung liefert der projezierte Dirichlet-zu-Neumann-Operator die Neumann-Bedingung, welche die selbe Lösung erzeugt, und vice versa.
+
+Die klassischen Steklov-Poincaré-Operatoren sind zueinander invers, beide koerziv, symmetrisch in dualer Paarung und stetig \colorbox{red}{aufgrund der Koerzivität und Symmetrie der Bilinearform $a$,} siehe die Quellen bei \cite{bfgs2}, Def. 3.1. Die projezierten Operatoren besitzen weiterhin alle genannten Eigenschaften, bis auf die des Inversen. Um Rechenaufwand einzusparen, und Glättungseigenschaften auszunutzen, fällt die Wahl des Operators zur Definition des Skalarproduktes auf den Tangentialräumen auf $(S^p)^{-1}$, für Details, unter anderem zu spektraler Äquivalenz der Kanditaten, siehe \cite{bfgs1} und die dort genannten Quellen. Wir kommen nun zu unserem Etappenziel, eine Riemannsche Metrik auf dem Shape-space für den $\mathbb{R}^2$ zu definieren, vgl. \cite{bfgs2}.
+
+\begin{defi}[Steklov-Poincaré-Metrik]\label{Stek-Poi-metrik}
+Seien die Voraussetzungen wie in \ref{Randoperatoren}. Dann heißt das Skalarprodukt
+\begin{align*}
+	g^S: H^{1/2}(\partial \Omega) \times H^{1/2}(\partial \Omega) &\rightarrow \mathbb{R} \\
+	(\alpha,\beta) &\mapsto \langle \alpha, (S^p)^{-1}\beta \rangle = \underset{\partial \Omega}{\int} \alpha(s)\cdot((S^p)^{-1}\beta)(s)ds,
+\end{align*}
+\textit{Steklov-Poincaré-Metrik}, wobei die Produkte auf der rechten Seite als duale Paarungen zu verstehen sind. 
+\end{defi}
+
+Das so definierte Skalarprodukt ist auf allgemeinen Sobolev-Slobodeckij-Räumen definiert, da Lösungen der Zustandsgleichung bei Auswertung auf dem Rand in der Regel Ordnung $1/2$ besitzen, siehe Kapitel \ref{Chapter_grundlagenpde}. Diese Räume enthalten, wie wir in der Einführung zu Differentialgleichungen gezeigt haben, die $C^\infty$-Funktionen auf dem Rand. Somit ist das Skalarprodukt für Tangentialvektoren aller Formen aus $B_e(S^1, \mathbb{R}^2)$ wohldefiniert, da wir erneut Tangentialvektoren wie in der Definition \ref{Tangentialvektor} mit den Koeffizientenfeldern der äußeren Normalenvektorfelder identifizieren.
+
+Wir kommen nun zu dem Zusammenhang des in Kapitel \ref{Chapter_formopt} definierten Formkalküls und der soeben konstruierten Riemannschen Mannigfaltigkeit $(B_e(S^1,\mathbb{R}^2),g^S)$.
+Für die in dieser Arbeit genutzten Algorithmen ist die Gewinnung von Gradienten aus der Formableitung eines Zielfunktionals, welche wir für die Generierung von Deformationen nutzen wollen, von zentraler Bedeutung. Das Skalarprodukt $g^S$ bietet genau hierzu das geeignete Mittel, vgl. \cite{bfgs2}.
+
+\begin{defi}[Formgradient]\label{Formgradientdefi}
+Seien die Voraussetzungen wie in \ref{Sproperatoren} und \ref{Llsgsoperatoren}.
+Sei $\mathcal{J}$ ein formdifferenzierbares Formfunktional und die zugehörige Formableitung $d\mathcal{J}$. Betrachte die zu $c\in B_e(S^1,\mathbb{R}^2)$ gehörige Form $\partial\Omega$, mit Tangentialraum $T_cB_e$. Dann heißt der Tangentialvektor $h\in T_cB_e$ \textit{Formgradient von} $\mathcal{J}$ \textit{in c}, falls seine Darstellung $\alpha_h$ als Skalarvektorfeld, gemäß \ref{Tangentialvektor}, 
+
+\colorbox{red}{stimmt hier für alle Cinfty V? eigentlich H10, aber das ersteres dicht liegt und gS bzw a stetig sind, egal?}
+
+\begin{align}\label{Gradientengleichung}
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\Omega)[V] \quad \forall V\in C^\infty(\mathcal{D},\mathbb{R}^2)
+\end{align}
+erfüllt, wobei $\alpha_V = \langle V_{\vert \partial\Omega}, n\rangle$ das Koeffizientenfeld des äußeren Normalenanteils $n$ von $V$ auf dem Rand $\partial \Omega$ ist.
+
+\end{defi}
+
+Die hier gemachte Definition ist als eine duale Repräsentation der Formableitung $D\mathcal{J}$ in dem Skalarprodukt $g^S$ zu sehen. Damit folgen wir nicht der typischen Definition eines gewöhnlichen Gradienten, wie diese oft in der elementaren Analysis stattfindet, sondern betrachten diese in Anlehnung an den  Riesz'schen Darstellungssatz. Der Aufwand bis zur Definition des Formgradienten macht auch deutlich, wie wesentlich die Art des Gradienten vom zugrunde liegenden Skalarprodukt abhängt, ganz im Gegenteil zur Formableitung, für welche kein zugrunde liegendes Skalarprodukt benötigt wird. Somit ergeben sich für die selbe Formableitung, je nachdem welche Metrik man für den Shape-space verwendet, andere Gradienten und somit andere numerische Verfahren. Für eine Auswahl weiterer Alternativen, siehe \cite{shape_space}, Kapitel 3.2.
+
+Es fällt weiterhin auf, dass die hier geforderte Gleichung \ref{Gradientengleichung} nicht in dualer Paarung mit Skalarfeldern, welche in die Ableitung $D\mathcal{J}$ einfließen, sondern durch deren Koeffizientenfeldern der Normalenkomponente auf der Form berücksichtigt werden. Dies lässt sich mit dem Hadamard'schen Darstellungssatz begründen:
+\begin{align*}
+	D\mathcal{J}(\Omega)[V] &= \underset{\partial\Omega}{\int}f(s)\langle V(s),n(s)\rangle ds \\
+	&=\underset{\partial\Omega}{\int}f(s) \alpha_V(s)\langle n(s),n(s)\rangle ds \\
+	&=\underset{\partial\Omega}{\int}f(s) \alpha_V(s) ds \\
+	&= (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega)}
+\end{align*}
+Damit wird klar, dass Vektorfelder $V\in C^\infty(\mathcal{D},\mathbb{R}^2)$ mit gleichen Werten in äußerer Normalenrichtung $n$ auf $\partial\Omega$ auch den selben Wert bei Ableitung erhalten, und somit lediglich die Koeffizientenfelder $\alpha_V$ auf der Form relevant sind. Die Identifikation mit diesen ist auch nötig, da wir das Skalarprodukt $g^S$ für gerade diese Funktionen definiert haben, und nicht bezüglich der hierzu isomorphen echten Tangentialvektoren, welche Vektorfelder sind.
+
+Mit diesem Zusammenhang lässt sich auch leicht der Bezug zu auf ganz $\mathcal{D}$ definierten Vektorfeldern $U,V$, und der Bilinearform $a$, welche $g^S$ zu Grunde liegt, beschreiben. Wir formulieren die Zusammenhänge aus \cite{bfgs2} für unsere Situation und Notation als Satz um, und geben einen Beweis. 
+
+\begin{theorem}[Formgradienten und Deformationsfelder \label{zentraleDeformationTheorem}]
+Seien die Voraussetzungen wie in Definition \ref{Formgradientdefi}. Sei $a$ eine koerzive, beschränkte, symmetrische Bilinearform, und $g^S$ die zugehörige Steklov-Poincaré-Metrik. Weiterhin sei $h$ der zu einer Form $\partial\Omega$ und Formfunktional $\mathcal{J}$ gehörige Formgradient. Dann existiert ein zu $h$ gehöriges Vektorfeld $H \in H^1_0(\mathcal{D}, \mathbb{R}^n)$, so dass gilt
+\begin{equation}
+\label{zentraleDeformation}
+\begin{aligned}
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\Omega)[V] = a(H,V) \quad \forall  V \in C^\infty(\mathcal{D},\mathbb{R}^2)
+\end{aligned}
+\end{equation}
+und, mit Notation aus \ref{Sproperatoren},
+\begin{align*}
+	(\gamma_0\circ H)^T n = \alpha_h.
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+Seien die Voraussetzungen wie oben. Nach der zuvor geführten Rechnung und mit der Definition des Formgradienten \ref{Formgradientdefi} gilt
+\begin{align*}
+	g^S(\alpha_h, \alpha_V) = D\mathcal{J}(\Omega)[V] = (f,\alpha_V)_{\mathcal{L}^2(\partial\Omega_2)},
+\end{align*}
+wobei $f$ aus der Randdarstellung von $D\mathcal{J}$ mittels Hadamard'schem Darstellungssatz stammt. Verwendet man die Definition \ref{Stek-Poi-metrik} von $g^S$, so erhält man
+\begin{align*}
+	\underset{\partial\Omega}{\int} \alpha_h (S^p)^{-1}(\alpha_V)ds = 				\underset{\partial\Omega}{\int} f \alpha_V ds
+\end{align*}
+für beliebige Vektorfelder $V\in C^\infty(\mathcal{D}, \mathbb{R}^2)$. Wegen der Invertierbarkeit von $S^P$, welche wegen \colorbox{red}{Stetigkeit} und Koerzivität der Bilinearform $a$ und Regularität des Randes gilt, sowie der Symmetrie von $g^S$, folgt mit dem Fundamentallemma der Variationsrechnung
+\begin{align*}
+	S^p(f) = \alpha_h.
+\end{align*}
+Nun folgt mit der Definition von $S^p$, siehe \ref{Llsgsoperatoren}, und mit der \colorbox{red}{Stetigkeit} und Symmetrie von $a$, dass ein $H \in H^1_0(\mathcal{D},\mathbb{R}^2)$ existiert, so dass gilt
+\begin{align*}
+	a(H,V) = \underset{\partial\Omega}{\int} f \alpha_V ds \quad \forall V\in C^\infty(\mathcal{D},\mathbb{R}^2),
+\end{align*}
+woraus insgesamt die erste Gleichung \ref{zentraleDeformation} folgt. Die zweite Gleichung folgt direkt aus der Definition des projezierten Operators $S^p$ , siehe \ref{Randoperatoren}, und des Neumann-Lösungsoperators $E_N$, denn
+\begin{align*}
+	\alpha_h = S^p(f) = n^T(\gamma_0\circ E_N(f\cdot n)) = n^T(\gamma_0 \circ H).
+\end{align*}
+\end{proof}
+
+Mit diesem Resultat haben wir nun mehrere Möglichkeiten, aus gegebener Formableitung $D\mathcal{J}$ eine Deformation einer Form $\partial\Omega$ zu erzeugen. Zum einen besteht die Möglichkeit, auf dem Rand $\partial\Omega$ zu agieren, indem man ein Normalenvektorfeld $h = \alpha_h \cdot n$ auf diesem mittels des Variationsproblems \ref{zentraleDeformation} auf Basis der linken Gleichheit erzeugt. Zu beachten ist, dass die so erzeugte Deformation lediglich auf dem Rand definiert ist, womit dann in der Anwendung das Gitter im Inneren und Äußeren nicht bewegt wird. Aus diesem Grund bezeichnen wir diese Art der Deformationsgewinnung \textit{Randformulierung}. Die andere Variante ist, eine Deformation auf dem gesamten Gebiet $\Omega$ zu gewinnen, indem man das Variationsproblem \ref{zentraleDeformation} auf Basis der rechten Gleichung mit der Bilinearform 
+$a$ löst. Im Gegensatz zur ersten Variante können hier potentiell alle Punkte des Gitters verschoben werden, trotz dessen, dass lediglich die Randpunkte zur Änderung des Zielfunktionals beitragen. Diese Variante bezeichnen wir als \textit{Volumenformulierung}, angelehnt an die Arten der Darstellung der Formableitung \ref{VolumenRandformulierung} aus dem vorigen Kapitel. Beide Varianten verwenden zur Erzeugung des Gradienten die Ableitungsinformation, welche physikalisch als Kraft interpretierbar ist. Wählt man als Beispiel für die Bilinearform $a$ die lineare Elastizitätsgleichung, welche wir weiter unten definieren, so wird diese Interpretation noch deutlicher. Genau diese Bilinearform werden wir in der praktischen Implementierung wählen, um in Volumenformulierung Formgradienten zu erzeugen.
+
+Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{zentraleDeformation} erzeugte Deformationen des Randes $h$ im Allgemeinen nicht in $C^\infty(\partial\Omega,\mathbb{R}^2)$ sind, siehe \cite{bfgs2}. Je nach Wahl der Bilinearform $a$, welche den Operator $S^p$ und somit das Skalarprodukt $g^S$ erzeugen, sowie der rechten Seite der Gleichung und der Regularität des Gebietes auf der diese definiert sind, existiert lediglich eine Lösung in $H^{1/2}(\partial\Omega,\mathbb{R}^2)$. Aus diesem Grunde ist nach unserer Definition \ref{Tangentialvektor} $h$ nicht immer Element des Tangentialraums $T_cB_e$, was Probleme theoretischer Natur macht. Unter anderem deshalb besteht an dieser Stelle der Bedarf eines allgemeineren Formraumes. Beispielsweise wäre eine Möglichkeit, Formen mit $H^{1/2}$-Rändern zuzulassen, was in \cite{shape_space}, Kapitel 7, kurz erläutert wird. Hierbei entstehen allerdings neue Schwierigkeiten theoretischer Natur, welche noch nicht völlig erforscht sind. Für eine Einführung in diese Thematik und zugehörige Konzepte verweisen wir auf \cite{diffeology}.
+
+Da wir nun mit \ref{zentraleDeformation} verstanden haben, wie Formgradienten mit Hilfe von Metriken $g^S$ und Bilinearformen $a$ erzeugt werden können, möchten wir für dieses ein Beispiel angeben. Die Wahl einer solchen Bilinearform $a$, und damit die einer Metrik $g^S$, ist in der Tat nicht trivial, und mehrere Möglichkeiten mit unterschiedlichen Eigenschaften bestehen. Die Wahl hängt unter anderem davon ab,
+\colorbox{red}{oder Symbol? Gitterunabhängig, welches Paper?} welche Ordnung der Hesse-Operator des betrachteten Problems in der Lösung hat. Würde man eine Bilinearform wählen, sodass die selbe Ordnung eingehalten wird, so kann man nach \colorbox{red}{Paper gitterunabhängig} gitterunabhängige Konvergenz des Verfahrens erwarten. Wir werden für die Gewinnung von Formgradienten im Nachfolgenden die lineare Elastizitätsgleichung verwenden, welche wir nun für unser Modellproblem einführen, wobei wir uns an \cite{bfgs1} und \cite{bfgs2} halten. 
+\newpage
+\begin{defi}[Lineare Elastizitätsgleichung]
+	Betrachte das Gebiet $(0,1)^2 \subset \mathbb{R}^2$. Sei $f_{elas}: (0,1)^2 \rightarrow \mathbb{R}$ eine Funktion. Dann heißt die Differentialgleichung
+	\begin{equation}\label{linelas}
+		\begin{aligned}
+		\text{div}(\sigma) &= f_{elas} \quad \text{in } (0,1)^2 \\
+		U &= 0 \quad \hspace{0.2cm} \;\;\text{ auf } \partial([0,1]^2)
+		\end{aligned}
+	\end{equation}	 
+	mit,
+	\begin{align*}
+		\sigma &:= \lambda_{elas} \text{Tr}(\epsilon)I + 2\mu_{elas}\epsilon \\
+		\epsilon &:= \frac{1}{2}(\nabla U + \nabla U^T),
+	\end{align*}
+	\textit{lineare Elastizitätsgleichung} in starker Formulierung, wobei $\text{Tr}(\epsilon)$ die Spur der Matrix $\epsilon$ ist, und $\lambda_{elas} \in \mathbb{R}$, sowie $\mu_{elas} \in [0,\infty)$, die sogenannten \textit{Lamé-Parameter} sind. $\sigma$ wird als Dehnungs-, $\epsilon$ als Spannungstensor bezeichnet. 
+\end{defi}
+
+Die Lösung $U: \Omega \rightarrow \mathbb{R}^2$ in dieser Differentialgleichung lässt sich als physikalische Deformation auf dem Gebiet $\Omega$ auffassen, wobei $f_{elas}$ als auf das Gebiet wirkende physikalische Kraft interpretiert werden kann. 
+
+Die Lamé-Parameter $\lambda_{elas}, \epsilon_{elas}$ besitzen hier keine physikalische Bedeutung, jedoch lassen haben diese Einfluss auf die Gitterdeformation, indem sie indirekt die Schrittweite steuern. Sie sind mit Hilfe des sogenannten \textit{Young'schen Elastizitätsmoduls} $E$ und der \textit{Poissonzahl} $\nu$ durch
+\begin{align*}
+	\lambda_{elas} = \frac{\nu E}{(1+\nu)(1-2\nu)}, \; 
+	\epsilon_{elas} = \frac{E}{2(1+\nu)}
+\end{align*}
+darstellbar. Das Elastizitätsmodul $E$ lässt sich als Steifigkeit des Materials interpretieren. Die Poissonzahl $\nu$ gibt an, in welchem Verhältniss sich das einen Gitterpunkt umgebende Gitter ausdehnt, falls dieser Gitterpunkt in eine Richtung verschoben wird. Insgesamt lassen also die Lamé-Parameter durch ihre Wahl die Möglichkeit einer Art Schrittweitensteuerung zu. Im weiteren Verlauf dieser Arbeit wählen wir $\lambda_{elas} = 0$.
+Wir werden eine etwas erweiterte Variante der Linearen Elastizitätsgleichung zur Schrittsteuerung verwenden, welche \textit{lokal variierende Lamé-Parameter} verwendet. Dabei wird das $\mu_{elas}$ als Koeffizientenfunktion $\mu_{elas}: (0,1)^2 \rightarrow [0,\infty)$ aufgefasst. Diese erzeugen wir für $\mu_{min}, \mu_{max} \in [0,\infty)$ durch das Lösen des Poissonproblems 
+\begin{equation}
+\label{loclame}
+	\begin{aligned}
+	-\Delta \mu_{elas} &=  0  \hspace{0.95cm}\text{ in } \mathcal{D} \\ 
+	\mu_{elas} &= \mu_{max}   \hspace{0.3cm}\text{ auf } \partial\Omega \\
+	\mu_{elas} &= \mu_{min}   \hspace{0.35cm}\text{ auf } \partial\mathcal{D}.
+	\end{aligned}
+\end{equation}
+Hierdurch lässt sich lokale Steifigkeit des Gitters gewährleisten, und somit der späteren Entartung von Gitterzellen etwas entgegensetzen. Je näher die Werte $\mu_{elas}(x)$ nahe $0$, desto steifer bewegt sich der zugehörige Punkt $x$.
+
+Möchte man nun mit Hilfe der linearen Elastizitätsgleichung auf Basis von Theorem \ref{zentraleDeformation} einen Formgradienten bestimmen, so besitzt man zwei Möglichkeiten. Zum einen lässt sich der Gradient mittels der Randformulierung der Formableitung $D\mathcal{J}$ bilden. Hierzu wird eine weitere Dirichlet-Randbedinungung bei der lineare Elastizitätsgleichung \ref{zentraleDeformation}, welche den Formgradienten bezüglich einer Sobolevmetrik auf der Form $\partial\Omega$ repräsentiert, gebildet, und $f_{elas}$ wird $0$ gesetzt. Für Details hierzu, siehe \cite{bfgs2}.
+Als andere Variante lässt sich die Volumenformulierung der Formableitung $D\mathcal{J}$ verwenden. Hierzu assembliert man bei der linearen Elastizitätsgleichung \ref{linelas} die rechte Seite $f_{elas}$ als den Volumenanteil $D\mathcal{J}_{target}(\Omega)[V]$, welchen wir in \ref{shapederivvolume} angegeben haben . Die Perimeter-Regularisierung, welche nur von der Form $\partial\Omega$ abhängt, wird mit Hilfe einer zusätzlichen von-Neumann-Randbedingung der Form
+\begin{align*}
+	\frac{\partial U}{\partial n} = f^{surf} \quad \text{auf } \partial\Omega
+\end{align*}
+berücksichtigt. Wir werden in der Implementierung äquivalent hierzu die folgende schwache Formulierung der linearen Elastizitätsgleichung nutzen, wobei wir als rechte Seite die leichter auf mehrere Dimensionen verallgemeinerbaren Randformulierungen \ref{shapederivsurfacetarget} und \ref{shapederivsurfaceperimeter} verwenden. Die schwache Formulierung lautet dann
+\begin{equation}\label{finalformgradient}
+	\begin{aligned}
+		a_{elas}(U,V) := \underset{(0,1)^2}{\int}\sigma(U):\epsilon(V) \;dx = D\mathcal{J}(\Omega)[V] \quad \forall V\in H^1_0((0,1)^2, \mathbb{R}^2).
+	\end{aligned}
+\end{equation}
+\ref{finalformgradient} ermöglicht nun bei relativ leichter Assemblierung die Berechnung eines Formgradienten durch lösen einer aus der linearen Elastizitätsgleichung erzeugten Variationsproblems, wobei wir die Rechtfertigung hierfür wie bei der Herleitung erwähnt in Theorem \ref{zentraleDeformationTheorem} finden. Wir werden für die praktische Implementierung \ref{finalformgradient} verwenden, wobei die Randformulierung prinzipiell Alternative zur Verfügung stände. 
+
+\subsection{Quasi-Newton-Verfahren}
+
+Nun besitzen wir alle theoretischen Hintergründe aus dem Bereich der Formoptimierung, um für uns interessante, auf Ableitungen basierte Optimierungsverfahren einzuführen. Im Rahmen dieser Arbeit konzentrieren wir uns auf das sogenannte \textit{Limited-Memory-Broyden-Fletcher-Goldfarb-Shanno-Verfahren \newline (L-BFGS-Verfahren)}. Dieses Verfahren ist ein sogenanntes \textit{Quasi-Newton-Verfahren}, welche wir im Folgenden nach \cite{Nocedal} erläutern möchten. Bevor wir dies tun, geben wir noch Definitionen von Konvergenzgeschwindigkeiten numerischer Optimierungsmethoden an, vgl. \cite{Nocedal}, Appendix A2. 
+
+\begin{defi}[Konvergenzraten]
+	Betrachte ein Minimierungsproblem, wobei $x^*$ eine optimale Lösung ist. Sei $\{x_n\}_{n\in\mathbb{N}}$ eine Folge mit $x_n \rightarrow x^*$ in geeignetem Sinne. Dann heißt die Folge
+	\begin{itemize}
+		\item[i)] \textit{linear konvergent}, falls ein $c\in (0,1)$ existiert, mit
+		\begin{equation}
+			\frac{\vert\vert x_{n+1} - x^*\vert\vert}{\vert\vert x_n - x^* \vert\vert} \leq c \quad \text{für n hinreichend groß,} 
+		\end{equation}
+		\item[ii)]	\textit{superlinear konvergent}, falls gilt		
+		\begin{equation}
+		\begin{aligned}
+		\hspace{-4.6cm}\underset{n \rightarrow \infty}{\lim} \frac{\vert\vert x_{n+1} - x^*\vert\vert}{\vert\vert x_n - x^* \vert\vert} = 0,
+		\end{aligned}
+		\end{equation}
+		\item[iii)] \textit{quadratisch konvergent}, falls ein $c\in (0,1)$ existiert, mit
+		\begin{equation}
+			\frac{\vert\vert x_{n+1} - x^*\vert\vert}{\vert\vert x_n - x^* \vert\vert^2} \leq c \quad \text{für n hinreichend groß}.
+		\end{equation}	
+	\end{itemize}
+
+\end{defi}
+
+Bevor wir den Fall der Quasi-Newton- und Newton-Verfahren in Shape spaces diskutieren, beginnen wir mit der theoretisch gesicherten Betrachtung der Verfahren in endlich-dimensionalen Vektorräumen. Das klassische Newton-Verfahren versucht, im Gegensatz zu einem Gradientenverfahren, auch Informationen zweiter Ordnung des Zielfunktionals in Form des Hesseoperators $\text{Hess} \mathcal{J}$ bei der Bildung eines Schrittes miteinzubeziehen. Verwendet man die übliche Notation im endlich-dimensionalen Fall, bei der $x_k \in \mathbb{R}^n$ der Wert bei Schritt $k$ ist, so berechnet sich der Schritt $\Delta x$ über Lösen des Problems
+\begin{equation}\label{newtonfinite}
+	\text{Hess} \mathcal{J} (x_k)\Delta x = - \nabla \mathcal{J}(x_k).
+\end{equation}
+Verwendet man dieses Verfahren mit geeigneter Schrittweitensteuerung, so besitzt das volle Newton-Verfahren bei geeigneten Voraussetzungen quadratische Konvergenz, siehe \cite{Nocedal}. Quasi-Newton-Verfahren ergeben sich nun aus dem Newton-Ansatz, indem man statt der Hessematrix $\text{Hess}\mathcal{J}(x_k)$ eine Approximation $B_k$ für diese verwendet. Hierzu gibt es eine Vielzahl von Möglichkeiten. Genannt seien hier unter anderem die \textit{Symmetric Rank 1 (SR1)} Updateformel und das \textit{DFP-Verfahren}, siehe etwa \cite{Nocedal}. Die BFGS-Update-Formeln für die Hessematrix und ihre Inverse, falls existent, sind im endlich-dimensionalen Fall wie folgt definiert, vgl. \cite{Nocedal}, 6.1.
+
+\begin{defi}[BFGS-Updates (endl. Dim.)]\label{BFGS-updates}	
+	Sei $B_k$ die Approximation der Hessematrix $\text{Hess}\mathcal{J}(x_k)$, weiterhin seien 
+	\begin{align*}
+		s_k &:= x_{k+1} - x_k \\ y_k &:= \nabla \mathcal{J}(x_{k+1}) - \nabla \mathcal{J}(x_k) \\ \rho_k &:= \frac{1}{y_k^T s_k }.
+	\end{align*}
+	Dann ist der \textit{BFGS-Update} definiert durch
+	\begin{equation}
+		B_{k+1} := B_k - \frac{B_k (s_k s_k^T) B_k}{s_k^T B_k s_k} + \frac{y_k y_k^T}{y_k^T s_k}.
+	\end{equation}
+	Das Inverse der Matrix $B_{k+1}$ besitzt die Updateformel
+	\begin{equation}
+		B_{k+1}^{-1} := (I - \rho_k s_k y_k^T)B_k^{-1}(I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T.
+	\end{equation}
+\end{defi}
+In der Definition ist nicht klar, was die natürliche Wahl für ein $B_0$, beziehungsweise $B_0^{-1}$ ist. Hier gibt es mehrere Möglichkeiten, beispielsweise kann man eine mittels automatischem Differenzieren gewonnene Hesseapproximation als Start $B_0$ wählen. Alternativ kann man die skalierte Identität $\alpha I$ mit $\alpha \in [0,\infty)$ wählen, um eine positiv definite Startmatrix zu erhalten.
+
+Weiterhin sei bemerkt, dass man die DFP-Updates erhält, falls man die Inverse Updateformel für die eigentliche Hesseapproximation $B_k$ benutzt. Aufgrund dieser Tatsache nennt man die beiden Updates auch zueinander dual.
+Diese Formeln sind sogenannte \textit{symmetric rank 2 Updates}, da sie eine symmetrische Approximation der Hessematrix mit Updates vom Rang 2 erzeugen. Leitet man die BFGS-Updates auf abstraktem Wege her, so bietet sich die Möglichkeit an, zuerst $B_{k+1}^{-1}$ zu definieren, und mit Hilfe der sogennanten Sherman–
+Morrison–Woodbury Formel den Update für $B_{k+1}$ aus $B_{k+1}^{-1}$ herzuleiten. Wir geben an dieser Stelle genau diese abstrakte definierende Eigenschaft der BFGS-Approximation $B_{k+1}^{-1}$ an, vgl. \cite{Nocedal}, da wir in dieser eine mögliche Chance zur Verallgemeinerung einer Hesseapproximation im Shape Space sehen.
+
+\begin{theorem}[Definierende Eigenschaft des BFGS-Updates]
+		
+	Es gelte die Notation aus \ref{BFGS-updates}. Betrachte das Optimierungsproblem
+	\begin{equation}\label{Frobeniusproblem}
+	\begin{aligned}
+		\underset{H}{\min}\; \vert\vert H - B_k^{-1} \vert\vert _{WFrob} \\
+		\text{s.t. } H^T = H\; \text{und } H y_k = s_k,
+	\end{aligned}
+	\end{equation}
+	wobei $B_k^{-1}$ die in \ref{BFGS-updates} definierte Inverse des $k$'ten BFGS-Updates ist, und \newline
+$\vert\vert \cdot \vert\vert_{WFrob}$ 
+eine gewichtete Frobeniusnorm ist, siehe \cite{Nocedal}, 6.1. Dann ist der BFGS-Update der Inversen $B_{k+1}^{-1}$ die eindeutige Lösung des Problems \ref{Frobeniusproblem}.
+\end{theorem}
+Wie man sieht, lässt sich die Inverse der BFGS-Approximation der Hessematrix als Lösung eines beschränktes Optimierungsproblems für Matrizen definieren. Die einschränkenden Bedingungen entstehen hierbei auf natürliche Weise. Zum einen beschreibt die erste Nebenbedingung lediglich die Forderung einer symmetrichen Approximation, die zweite Nebenbedingung lässt sich, unter Verwendung der eingeführten Notation aus \ref{BFGS-updates}, äquivalent umformen zu
+\begin{equation}
+	B_k (x_{k+1} - x_k) = \nabla \mathcal{J}(x_{k+1}) - \nabla \mathcal{J}(x_k),
+\end{equation}
+was bekannt ist als \textit{Sekantengleichung}. Um Existenz einer positiv definiten Inversen zu gewährleisten ist als Bedingung hinreichend, dass die Matrix $B_k$ positiv definit ist. Setzt man dies voraus, so ergibt sich aus der Sekantengleichung als notwendige Bedingung
+\begin{equation}
+	s_k^T y_k = s_k^T B_k s_k > 0.
+\end{equation}
+Diese sogenannte \textit{curvature condition} muss also notwendigerweise erfüllt sein, wenn man positive Definitheit von $B_k$ erhofft. Andererseits führt diese auch dazu, dass ein BFGS-Update-Schritt, angewandt auf eine positiv definite Matrix $B_k$ oder ihr Inverses $B_k^{-1}$, erneut eine positiv definite Matrix erzeugt, somit auch hinreichend für positive Definitheit ist. 
+
+Trivialerweise ist die bei konvexen Problemen die curvature condition immer erfüllt. Im nicht-konvexen Fall ist es trotzdem möglich mit Hilfe von Linesearch-Techniken, etwa der Wolfe oder starken Wolfe-Bedingungen, vgl. \cite{Nocedal}, die curvature condition zu erfüllen. Zu der Konvergenzgeschwindigkeit des BFGS-Verfahens in endlicher Dimension lässt sich sagen, dass unter Voraussetzungen, wie etwa Liptschitz-stetige Hesseoperatoren, superlineare Konvergenz vorhanden ist, siehe \cite{Nocedal}, Theorem 6.6. Sind die genannten Bedingungen nicht erfüllt, so ist die Konvergenz des BFGS-Verfahrens im Allgemeinen, wie wir in unserer Implementierung zeigen werden, nicht gewährleistet.
+
+Es fällt auf, dass man zur Berechnung eines BFGS-Updates die volle $n\times n$-Matrix $B_k$ speichern muss, da diese in der Regel keine Dünnbesetztheit aufweisen, siehe \cite{Nocedal}, 7.2. Da dies vor allem im Fall großer $n$, etwa bei feinen, höherdimensionalen Gittern in der Formoptimierung beträchliche Kosten verursacht, bedient man sich der sogenannten \textit{Limited Memory} Variante der Verfahren. Hierzu wird eine Approximation an die BFGS-Matrix $B_k$ erzeugt, indem man eine vorgegebene Anzahl $l$ gespeicherten Schritte benutzt. Dies spart Speicherkapazität auf dem Rechner. Die formale Definition der approximativen Update-Schritte findet sich in \cite{Nocedal}, 7.(19), welche wir hier nicht angeben. Stattdessen verwenden wir die sogenannte \textit{2-Schleifen-L-BFGS Rekursion}, welche wir weiter unten in \ref{2loopbfgs} auf den Formfall übertragen können.
+
+Wir führen nun in analoger Weise zu dem klassischen Newton Verfahren von zuvor ein Lagrange-Newton-Verfahren in Falle der Formoptimierung ein, um anschließend mögliche Verallgemeinerungen des BFGS-Verfahrens auf den Formfall zu diskutieren.
+Da wir in Formräumen keine kanonische Vektorraumstruktur besitzen, benötigt man zur Verallgemeinerung des Newton-Verfahrens auf diese zusätzliche Techniken.
+Die Autoren von \cite{LagrangeNewton} liefern dafür einen Zugang unter Ausnutzung der Mannigfaltigkeitsstruktur, welche wir bereits zuvor in dieser Arbeit zur Konstruktion eines Formgradienten eingeführt haben. Hierzu konstruieren die Autoren auf Grundlage des Raums aller Formen eine neue Mannigfaltigkeit, welche im Wesentlichen ein Produkt aus Bündeln von den Formen $\partial\Omega$ abhängiger Hilberträume $H(\Omega)$ und dem Formraum $B_e$ selber sind, siehe \cite{LagrangeNewton}, unter Remark 1.  Nun verwenden die Autoren Tangentialvektoren auf eben dieser Mannigfaltigkeit, um Richtungen zu gewinnen, mit derer Hilfe durch die Exponentialabbildung auf dem Formraum $B_e$ ein Optimierungsschritt definiert werden kann. Formal lässt sich dies wie folgt notieren, wobei $\zeta = (h_y, h_{\Omega}, h_p)$ ein Tangentialvektor der oben genannten Mannigfaltigkeit von der Form analog zu \ref{KKT} ist:
+
+\begin{itemize}
+	\item[i)] Löse das Newton-Problem \\
+	\begin{equation}\label{shapenewtonproblem}
+	\text{Hess}\mathcal{L}(\zeta_k)\Delta \zeta = - \nabla \mathcal{L}(\zeta_k)
+	\end{equation}
+	\item[ii)] Berechne den Schritt mit einer Schrittlänge $\alpha_k$
+	\begin{equation}
+	\zeta_{k+1} := exp_{\zeta_k}(\alpha_k \Delta \zeta).
+	\end{equation}
+\end{itemize}
+Wir haben das Lagrange-Newton-Verfahren im Shape-space ausformuliert, um auf die offenen Schwierigkeiten und Fragestellungen der Übertragung der BFGS-Updates aus \ref{BFGS-updates} aufmerksam zu machen. Da es sich bei 
+\ref{shapenewtonproblem} um eine Operatorgleichung handelt, anders als bei \ref{newtonfinite}, welches ein LGS darstellt, ist nicht klar, welche Arten von Updates eine sinnvolle Verallgemeinerung der Updates \ref{BFGS-updates} im endlich-dimensionalen Fall für die Approximation des Hesseoperators im Shape Space sind. Bei den Updates im endlich-dimensionalen Fall wird stillschweigend eine euklidisches Skalarprodukt vorausgesetzt. Im Shape-Fall dürfte dieses durch eine geeignet gewählte Riemannsche Metrik, etwa $g^S$ aus \ref{Stek-Poi-metrik}, ersetzt werden, \colorbox{red}{was bei direkter Übertragung einen fehlerhaften Update liefert}. Dies sorgt dafür, dass keine asymptotische superlineare Konvergenz zu erwarten ist. Außerdem überträgt sich die Curvature Condition durch ersetzen des euklidischen Skalarprodukts mit $g^S$. Genau diesen Ansatz haben die Autoren von \cite{diffusion} in ihrem Paper unter Abschnitt 3 getan. Alternativ könnte man den Ansatz zur abstrakten Konstruktion \ref{Frobeniusproblem} auf das Setting in Formräumen übertragen. Hierzu müsste man die Sekantengleichung mit Hilfe von Transporten in die richtigen Tangentialräume, welche weiter unten bei dem 2-Schleifen Algorithmus angegeben sind, formulieren. Fraglich ist die Bedingung der Symmetrie im Formraum-Fall, da der Hesseoperator im Allgemeinen keine Symmetrie aufweist. Welche Bedingungen dann nötig wären, um Eindeutigkeit der Lösung zu erzwingen, ist offen. Weiterhin Bedarf es zur Formulierung des Problems einen geeigneten Abstand auf dem Raum aller linearen und \colorbox{red}{stetigen} Operatoren auf dem Tangentialbündel des Formraums. Wäre dies alles geschafft, so könnte man zumindest für abstrakte theoretische Untersuchungen an Quasi-Newton-Methoden die Existenz eines BFGS-Operators sichern. Wenn sich dieser Ansatz als fruchtbar erweisen sollte, so könnte sich dieser mit wahrscheinlich geringem Aufwand auf die gesamte Broyden-Klasse erweitern, da der DFP-Update als Lösung des selben Problems \ref{Frobeniusproblem} erzeugt werden kann, wobei lediglich $B_k^{-1}$ durch $B_k$ ersetzt werden muss. Leider fehlt uns die Zeit für die Verfolgung dieses Ansatztes, zweitens ist der numerische Nutzen fragwürdig, da wahrscheinlich keine Verbesserung der Verfahren dabei entdeckt würde. 
+
+Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragung der 2-Schleifen-L-BFGS Rekursion auf den Formfall begnügen. Hierzu haben die Autoren von \cite{bfgs1} den Algorithmus aus \cite{Nocedal}, 7.4, unter Verwendung des Zusammenhangs \ref{zentraleDeformation} und der dort vorkommenden Metrik $g^S$, sowie der Bilinearform $a$, angepasst. Zu beachten ist, dass hier die Tangentialvektoren Elemente verschiedener Tangentialräumen sind, weshalb diese noch zuerst in die richtigen Räume transportiert werden müssen. Für die differentialgeometrische Definition der Transporte $\mathcal{T}$, siehe etwa \cite{LeeDGEO} oder \cite{diffusion} Abschnitt 3. Der klassische Algorithmus entsteht, wenn man statt der Metrik $g^S$ im endlich-dimensionalen Fall das euklidische Skalarprodukt verwendet, wobei keine Transporte von Tangentialvektoren anfallen. Es folgt die Definition nach \cite{bfgs1}, Kapitel 4.
+
+\colorbox{red}{ achtung: länge l oder länge m oder was genau}
+\colorbox{red}{referenz zu den verwendeten Randauswertungen gamma aus vorigem Kapitel}
+
+\begin{defi}[2-Schleifen-L-BFGS Rekursion im Formfall]
+	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $h_i \in T_{\partial\Omega_i}B_e$ Formgradienten der in den L-BFGS-Schritten erzeugten Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{h_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor}. Weiterhin seien $H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die zugehörigen Darstellungen auf der Hold-all-Domain $\mathcal{D}$ nach \ref{zentraleDeformation}. Zudem seien $S_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := H_{i+1} - \mathcal{T}_{S_i}H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die entlang der Deformation $S_i$ transportierte Differenz der Gradienten. Sei $l \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Verwendet man Notation aus \ref{Sproperatoren}, dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
+
+\colorbox{red}{hier lieber alphas statt gamma verwenden?? also die definition wie wir sie zuvor gemacht haben}
+\colorbox{red}{format: einrücken bei code wie in python}
+\colorbox{red}{stimmt das mit den Vorzeichen hier: hatt ja den Fehler}
+\colorbox{blue}{Transporte müssen so sein, dass man in der aktuellen form Omega j landet, wenn ich um q verschiebe, so lande ist aber irgendwo}
+\begin{equation} 
+\label{2loopbfgs}
+\begin{aligned}
+&	\hspace{-2.3cm}	q \leftarrow H_j \\
+&	\hspace{-2.3cm} \textbf{for } i = j - 1, \dots, j - l \textbf{ do} \\
+&	\hspace{-2.3cm} 	S_i \leftarrow \mathcal{T}_q S_i \\
+&	\hspace{-2.3cm} 	Y_i \leftarrow \mathcal{T}_q Y_i \\
+&	\hspace{-2.3cm} 	\rho_i \leftarrow g^S((\gamma_0 Y_i)^Tn, (\gamma_0 S_i)^Tn)^{-1} = a(Y_j, S_j)^{-1} \\
+&	\hspace{-2.3cm} 	\alpha_i \leftarrow \rho_i g^S((\gamma_0 S_i)^Tn, (\gamma_0 q)^T n) = \rho_i a(S_i, q) \\
+&	\hspace{-2.3cm}		q \leftarrow q - \alpha_i Y_i \\
+&	\hspace{-2.3cm}     \textbf{end for} \\
+&	\hspace{-2.3cm}     q \leftarrow \frac{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 S_{j-1})^Tn)}{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 Y_{j-1})^Tn)}q = \frac{a(Y_{j-1}, S_{j-1})}{a(Y_{j-1}, Y_{j-1})}q \\	
+&	\hspace{-2.3cm}     \textbf{for } i = j - l, \dots, j - 1 \textbf{ do} \\
+&	\hspace{-2.3cm}   	\beta_i \leftarrow \rho_i g^S((\gamma_0 Y_i)^Tn, (\gamma_0 q)^Tn) = \rho_i a(Y_i, q) \\
+&	\hspace{-2.3cm}   	q \;\leftarrow q + (\alpha_i - \beta_i)S_i \\
+&	\hspace{-2.3cm}  	\textbf{end for.}
+\end{aligned}
+\end{equation}
+	Dann lässt sich das erzeugte Vektorfeld als Deformation $S_j := q = \tilde{B}_j^{-1}H_j$ verwenden, wobei $\tilde{B}_j$ die L-BFGS-Approximation des Hesseoperators in Schritt $j$ ist. Dieser Algorithmus ist designed für Maximierungsprobleme, möchte man ein Minimierungsproblem lösen, wie wir es tun, so muss man entweder $q \leftarrow -H_j$ setzen, oder wegen Linearität äquivalent \newline $S_j := -q$ setzen.
+\end{defi}
+
+Mit Abschluss dieses Kapitels haben wir alle theoretischen Aspekte für die praktische Behandlung der in den nächsten Kapiteln folgenden Implementierung und deren Resultate gelegt. Wir möchten nun die Umsetzung von Algorithmus \ref{2loopbfgs} erläutern.
+
+\colorbox{red}{mache noch die hier benutzte vereinfachung der Transporte, rede kurz über transportgleichungen und lösung für geodätische, vllt mit Quelle aus einem Dgeo buch}
+
+%Transporte!!!! und exponentialabbildung
+
+\colorbox{red}{Erklärung}
+
