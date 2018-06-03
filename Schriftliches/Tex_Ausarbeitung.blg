@@ -3,52 +3,51 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: Tex_Ausarbeitung.aux
 The style file: plain.bst
 Database file #1: papers.bib
-Warning--I didn't find a database entry for "Lagrange-Newton"
 Warning--empty journal in tracetheorem
 Warning--empty journal in multigrid
 Warning--empty journal in auto-diff
 Warning--empty journal in brokenSobolev
 Warning--empty journal in diffeology
 Warning--empty journal in diffusion
-You've used 23 entries,
+You've used 24 entries,
             2118 wiz_defined-function locations,
-            616 strings with 7255 characters,
-and the built_in function-call counts, 4914 in all, are:
-= -- 464
-> -- 161
+            620 strings with 7378 characters,
+and the built_in function-call counts, 5122 in all, are:
+= -- 485
+> -- 168
 < -- 0
-+ -- 72
-- -- 46
-* -- 205
-:= -- 912
-add.period$ -- 69
-call.type$ -- 23
-change.case$ -- 82
++ -- 75
+- -- 48
+* -- 214
+:= -- 952
+add.period$ -- 72
+call.type$ -- 24
+change.case$ -- 86
 chr.to.int$ -- 0
-cite$ -- 29
-duplicate$ -- 245
-empty$ -- 439
-format.name$ -- 46
-if$ -- 1002
+cite$ -- 30
+duplicate$ -- 255
+empty$ -- 456
+format.name$ -- 48
+if$ -- 1044
 int.to.chr$ -- 0
-int.to.str$ -- 23
-missing$ -- 29
-newline$ -- 118
-num.names$ -- 46
-pop$ -- 126
+int.to.str$ -- 24
+missing$ -- 30
+newline$ -- 123
+num.names$ -- 48
+pop$ -- 128
 preamble$ -- 1
-purify$ -- 69
+purify$ -- 72
 quote$ -- 0
-skip$ -- 153
+skip$ -- 161
 stack$ -- 0
-substring$ -- 151
-swap$ -- 17
+substring$ -- 156
+swap$ -- 18
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 76
+type$ -- 80
 warning$ -- 6
-while$ -- 47
-width$ -- 25
-write$ -- 232
-(There were 7 warnings)
+while$ -- 49
+width$ -- 26
+write$ -- 243
+(There were 6 warnings)

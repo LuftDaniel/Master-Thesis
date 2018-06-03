@@ -13,7 +13,9 @@ daher aber auch trust region nötig} \newline
 \colorbox{red}{line search: amijo und backtracking} \newline
 \colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)} \newline
 \colorbox{red}{reguläre form statt immer voraussetzungen einzeln...} \newline
-\colorbox{red}{hesse ist doch sparse außerhalb vom Rand, lohnt sich da voller aufbau mit sparse strukture?}
+\colorbox{red}{hesse ist doch sparse außerhalb vom Rand, lohnt sich da voller aufbau mit sparse strukture?} \newline
+\colorbox{red}{linesearch aufschreiben}
+
 
 Nachdem wir in die Grundlagen der Formoptimierung, möchten wir in diesem Abschnitt weiter auf den Grundlagen aufbauen und Rahmenbedingungen schaffen, unter welchen das endlich-dimensionale BFGS-Verfahren in den Kontext von Formen abstrahiert werden können. Dies ist nicht ohne weiteres möglich, da a priori nicht klar ist, wie Gradienten von Formen definiert werden sollen, insbesondere deshalb, weil wir uns in unendlich-dimensionalen \textit{Formräumen (engl. shape-spaces)} befinden. Erschwert wird dies weiter dadurch, dass, wie eingangs bemerkt, keine natürliche Vektorraumstruktur auf dem betrachteten Shape-space vorhanden ist. Ziel dieses Abschnittes wird es sein zunächst die Wahl einer geeigneten Metrik im Sinne der Riemannschen Geometrie zu treffen, wodurch die Definition eines Gradienten überhaupt erst möglich wird. Im $\mathbb{R}^n$ würden wir zur Darstellung solcher Gradienten stets stillschweigend die euklidische Metrik verwenden, diese lässt sich jedoch offensichtlich nicht einfach im Shape-setting verwenden. Anschließend übertragen wir den BFGS-Algorithmus auf die Formoptimierung. In diesem Abschnitt halten wir uns vorallem an \cite{bfgs2}, sowie an \cite{shape_space} und \cite{bfgs1}.
 
@@ -201,7 +203,7 @@ Wir erwähnen an dieser Stelle noch, dass die durch das Variationsproblem \ref{z
 
 Da wir nun mit \ref{zentraleDeformation} verstanden haben, wie Formgradienten mit Hilfe von Metriken $g^S$ und Bilinearformen $a$ erzeugt werden können, möchten wir für dieses ein Beispiel angeben. Die Wahl einer solchen Bilinearform $a$, und damit die einer Metrik $g^S$, ist in der Tat nicht trivial, und mehrere Möglichkeiten mit unterschiedlichen Eigenschaften bestehen. Die Wahl hängt unter anderem davon ab,
 \colorbox{red}{oder Symbol? Gitterunabhängig, welches Paper?} welche Ordnung der Hesse-Operator des betrachteten Problems in der Lösung hat. Würde man eine Bilinearform wählen, sodass die selbe Ordnung eingehalten wird, so kann man nach \colorbox{red}{Paper gitterunabhängig} gitterunabhängige Konvergenz des Verfahrens erwarten. Wir werden für die Gewinnung von Formgradienten im Nachfolgenden die lineare Elastizitätsgleichung verwenden, welche wir nun für unser Modellproblem einführen, wobei wir uns an \cite{bfgs1} und \cite{bfgs2} halten. 
-
+\newpage
 \begin{defi}[Lineare Elastizitätsgleichung]
 	Betrachte das Gebiet $(0,1)^2 \subset \mathbb{R}^2$. Sei $f_{elas}: (0,1)^2 \rightarrow \mathbb{R}$ eine Funktion. Dann heißt die Differentialgleichung
 	\begin{equation}\label{linelas}
@@ -242,7 +244,7 @@ Als andere Variante lässt sich die Volumenformulierung der Formableitung $D\mat
 \begin{align*}
 	\frac{\partial U}{\partial n} = f^{surf} \quad \text{auf } \partial\Omega
 \end{align*}
-berücksichtigt. Wir werden in der Implementierung äquivalent hierzu die folgende schwache Formulierung der linearen Elastizitätsgleichung nutzen, wobei wir als rechte Seite die leichter auf mehrere Dimensionen verallgemeinerbaren Randformulierungen \ref{shaperderivsurfacetarget} und \ref{shapederivsurfaceperimeter} verwenden. Die schwache Formulierung lautet dann
+berücksichtigt. Wir werden in der Implementierung äquivalent hierzu die folgende schwache Formulierung der linearen Elastizitätsgleichung nutzen, wobei wir als rechte Seite die leichter auf mehrere Dimensionen verallgemeinerbaren Randformulierungen \ref{shapederivsurfacetarget} und \ref{shapederivsurfaceperimeter} verwenden. Die schwache Formulierung lautet dann
 \begin{equation}\label{finalformgradient}
 	\begin{aligned}
 		a_{elas}(U,V) := \underset{(0,1)^2}{\int}\sigma(U):\epsilon(V) \;dx = D\mathcal{J}(\Omega)[V] \quad \forall V\in H^1_0((0,1)^2, \mathbb{R}^2).
@@ -351,31 +353,34 @@ Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragun
 \colorbox{red}{referenz zu den verwendeten Randauswertungen gamma aus vorigem Kapitel}
 
 \begin{defi}[2-Schleifen-L-BFGS Rekursion im Formfall]
-\label{2loopbfgs}
-	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $h_i \in T_{\partial\Omega_i}B_e$ Formgradienten der in den L-BFGS-Schritten erzeugten Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{h_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor}. Weiterhin seien $H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die zugehörigen Darstellungen auf der Hold-all-Domain $\mathcal{D}$ nach \ref{zentraleDeformation}. Zudem seien $S_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := H_{i+1} - \mathcal{T}_{S_i}H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die entlang der Deformation $S_i$ transportierte Differenz der Gradienten. Sei $l \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
+	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $h_i \in T_{\partial\Omega_i}B_e$ Formgradienten der in den L-BFGS-Schritten erzeugten Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{h_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor}. Weiterhin seien $H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die zugehörigen Darstellungen auf der Hold-all-Domain $\mathcal{D}$ nach \ref{zentraleDeformation}. Zudem seien $S_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := H_{i+1} - \mathcal{T}_{S_i}H_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die entlang der Deformation $S_i$ transportierte Differenz der Gradienten. Sei $l \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Verwendet man Notation aus \ref{Sproperatoren}, dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
 
 \colorbox{red}{hier lieber alphas statt gamma verwenden?? also die definition wie wir sie zuvor gemacht haben}
 \colorbox{red}{format: einrücken bei code wie in python}
 \colorbox{red}{stimmt das mit den Vorzeichen hier: hatt ja den Fehler}
 \colorbox{blue}{Transporte müssen so sein, dass man in der aktuellen form Omega j landet, wenn ich um q verschiebe, so lande ist aber irgendwo}
-
-\begin{align*}
-	\rho_j \leftarrow g^S((\gamma_0 Y_j)^Tn, (\gamma_0 S_j)^Tn)^{-1} = a(Y_j, S_j)^{-1} \\
-		q \leftarrow H_j \\
-	\textbf{for } i = j - 1, \dots, j - l \textbf{ do} \\
-		S_i \leftarrow \mathcal{T}_q S_i \\
-		Y_i \leftarrow \mathcal{T}_q Y_i \\
-		\alpha_i \leftarrow \rho_i g^S((\gamma_0 S_i)^Tn, (\gamma_0 q)^T n) = \rho_i a(S_i, q) \\
-				q \leftarrow q - \alpha_i Y_i \\
-	\textbf{end for} \\
-	q \leftarrow \frac{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 S_{j-1})^Tn)}{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 Y_{j-1})^Tn)}q = \frac{a(Y_{j-1}, S_{j-1})}{a(Y_{j-1}, Y_{j-1})}q \\	
-	\textbf{for } i = j - l, \dots, j - 1 \textbf{ do} \\
-		\beta_i \leftarrow \rho_i g^S((\gamma_0 Y_i)^Tn, (\gamma_0 q)^Tn) = \rho_i a(Y_i, q) \\
-		q \leftarrow q + (\alpha_i - \beta_i)S_i \\
-		\textbf{end do.}
-\end{align*}
-	Dann lässt sich das erzeugte Vektorfeld als Deformation $S_j := q$ verwenden. \colorbox{red}{vorzeichen!}
+\begin{equation} 
+\label{2loopbfgs}
+\begin{aligned}
+&	\hspace{-2.3cm}	q \leftarrow H_j \\
+&	\hspace{-2.3cm} \textbf{for } i = j - 1, \dots, j - l \textbf{ do} \\
+&	\hspace{-2.3cm} 	S_i \leftarrow \mathcal{T}_q S_i \\
+&	\hspace{-2.3cm} 	Y_i \leftarrow \mathcal{T}_q Y_i \\
+&	\hspace{-2.3cm} 	\rho_i \leftarrow g^S((\gamma_0 Y_i)^Tn, (\gamma_0 S_i)^Tn)^{-1} = a(Y_j, S_j)^{-1} \\
+&	\hspace{-2.3cm} 	\alpha_i \leftarrow \rho_i g^S((\gamma_0 S_i)^Tn, (\gamma_0 q)^T n) = \rho_i a(S_i, q) \\
+&	\hspace{-2.3cm}		q \leftarrow q - \alpha_i Y_i \\
+&	\hspace{-2.3cm}     \textbf{end for} \\
+&	\hspace{-2.3cm}     q \leftarrow \frac{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 S_{j-1})^Tn)}{g^S((\gamma_0 Y_{j-1})^Tn, (\gamma_0 Y_{j-1})^Tn)}q = \frac{a(Y_{j-1}, S_{j-1})}{a(Y_{j-1}, Y_{j-1})}q \\	
+&	\hspace{-2.3cm}     \textbf{for } i = j - l, \dots, j - 1 \textbf{ do} \\
+&	\hspace{-2.3cm}   	\beta_i \leftarrow \rho_i g^S((\gamma_0 Y_i)^Tn, (\gamma_0 q)^Tn) = \rho_i a(Y_i, q) \\
+&	\hspace{-2.3cm}   	q \;\leftarrow q + (\alpha_i - \beta_i)S_i \\
+&	\hspace{-2.3cm}  	\textbf{end for.}
+\end{aligned}
+\end{equation}
+	Dann lässt sich das erzeugte Vektorfeld als Deformation $S_j := q = \tilde{B}_j^{-1}H_j$ verwenden, wobei $\tilde{B}_j$ die L-BFGS-Approximation des Hesseoperators in Schritt $j$ ist. Dieser Algorithmus ist designed für Maximierungsprobleme, möchte man ein Minimierungsproblem lösen, wie wir es tun, so muss man entweder $q \leftarrow -H_j$ setzen, oder wegen Linearität äquivalent \newline $S_j := -q$ setzen.
 \end{defi}
+
+Mit Abschluss dieses Kapitels haben wir alle theoretischen Aspekte für die praktische Behandlung der in den nächsten Kapiteln folgenden Implementierung und deren Resultate gelegt. Wir möchten nun die Umsetzung von Algorithmus \ref{2loopbfgs} erläutern.
 
 \colorbox{red}{mache noch die hier benutzte vereinfachung der Transporte, rede kurz über transportgleichungen und lösung für geodätische, vllt mit Quelle aus einem Dgeo buch}
 

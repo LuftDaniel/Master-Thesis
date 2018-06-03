@@ -73,6 +73,11 @@ Kevin Sturm.
   equations}.
 \newblock PhD thesis, Technische Universität Berlin, 2015.
 
+\bibitem{bfgsjumpconv}
+{L}.~{N}azareth{,} {T}. {G.}~{K}olda, {D}. {P}.~{O}'{L}eary.
+\newblock {BFGS} with update skipping and varying memory.
+\newblock {\em {SIAM} {J}. {O}ptim.}, 8., {N}o. 4, 1998.
+
 \bibitem{brokenSobolev}
 T.~Tartar.
 \newblock An introduction to {S}obolev and interpolation spaces.

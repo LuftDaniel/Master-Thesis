@@ -4,7 +4,17 @@
 \BOOKMARK [2][-]{subsection.3.1}{Shape Spaces und Formgradienten}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Quasi-Newton-Verfahren}{section.3}% 5
 \BOOKMARK [1][-]{section.4}{Implementierung in Python mit FEniCS}{}% 6
-\BOOKMARK [2][-]{subsection.4.1}{???}{section.4}% 7
-\BOOKMARK [1][-]{section.5}{Resultate}{}% 8
-\BOOKMARK [2][-]{subsection.5.1}{???}{section.5}% 9
-\BOOKMARK [1][-]{section*.15}{Literatur}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Gittererzeugung}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Die Bibliothek shape\137bib}{section.4}% 8
+\BOOKMARK [3][-]{subsubsection.4.2.1}{Die MeshData-Klasse}{subsection.4.2}% 9
+\BOOKMARK [3][-]{subsubsection.4.2.2}{Berechnungen in der shape\137bib}{subsection.4.2}% 10
+\BOOKMARK [3][-]{subsubsection.4.2.3}{Die BFGS-Memory-Klasse}{subsection.4.2}% 11
+\BOOKMARK [2][-]{subsection.4.3}{Das Hauptprogramm shape\137main}{section.4}% 12
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Der Hauptalgorithmus und Einstellungen}{subsection.4.3}% 13
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Die Backtracking-Linesearch}{subsection.4.3}% 14
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Der Output}{subsection.4.3}% 15
+\BOOKMARK [1][-]{section.5}{Resultate}{}% 16
+\BOOKMARK [2][-]{subsection.5.1}{Problem: kleiner zu gro\337em Kreis}{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.2}{Problem: kleiner Kreis zu 'broken Donut'}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.3}{Ausblick und Schlussbetrachtung}{section.5}% 19
+\BOOKMARK [1][-]{section*.15}{Literatur}{}% 20
