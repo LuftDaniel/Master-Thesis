@@ -1,15 +1,12 @@
 
 \section{Resultate}\label{Chap_results}
 
-\colorbox{red}{Gitterunabhängig? Bilinearform mit dem Symbol des Hesseoperators in übereinstimmung? Ausblick biharmonic?} \newline
 \colorbox{red}{ eventuell bei Zeit die Hintergrundeinstellung bei Paraview bei allen Bildern gleich machen, sprich jedes mal X-Ray einstellen} \newline
-\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)} \newline
 \colorbox{red}{graphen Schritte anpassen; statt schritt 1 entwedet schritt 0 oder Form nr}
 
-Wie angekündigt möchten wir in diesem abschließenden Abschnitt die Resultate aus unserer Programmierung analysieren. Wir haben mehrere Problemgitter und Kombinationen aus Verfahren getestet, und dabei die Daten aufbereitet. \colorbox{red}{Diese Daten werden auf der beigelegten CD samt dem Programm enthalten sein.}
+Wie angekündigt möchten wir in diesem abschließenden Abschnitt die Resultate aus unserer Programmierung analysieren. Wir haben mehrere Problemgitter und Kombinationen aus Verfahren getestet, und dabei die Daten aufbereitet. Diese Daten werden samt dem Programm bei der Abgabe zur Verfügung gestellt.
 Wir haben uns für die Analyse der Verfahren für zwei Testprobleme entschieden. Zum einen soll ein kleiner Kreis zu einem großen Kreis deformiert werden, wobei die Kreismittelpunkte jeweils gleich bleiben. Somit handelt es sich bei diesem Problem um eine Deformation einer konvexen Form ohne große Translation. Zum anderen soll ein kleiner Kreis zu einer nierenartigen Form deformiert werden. In diesem Problem findet eine verhältnismäßig starke Translation statt, außerdem ist die Zielform ein nicht konvex, was dieses Problem deutlich schwieriger als das erste macht. In beiden Fällen sind die Formen in dem Einheitsquadrat im $\mathbb{R}^2$ eingebettet. Diese sind zu sehen in Abbildung \ref{Meshes}. 
 Die Parameter, welche bei der Analyse in Betracht kommen, sind als Standard auf folgende Werte gesetzt:
-\colorbox{red}{vllt doch die Namen aus dem Programm, mit Tabellenverweis}
 \begin{align*}
 \text{Gitterfeinheit: \hspace{0.2cm} }& 0.1 \text{ (normal)} \hspace{0.65cm} ,0.025 \text{ (fein)} \\
 \text{Lamé-Parameter: \hspace{0.2cm} }& 0.0 \text{ (min)} \hspace{1.2cm}  ,30.0 \text{ (max)} \\

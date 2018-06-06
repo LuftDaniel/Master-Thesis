@@ -86,8 +86,8 @@
 \citation{LagrangeNewton}
 \citation{LagrangeNewton}
 \citation{LagrangeNewton}
-\newlabel{adjointequation}{{2.3}{17}{Adjungierte und Design-Gleichung}{equation.2.3}{}}
-\newlabel{Design equation}{{2.4}{17}{Adjungierte und Design-Gleichung}{equation.2.4}{}}
+\newlabel{adjointequation}{{2.3}{17}{Adjungierte und Designgleichung}{equation.2.3}{}}
+\newlabel{Design equation}{{2.4}{17}{Adjungierte und Designgleichung}{equation.2.4}{}}
 \newlabel{KKT}{{2.6}{17}{Einführung in die theoretischen Grundlagen der Formoptimierung}{equation.2.6}{}}
 \citation{shape_space}
 \citation{LagrangeNewton}
@@ -103,19 +103,19 @@
 \newlabel{shapederivsurfaceperimeter}{{2.14}{20}{Formableitung für das Modellproblem}{equation.2.14}{}}
 \citation{auto-diff}
 \citation{fenics}
+\citation{bfgs2}
+\citation{shape_space}
+\citation{bfgs1}
 \@writefile{toc}{\contentsline {section}{\numberline {3}BFGS-Algorithmus in der Formoptimierung}{21}{section.3}}
 \newlabel{Chap_3}{{3}{21}{BFGS-Algorithmus in der Formoptimierung}{section.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Shape Spaces und Formgradienten}{21}{subsection.3.1}}
 \newlabel{Chap_shapespaces}{{3.1}{21}{Shape Spaces und Formgradienten}{subsection.3.1}{}}
-\citation{bfgs2}
-\citation{shape_space}
-\citation{bfgs1}
 \citation{bfgs1}
 \citation{bfgs2}
 \citation{LeeDGEO}
 \citation{shape_space}
 \citation{shape_space}
-\citation{bfgs1}
+\citation{bfgs2}
 \citation{bfgs1}
 \citation{shape_space}
 \citation{bfgs2}
@@ -140,9 +140,9 @@
 \citation{diffeology}
 \citation{bfgs1}
 \citation{bfgs2}
+\citation{bfgs2}
 \newlabel{linelas}{{3.3}{30}{Lineare Elastizitätsgleichung}{equation.3.3}{}}
 \newlabel{loclame}{{3.4}{30}{Shape Spaces und Formgradienten}{equation.3.4}{}}
-\citation{bfgs2}
 \citation{Nocedal}
 \citation{Nocedal}
 \newlabel{finalformgradient}{{3.5}{31}{Shape Spaces und Formgradienten}{equation.3.5}{}}
@@ -199,41 +199,41 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Der Output}{54}{subsubsection.4.3.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Resultate}{56}{section.5}}
 \newlabel{Chap_results}{{5}{56}{Resultate}{section.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces (a) Ausgangsform kleiner Kreis auf grobem Gitter (b) Ausgangsform kleiner Kreis auf feinem Gitter (c) Zielform gro\IeC {\ss }er Kreis auf feinem Gitter (d) Zielform broken Donut auf feinem Gitter\relax }}{57}{figure.caption.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces (a) Ausgangsform kleiner Kreis auf grobem Gitter (b) Ausgangsform kleiner Kreis auf feinem Gitter (c) Zielform gro\IeC {\ss }er Kreis auf feinem Gitter (d) Zielform broken Donut auf feinem Gitter\relax }}{57}{figure.caption.4}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{Meshes}{{1}{57}{(a) Ausgangsform kleiner Kreis auf grobem Gitter (b) Ausgangsform kleiner Kreis auf feinem Gitter (c) Zielform großer Kreis auf feinem Gitter (d) Zielform broken Donut auf feinem Gitter\relax }{figure.caption.3}{}}
+\newlabel{Meshes}{{1}{57}{(a) Ausgangsform kleiner Kreis auf grobem Gitter (b) Ausgangsform kleiner Kreis auf feinem Gitter (c) Zielform großer Kreis auf feinem Gitter (d) Zielform broken Donut auf feinem Gitter\relax }{figure.caption.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Problem: kleiner zu gro\IeC {\ss }em Kreis}{58}{subsection.5.1}}
 \newlabel{subsect_circle}{{5.1}{58}{Problem: kleiner zu großem Kreis}{subsection.5.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces (a) Gitter nach mehrmaligen Schritten unter Verletzung der Curvature Condition und Non-update Schritten (b) der darauf folgende Schritt, Zerst\IeC {\"o}rung des Gitters\relax }}{59}{figure.caption.4}}
-\newlabel{Destroyedbfgs_grob}{{2}{59}{(a) Gitter nach mehrmaligen Schritten unter Verletzung der Curvature Condition und Non-update Schritten (b) der darauf folgende Schritt, Zerstörung des Gitters\relax }{figure.caption.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces (a) 1. Schritt des BFGS-Verfahrens: Gradientenschritt bei feinem Gitter (b) 2. Schritt: BFGS-Schritt mit Entartung des feinen Gitters\relax }}{59}{figure.caption.5}}
-\newlabel{Destroyedbfgs}{{3}{59}{(a) 1. Schritt des BFGS-Verfahrens: Gradientenschritt bei feinem Gitter (b) 2. Schritt: BFGS-Schritt mit Entartung des feinen Gitters\relax }{figure.caption.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces BFGS-Verfahren ohne Schrittweitensteuerung bei konstanten Lam\IeC {\'e}-Parametern mit Wert 30; die ersten 6 Schritte\relax }}{60}{figure.caption.6}}
-\newlabel{Destroyedkonstlame}{{4}{60}{BFGS-Verfahren ohne Schrittweitensteuerung bei konstanten Lamé-Parametern mit Wert 30; die ersten 6 Schritte\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces (a) Gitter nach mehrmaligen Schritten unter Verletzung der Curvature Condition und Non-update Schritten (b) der darauf folgende Schritt, Zerst\IeC {\"o}rung des Gitters\relax }}{59}{figure.caption.5}}
+\newlabel{Destroyedbfgs_grob}{{2}{59}{(a) Gitter nach mehrmaligen Schritten unter Verletzung der Curvature Condition und Non-update Schritten (b) der darauf folgende Schritt, Zerstörung des Gitters\relax }{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces (a) 1. Schritt des BFGS-Verfahrens: Gradientenschritt bei feinem Gitter (b) 2. Schritt: BFGS-Schritt mit Entartung des feinen Gitters\relax }}{59}{figure.caption.6}}
+\newlabel{Destroyedbfgs}{{3}{59}{(a) 1. Schritt des BFGS-Verfahrens: Gradientenschritt bei feinem Gitter (b) 2. Schritt: BFGS-Schritt mit Entartung des feinen Gitters\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces BFGS-Verfahren ohne Schrittweitensteuerung bei konstanten Lam\IeC {\'e}-Parametern mit Wert 30; die ersten 6 Schritte\relax }}{60}{figure.caption.7}}
+\newlabel{Destroyedkonstlame}{{4}{60}{BFGS-Verfahren ohne Schrittweitensteuerung bei konstanten Lamé-Parametern mit Wert 30; die ersten 6 Schritte\relax }{figure.caption.7}{}}
 \citation{diffusion}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces kleiner Kreis auf gro\IeC {\ss }er Kreis (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }}{61}{figure.caption.7}}
-\newlabel{Konvplots_circle}{{5}{61}{kleiner Kreis auf großer Kreis (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }{figure.caption.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces (a) L-BFGS mit Backtracking bei grobem Gitter. Abweichung bei Ausstieg sichtbar. (b) L-BFGS mit Backtracking bei feinem Gitter. Abweichung bei Ausstieg nicht erkennbar.\relax }}{62}{figure.caption.8}}
-\newlabel{Konvergenzbfgscircle}{{6}{62}{(a) L-BFGS mit Backtracking bei grobem Gitter. Abweichung bei Ausstieg sichtbar. (b) L-BFGS mit Backtracking bei feinem Gitter. Abweichung bei Ausstieg nicht erkennbar.\relax }{figure.caption.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Zielfunktional bei Variation des Skalierungsparameters \textsf  {start\_scale} des Backtracking f\IeC {\"u}r das L-BFGS-Verfahren auf feinen Gittern der Probleme (a) kleiner Kreis auf gro\IeC {\ss }en Kreis (b) kleiner Kreis auf "broken donut"\relax }}{62}{figure.caption.9}}
-\newlabel{plot_startscales}{{7}{62}{Zielfunktional bei Variation des Skalierungsparameters \textsf {start\_scale} des Backtracking für das L-BFGS-Verfahren auf feinen Gittern der Probleme (a) kleiner Kreis auf großen Kreis (b) kleiner Kreis auf "broken donut"\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces kleiner Kreis auf gro\IeC {\ss }er Kreis (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }}{61}{figure.caption.8}}
+\newlabel{Konvplots_circle}{{5}{61}{kleiner Kreis auf großer Kreis (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces (a) L-BFGS mit Backtracking bei grobem Gitter. Abweichung bei Ausstieg sichtbar. (b) L-BFGS mit Backtracking bei feinem Gitter. Abweichung bei Ausstieg nicht erkennbar.\relax }}{62}{figure.caption.9}}
+\newlabel{Konvergenzbfgscircle}{{6}{62}{(a) L-BFGS mit Backtracking bei grobem Gitter. Abweichung bei Ausstieg sichtbar. (b) L-BFGS mit Backtracking bei feinem Gitter. Abweichung bei Ausstieg nicht erkennbar.\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Zielfunktional bei Variation des Skalierungsparameters \textsf  {start\_scale} des Backtracking f\IeC {\"u}r das L-BFGS-Verfahren auf feinen Gittern der Probleme (a) kleiner Kreis auf gro\IeC {\ss }en Kreis (b) kleiner Kreis auf "broken donut"\relax }}{62}{figure.caption.10}}
+\newlabel{plot_startscales}{{7}{62}{Zielfunktional bei Variation des Skalierungsparameters \textsf {start\_scale} des Backtracking für das L-BFGS-Verfahren auf feinen Gittern der Probleme (a) kleiner Kreis auf großen Kreis (b) kleiner Kreis auf "broken donut"\relax }{figure.caption.10}{}}
 \citation{Nocedal}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces (a) Variation des L-BFGS-Parameters \textsf  {memory\_length} bei feinem Gitter des Problems kleiner Kreis auf gro\IeC {\ss }er Kreis. Zu sehen sind 3 verschiedene Graphen, numerische Abweichungen treten erst ab Schritt 5 ab der 3 Nachkommastelle auf, weshalb diese fast gleich aussehen. \newline  (b) \IeC {\"A}nderung der Lam\IeC {\'e}-Parameter und Entfernen der Perimeter-Regularisierung auf feinem Gitter des Problems kleiner Kreis auf "broken donut".\relax }}{63}{figure.caption.10}}
-\newlabel{plot_memlen_lame}{{8}{63}{(a) Variation des L-BFGS-Parameters \textsf {memory\_length} bei feinem Gitter des Problems kleiner Kreis auf großer Kreis. Zu sehen sind 3 verschiedene Graphen, numerische Abweichungen treten erst ab Schritt 5 ab der 3 Nachkommastelle auf, weshalb diese fast gleich aussehen. \newline (b) Änderung der Lamé-Parameter und Entfernen der Perimeter-Regularisierung auf feinem Gitter des Problems kleiner Kreis auf "broken donut".\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces (a) Variation des L-BFGS-Parameters \textsf  {memory\_length} bei feinem Gitter des Problems kleiner Kreis auf gro\IeC {\ss }er Kreis. Zu sehen sind 3 verschiedene Graphen, numerische Abweichungen treten erst ab Schritt 5 ab der 3 Nachkommastelle auf, weshalb diese fast gleich aussehen. \newline  (b) \IeC {\"A}nderung der Lam\IeC {\'e}-Parameter und Entfernen der Perimeter-Regularisierung auf feinem Gitter des Problems kleiner Kreis auf "broken donut".\relax }}{63}{figure.caption.11}}
+\newlabel{plot_memlen_lame}{{8}{63}{(a) Variation des L-BFGS-Parameters \textsf {memory\_length} bei feinem Gitter des Problems kleiner Kreis auf großer Kreis. Zu sehen sind 3 verschiedene Graphen, numerische Abweichungen treten erst ab Schritt 5 ab der 3 Nachkommastelle auf, weshalb diese fast gleich aussehen. \newline (b) Änderung der Lamé-Parameter und Entfernen der Perimeter-Regularisierung auf feinem Gitter des Problems kleiner Kreis auf "broken donut".\relax }{figure.caption.11}{}}
 \citation{bfgs2}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Problem: kleiner Kreis zu 'broken Donut'}{64}{subsection.5.2}}
 \newlabel{subsect_donut}{{5.2}{64}{Problem: kleiner Kreis zu 'broken Donut'}{subsection.5.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) Optimale Form und Zielform bei Gradientenverfahren auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }}{65}{figure.caption.11}}
-\newlabel{brokendonutgradient}{{9}{65}{(a) Optimale Form und Zielform bei Gradientenverfahren auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces (a) Optimale Form und Zielform bei Gradientenverfahren mit Linesearch auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }}{66}{figure.caption.12}}
-\newlabel{brokendonutgradient_linesearch}{{10}{66}{(a) Optimale Form und Zielform bei Gradientenverfahren mit Linesearch auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces kleiner Kreis auf "broken donut" (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }}{66}{figure.caption.13}}
-\newlabel{plot_konvergenzdonut}{{11}{66}{kleiner Kreis auf "broken donut" (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }{figure.caption.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces BFGS-Verfahren bei konstanten Lam\IeC {\'e}-Parameter von 30 (a) Schritt 6 (b) gute Form bei Schritt 12; man beachte die starke Stauchung/ Streckung der Zellen (c) Zerst\IeC {\"o}rung des Gitters bei Schritt 14\relax }}{67}{figure.caption.14}}
-\newlabel{brokendonut_bfgs_konstlame}{{12}{67}{BFGS-Verfahren bei konstanten Lamé-Parameter von 30 (a) Schritt 6 (b) gute Form bei Schritt 12; man beachte die starke Stauchung/ Streckung der Zellen (c) Zerstörung des Gitters bei Schritt 14\relax }{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) Optimale Form und Zielform bei Gradientenverfahren auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }}{65}{figure.caption.12}}
+\newlabel{brokendonutgradient}{{9}{65}{(a) Optimale Form und Zielform bei Gradientenverfahren auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces (a) Optimale Form und Zielform bei Gradientenverfahren mit Linesearch auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }}{66}{figure.caption.13}}
+\newlabel{brokendonutgradient_linesearch}{{10}{66}{(a) Optimale Form und Zielform bei Gradientenverfahren mit Linesearch auf grobem Gitter (b) Selbiges auf feinem Gitter\relax }{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces kleiner Kreis auf "broken donut" (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }}{66}{figure.caption.14}}
+\newlabel{plot_konvergenzdonut}{{11}{66}{kleiner Kreis auf "broken donut" (a) Werte des Zielfunktionals bei den Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten (b) logarithmierte Meshdistanz bei Verfahren mit Linesearch; unterschiedliche Gitterfeinheiten\relax }{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces BFGS-Verfahren bei konstanten Lam\IeC {\'e}-Parameter von 30 (a) Schritt 6 (b) gute Form bei Schritt 12; man beachte die starke Stauchung/ Streckung der Zellen (c) Zerst\IeC {\"o}rung des Gitters bei Schritt 14\relax }}{67}{figure.caption.15}}
+\newlabel{brokendonut_bfgs_konstlame}{{12}{67}{BFGS-Verfahren bei konstanten Lamé-Parameter von 30 (a) Schritt 6 (b) gute Form bei Schritt 12; man beachte die starke Stauchung/ Streckung der Zellen (c) Zerstörung des Gitters bei Schritt 14\relax }{figure.caption.15}{}}
 \citation{bfgsjumpconv}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces L-BFGS-Verfahren mit Linesearch (a) Form bei Ausstieg auf grobem Gitter (b) Form bei Ausstieg auf feinem Gitter\relax }}{68}{figure.caption.15}}
-\newlabel{brokendonut_bfgs_linesearch}{{13}{68}{L-BFGS-Verfahren mit Linesearch (a) Form bei Ausstieg auf grobem Gitter (b) Form bei Ausstieg auf feinem Gitter\relax }{figure.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces L-BFGS-Verfahren mit Linesearch (a) Form bei Ausstieg auf grobem Gitter (b) Form bei Ausstieg auf feinem Gitter\relax }}{68}{figure.caption.16}}
+\newlabel{brokendonut_bfgs_linesearch}{{13}{68}{L-BFGS-Verfahren mit Linesearch (a) Form bei Ausstieg auf grobem Gitter (b) Form bei Ausstieg auf feinem Gitter\relax }{figure.caption.16}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Ausblick und Schlussbetrachtung}{69}{subsection.5.3}}
 \citation{*}
 \bibstyle{plain}
@@ -251,7 +251,7 @@
 \bibcite{b-spline}{11}
 \bibcite{abstract4}{12}
 \bibcite{auto-diff}{13}
-\@writefile{toc}{\contentsline {section}{Literatur}{71}{section*.16}}
+\@writefile{toc}{\contentsline {section}{Literatur}{71}{section*.17}}
 \bibcite{abstract1}{14}
 \bibcite{riemann}{15}
 \bibcite{PDE3}{16}

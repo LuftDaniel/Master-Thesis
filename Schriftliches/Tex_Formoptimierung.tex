@@ -1,17 +1,7 @@
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Quelle zu Shape opt?
-%Andere Ansätze als direkt Shape opt, zb splines, ffd etc
-%Formfunktional erklären in einem kurzen Abschnitt?
-%wie zitiere ich Schulz's Vorlesung?
-%material- und formableitung?
-%variationsungleichungen?
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Einführung in die theoretischen Grundlagen der Formoptimierung}
 \label{Chapter_formopt}
-\colorbox{red}{welche richtungen V sind in hold all domain als ableitung erlaubt?}
 
 In diesem Kapitel möchten wir eine Einführung in die grundlegenden Begriffe der Formoptimierung geben.
 Die Formoptimierung ist der Bereich des Optimal Control, welcher sich mit der Wahl einer, in gewisser Hinsicht, optimalen Form beschäftigt. Anders als in der klassischen PDE-constrained Optimization ist hier die Steuerung somit keine Funktion, sondern eine Form. Was man mathematisch präzise unter Formen versteht, werden wir im Laufe dieser Kapitels präzisieren.
@@ -138,7 +128,7 @@ Diese Lagrangefunktion ermöglicht es uns, Optimalitätskriterien für das PDE b
 
 Wir fahren fort mit notwendigen Optimalitätskriterien für Lösungen, welche gegeben werden in Form von Variationsformulierungen, siehe \cite{LagrangeNewton}, Definition 2.1, wobei dort hinreichend glatte Richtungen $V$ verwendet werden.
 
-\begin{defi}[Adjungierte und Design-Gleichung]
+\begin{defi}[Adjungierte und Designgleichung]
 	Betrachte ein PDE beschränktes Formoptimierungsproblem mit differenzierbarem Formfunktional $\mathcal{J}$. Verwende die Notation von \ref{lagrangefunction} und bezeichne mit $D\mathcal{J}$ die zu $\mathcal{J}$ gehörige Formableitung. Seien $\tilde{y} \in H(\tilde{\Omega})$ und $\tilde{\Omega}\in \mathcal{O}$ optimale Lösungen des Problems \ref{PDE constrained equation}. Dann gilt die Variationsgleichung
 \begin{equation}\label{adjointequation}
 	a_{\tilde{\Omega}}(\tilde{y},z) = - \frac{\partial}{\partial y} \mathcal{J}(\tilde{y},\tilde{\Omega})(z) \quad \forall z\in H(\tilde{\Omega}),
@@ -180,9 +170,8 @@ Wir führen jetzt noch eine technische Notation zur Beschreibung von Sprüngen a
 
 Die obigen Definition ist dabei so zu verstehen, dass jeweils Grenzwerte von innerhalb, und von außerhalb $\Omega$ gebildet werden, und diese dann voneinander abgezogen werden, sofern diese existieren. Die Existenz eines sinnvollen Inneren und Äußeren ist durch die Regularität des Gebietes gewährleistet.
 
-Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehöriger Optimalitätsbedingungen und Ableitungen. Hierzu wählen wir wie vorweggenommen das Poissonproblem \ref{Poissonproblem}, für welches wir ausreichende Theorie in Kapitel \ref{Chapter_grundlagenpde} eingeführt haben. Das Problem findet sich in ähnlicher Art in \cite{shape_space}, 4.2., sowie in \cite{LagrangeNewton}, unter Remark 2.
+Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehöriger Optimalitätsbedingungen und Ableitungen. Hierzu wählen wir wie vorweggenommen das Poissonproblem \ref{Poissonproblem}, für welches wir ausreichende Theorie in Kapitel \ref{Chapter_grundlagenpde} eingeführt haben. Das Problem findet sich in ähnlicher Art in \cite{shape_space}, 4.2., sowie in \cite{LagrangeNewton}, unter Remark 2, wobei wir die Notation nicht von der Wahl des Gebietes $\Omega$ abhängen lassen, dies aber implizit meinen.
 
-\colorbox{red}{sollte ich die Notation von der Form Omega abhängen lassen?}
 \begin{defi}[Modellproblem]
 	Sei $\mathcal{D} := (0,1)^2 \subset \mathbb{R}^2$ das Einheitsquadrat im $\mathbb{R}^2$, welches als hold-all-domain fungiert.
 	Weiterhin sei $\Omega \subset (0,1)^2$ ein reguläres Gebiet in der hold-all-domain mit zugehöriger Form $\partial\Omega$, und eine stückweise konstante Funktion $f \in \mathcal{L}^2((0,1)^2)$ der Art
@@ -203,7 +192,7 @@ Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehö
 	\begin{equation}\label{Interfacecondition}
 		[[y]] = 0, \quad \Big[\Big[\frac{\partial y}{\partial n}\Big]\Big] = 0 \quad \text{auf } \partial \Omega,
 	\end{equation}
-	wobei $n$ das äußere Normalenvektorfeld auf $\partial\Omega$ ist.	Zusammen erhalten wir die schwache Formulierung der Zustandsgleichung
+	wobei $n$ das äußere Einheitsnormalenvektorfeld auf $\partial\Omega$ ist.	Zusammen erhalten wir die schwache Formulierung der Zustandsgleichung
 	\begin{equation}
 		\underset{\mathcal{D}}{\int} \nabla y^T \nabla p\; dx - \underset{\partial\Omega}{\int} \Big[\Big[ \frac{\partial y}{\partial n}p\Big]\Big]\;ds = \underset{\mathcal{D}}{\int} fp \;dx \quad \forall p \in H^1_0(\mathcal{D}).
 	\end{equation}
@@ -227,9 +216,7 @@ wird gemeinhin als \textit{Perimeter-Regularisierung} bezeichnet, wobei $\nu > 0
 
 Die Zustandsgleichung ist ein gewöhnliches Poisson-Problem mit Dirichlet-Randwerten, welches wir hier symbolisch in starker Form notiert haben. Die starke Notation repräsentiert hier also die Variationsformulierung des Poisson-Problems mit Dirichlet-Randwerten, wobei gleiches für die adjungierte Gleichung gilt. Für die Herleitung der adjungierten Gleichung, welche mittels \ref{adjointequation} erfolgt, verweisen wir auf \cite{shape_space}, 4.2.1. Die Existenz einer Lösung der  Zustands- als auch adjungierten Gleichung sind gesichert durch das in \ref{LaxMilgram} eingeführte Lemma von Lax-Milgram.
 
-Die Interface Condition \ref{Interfacecondition} sorgt bei uns dafür, dass der Zustand $y$ stetig vom inneren Gebiet $\Omega$ zum äußeren Gebiet $\mathcal{O} \setminus \Omega$ verläuft, sowie, dass der Fluss $\frac{\partial y }{\partial n}$ auch stetig ist. Ohne die Interface Condition wäre dies für allgemeine Probleme nicht der Fall, in unserem Falle wäre jedoch das Weglassen dieser möglich. 
-
-\colorbox{red}{und sorgt doch für existenz einer eindeutigen lösung?! lax-milgram reicht nicht oder?}
+Die Interface Condition \ref{Interfacecondition} sorgt bei uns dafür, dass der Zustand $y$ stetig vom inneren Gebiet $\Omega$ zum äußeren Gebiet $\mathcal{O} \setminus \Omega$ verläuft, sowie, dass der Fluss $\frac{\partial y }{\partial n}$ auch stetig ist. Ohne die Interface Condition wäre dies für allgemeine Probleme nicht der Fall, in unserem Falle wäre jedoch das Weglassen dieser wegen Regularität der Lösung möglich. 
 
 Damit wir Wohldefiniertheit von im folgenden Kapitel \ref{Chap_shapespaces} definierten Metriken für Formräume sicherstellen können, benötigen wir, dass $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega)$ ist. Mit unseren Voraussetzungen $f,\bar{y} \in \mathcal{L}^2((0,1)^2)$, sowie einem hinreichend glatten Rand $\partial\Omega$, erhalten wir $y\in H^2((0,1)^2)$ nach dem Satz  \ref{higherregularity} für höhere Regularität der Lösung. Kombiniert man dies mit den auf Sobolev-Slobodeckij-Räumen verallgemeinerten Spursatz \ref{tracetheorem}, so erhalten wir wie gewünscht $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega)$. Ob die hinreichend glatten Ränder in der Theorie und Praxis gerechtfertigt sind, ist wie schon erwähnt eine gänzlich andere wichtige Diskussion, welche wir in dieser Arbeit nicht führen möchten.
 
@@ -254,7 +241,7 @@ Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung a
 	\begin{equation}\label{shapederivsurfaceperimeter}
 	D\mathcal{J}_{reg}(\Omega)[V] = \nu\underset{\partial\Omega}{\int} \text{div}(V) - \langle\frac{\partial V}{\partial n}, n\rangle ds,
 	\end{equation}
-	wobei $n$ erneut das äußere Normalenvektorfeld von $\partial\Omega$ ist.
+	wobei $n$ erneut das äußere Einheitsnormalenvektorfeld von $\partial\Omega$ ist.
 \end{theorem}
 
 Diese Formableitungen lassen sich nun in ableitungsbasierten Optimierungsmethoden verwenden. Wie man sieht, muss man zum Auswerten der Formableitung in einer bestimmten Form $\partial\Omega$ die zugehörige Zustandsgleichung bei \ref{Modellproblem}, und die entsprechende adjungierte Gleichung \ref{adjointequation} lösen. Weiter ließe sich dann aus der Ableitungsinformation ein Gradient erzeugen, mit dessen Hilfe man beispielsweise ein Verfahren des steilsten Abstiegs einsetzen kann. Um einen solchen Gradienten zu definieren, werden wir uns im folgenden Kapitel Gedanken machen, welche zugrundeliegende Metrik wir auf dem Raum aller Formen annehmen, um mit dieser einen Gradienten in Anlehnung an den Riesz'schen Darstellungssatz zu definieren. An dieser Stelle sei erwähnt, dass wir hier Gebrauch von der geschlossenen Darstellung der Formableitung machen, welche wir in späteren Kapiteln implementieren werden. Die Formulierung der Formableitung der Perimeter-Regularisierung, welche ohne Krümmungsterm $\kappa$ auskommt, wird von uns bevorzugt implementiert, da dies die Berechnung der Krümmung vermeidet, und somit eine Verallgemeinerung unseres Programms auf 3 Dimensionen erleichtert.
