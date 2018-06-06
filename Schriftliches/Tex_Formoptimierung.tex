@@ -9,10 +9,8 @@
 %variationsungleichungen?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Einführung in die Formoptimierung}
+\section{Einführung in die theoretischen Grundlagen der Formoptimierung}
 \label{Chapter_formopt}
-\colorbox{red}{dJ oder DJ} \newline
-\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)} \newline
 \colorbox{red}{welche richtungen V sind in hold all domain als ableitung erlaubt?}
 
 In diesem Kapitel möchten wir eine Einführung in die grundlegenden Begriffe der Formoptimierung geben.
@@ -25,7 +23,7 @@ Um nicht den Rahmen dieser Arbeit zu sprengen, verweisen wir für weiterführend
 Bei der numerischen Optimierung werden Objekte hinsichtlich durch Zielfunktionale definierter Kriterien bewertet. Die Güte einer Form ist dabei, siehe \cite{shape_space} oder \cite{bfgs2}, gegeben durch den skalaren Wert bei Auswertung eines sogenannten Formfunktionals.
 
 \begin{defi}[Formfunktional] %\label{Formfunktional}
-Sei $\mathcal{D}\subset \mathbb{R}^d$ nicht leer und offen mit $d \in \mathbb{N}_+$. Weiterhin sei $\mathcal{O} \subseteq 2^{\mathcal{D}}$ die Menge aller offenen Teilmengen von $\mathcal{D}$. Dann heißt die Abbildung 
+Sei $\mathcal{D}\subset \mathbb{R}^n$ nicht leer und offen mit $d \in \mathbb{N}_+$. Weiterhin sei $\mathcal{O} \subseteq 2^{\mathcal{D}}$ die Menge aller offenen Teilmengen von $\mathcal{D}$. Dann heißt die Abbildung 
 \begin{align*}
 \mathcal{J}: \mathcal{O} \rightarrow \mathbb{R},\; \Omega \rightarrow \mathcal{J}(\Omega)
 \end{align*}
@@ -34,24 +32,24 @@ Sei $\mathcal{D}\subset \mathbb{R}^d$ nicht leer und offen mit $d \in \mathbb{N}
 
 In der Literatur wird die Menge $\mathcal{D}$ oft \textit{hold-all-domain} genannt, siehe etwa die oben genannten Quellen. Alle Formen, die zur Optimierung in Betracht gezogen werden, lassen sich in die hold-all-domain einbetten.
 
-Da die Menge aller zur Optimierung verwendeten Formen $\mathcal{O}$ aus Perspektive der Praxis zu groß ist, fordern wir einige Regularitätseigenschaften, wie etwa in \cite{Shape_diff}, und passen diese unserer Situation an:
+Da die Menge aller zur Optimierung verwendeten Formen $\mathcal{O}$ aus Perspektive der Praxis zu groß ist, fordern wir einige Regularitätseigenschaften, wie etwa in \cite{Shape_diff} und \cite{sokol}, und passen diese unserer Situation an:
 
 \begin{defi}[reguläre Formen]\label{regu}
 Sei $\Omega \in \mathcal{O}$ ein zulässiges Gebiet, $\varepsilon > 0$, $\text{int}(\Omega)$ das Innere und $\partial\Omega$ der Rand von $\Omega$. Falls gilt:
 \begin{itemize}
-\item[i)] $\partial \Omega$ ist eine $(d-1)$-dimensionale Untermannigfaltigket des $\mathbb{R}^d$, und zu jedem Punkt $p\in \partial \Omega$ existieren offene Umgebungen $U\subseteq \mathbb{R}^{d-1}, V\subseteq \mathbb{R}^d$, mit einer zugehörigen Parametrisierung $\varphi: U \rightarrow \mathbb{R}^d$, und einer hinreichend differenzierbaren Erweiterung $h: V \rightarrow \mathbb{R}^d$, so dass lokal gilt:\\
+\item[i)] $\partial \Omega$ ist eine $(d-1)$-dimensionale Untermannigfaltigket des $\mathbb{R}^n$, und zu jedem Punkt $p\in \partial \Omega$ existieren offene Umgebungen $U\subseteq \mathbb{R}^{d-1}, V\subseteq \mathbb{R}^n$, mit einer zugehörigen Parametrisierung $\varphi: U \rightarrow \mathbb{R}^n$, und einer hinreichend differenzierbaren Erweiterung $h: V \rightarrow \mathbb{R}^n$, so dass lokal gilt:\\
 $h(x,0) = \varphi(x)$ und $h(x,x_d) \in \text{int}(\Omega)$, falls $-\varepsilon < x_d < 0$.
-\item[i)] $\Omega$ ist zusammenhängend, beschränkt und besitzt einen Lipschitzrand.
+\item[ii)] $\Omega$ ist zusammenhängend, beschränkt und besitzt einen Lipschitzrand.
 \end{itemize}
 Dann heißt $\Omega$ \textit{reguläres Gebiet} und $\partial\Omega$ \textit{reguläre Form}.
 \end{defi}
 
-Anschaulich bedeutet die erste Forderung an Regularität, dass sich $\partial\Omega$ lokal so parametrisieren lässt, dass durch hinzufügen einer weiteren Koordinate $x_d$ der umgebende Raum mit parametrisiert wird und anhand des Vorzeichens von $x_d$ erkennbar ist, ob sich der zugehörige Punkt $h(x,x_d)$ im Inneren oder außerhalb von $\Omega$ befindet.
+Anschaulich bedeutet die erste Forderung an Regularität, dass sich $\partial\Omega$ lokal so parametrisieren lässt, dass durch hinzufügen einer weiteren Koordinate $x_d$ der umgebende Raum mit parametrisiert wird und anhand des Vorzeichens von $x_d$ erkennbar ist, ob sich der zugehörige Punkt $h(x,x_d)$ im Inneren oder außerhalb von $\Omega$ befindet. Dies erleichtert die Beschreibung äußerer Normalen.
 
 Nun möchten wir die Problemstellung der Formoptimierung im Rahmen dieser Arbeit definieren, in Analogie zu \cite{LagrangeNewton}.
 
 \begin{defi}[Abstraktes Formoptimierungsproblem]
-Sei $\mathcal{O}$ die Menge aller zulässigen Gebiete einer hold-all-domain $\mathcal{D}\subseteq\mathbb{R}^d$ und $\mathcal{J}$ ein auf dieser Menge beschränktes, wohldefiniertes Formfunktional. Weiterhin seien $Y,Z$ Banachräume und $c: Y\times \mathcal{O} \rightarrow Z$ eine hinreichend glatte Abbildung. Dann heißt das Problem
+Sei $\mathcal{O}$ die Menge aller zulässigen Gebiete einer hold-all-domain $\mathcal{D}\subseteq\mathbb{R}^n$ und $\mathcal{J}$ ein auf dieser Menge beschränktes, wohldefiniertes Formfunktional. Weiterhin seien $Y,Z$ Banachräume und $c: Y\times \mathcal{O} \rightarrow Z$ eine hinreichend glatte Abbildung. Dann heißt das Problem
 
 \begin{align*}
 	\underset{(y,\Omega) \in Y \times \mathcal{O}}{\min} \mathcal{J}(y,\Omega) \\
@@ -67,12 +65,12 @@ Der in Definition \ref{regu} geforderte Lipschitzrand ist sowohl aus theoretisch
 Die Verfahren zur Optimierung von Formen bei partiellen Differentialgleichungen, die wir in dieser Arbeit betrachten, basieren auf der Differenzierbarkeit der obigen Ausdrücke, unter anderem bezüglich der Form $\Omega$. Im Folgenden führen wir die hierzu gehörigen Begriffe ein. Zunächst betrachten wir Deformationen von Gebieten in Analogie zu \cite{bfgs2}.
 
 \begin{defi}[Deformiertes Gebiet]
-Sei $\Omega\in\mathcal{O}$ ein zulässiges Gebiet, $\tau > 0$, sei $\{T_t\}_{t\in [0,\tau]}$ eine Familie von bijektiven Abbildungen $T_t: \Omega \rightarrow \mathbb{R}^d$ mit $T_0 = id$. Dann heißt $\Omega_t := \{T_t(x) \vert x\in\Omega\}$ \textit{deformiertes Gebiet}.
+Sei $\Omega\in\mathcal{O}$ ein zulässiges Gebiet, $\tau > 0$, sei $\{T_t\}_{t\in [0,\tau]}$ eine Familie von bijektiven Abbildungen $T_t: \Omega \rightarrow \mathbb{R}^n$ mit $T_0 = id$. Dann heißt $\Omega_t := \{T_t(x) \vert x\in\Omega\}$ \textit{deformiertes Gebiet}.
 \end{defi}
 
-Zwei häufig Verwendung findende Arten solcher Familien von Deformationen $\{T_t\}_{t\in [0,\tau]}$ sind die \textit{Pertubation of Identity} und die \textit{Velocity method}, siehe \cite{bfgs2}. Die \textit{Pertubation of Identity} ist definiert über ein hinreichend differenzierbares Vektorfeld $V \in C^2(\mathbb{R}^d,\mathbb{R}^d)$ durch
+Zwei häufig Verwendung findende Arten solcher Familien von Deformationen $\{T_t\}_{t\in [0,\tau]}$ sind die \textit{Pertubation of Identity} und die \textit{Velocity method}, siehe \cite{bfgs2}. Die \textit{Pertubation of Identity} ist definiert über ein hinreichend differenzierbares Vektorfeld $V$ durch
 \begin{align*}
-	T_t: \Omega \rightarrow \mathbb{R}^d, x \mapsto x + tV(x).
+	T_t: \Omega \rightarrow \mathbb{R}^n, x \mapsto x + tV(x).
 \end{align*}
 Die Deformationen der \textit{Velocity method} sind definiert durch den Fluss $T_t(x) := \xi(t,x)$, welcher gegeben ist durch das Anfangswertproblem
 \begin{align*}
@@ -83,37 +81,40 @@ Die Deformationen der \textit{Velocity method} sind definiert durch den Fluss $T
 Für den Rest dieser Arbeit werden wir die Pertubation of Identity verwenden. Mit Hilfe der eingeführten Deformationen können wir nun die Formableitung nach \cite{bfgs2} definieren. 
 
 \begin{defi}[Formableitung]
-Sei $\Omega \in \mathcal{O}$ eine zulässige Form, $V\in C^2(\mathbb{R}^d,\mathbb{R}^d)$ ein differenzierbares Vektorfeld, und $\mathcal{J}: \mathcal{O} \rightarrow \mathbb{R}$ ein Formfunktional. Falls der Grenzwert
+Sei $\Omega \in \mathcal{O}$ ein reguläres Gebiet, $V\in C^1(\Omega,\mathbb{R}^n)$ ein differenzierbares Vektorfeld, und $\mathcal{J}: \mathcal{O} \rightarrow \mathbb{R}$ ein Formfunktional. Falls der Grenzwert
 \begin{align*}
-	d\mathcal{J}(\Omega)[V] := \underset{t \rightarrow 0^+}{\lim}
+	D\mathcal{J}(\Omega)[V] := \underset{t \rightarrow 0^+}{\lim}
 	\frac{\mathcal{J}(\Omega_t) - \mathcal{J}(\Omega)}{t}
 \end{align*}
 existiert, und die Abbildung 
 \begin{align*}
-	d\mathcal{J}(\Omega)[\cdot]: C^2(\mathbb{R}^d,\mathbb{R}^d) \rightarrow 						\mathbb{R}, V \mapsto d\mathcal{J}(\Omega)[V]
+	D\mathcal{J}(\Omega)[\cdot]: C^1(\Omega,\mathbb{R}^n) \rightarrow 						\mathbb{R}, V \mapsto D\mathcal{J}(\Omega)[V]
 \end{align*}
-stetig und linear für alle $V \in C^2(\mathbb{R}^d,\mathbb{R}^d)$ ist, so heißt $d\mathcal{J}(\Omega)[V]$ \textit{Formableitung} von $\mathcal{J}$ in $\Omega$ in Richtung $V$.
+stetig und linear für alle $V \in C^1(\Omega,\mathbb{R}^n)$ ist, so heißt $D\mathcal{J}(\Omega)[V]$ \textit{Formableitung} von $\mathcal{J}$ in $\Omega$ in Richtung $V$.
 \end{defi}
+
+Es ist denkbar, die Richtungen $V$ etwas allgemeiner zu wählen, indem man $H^1$-Vektorfelder als Ableitungsrichtung zulässt. Dies hängt mit der nötigen Anwendung des Transformationssatzes bei der Formableitung zusammen, dessen Anwendung durch Voraussetzungen an die Form und Ableitungsrichtung gesichert sein sollte. Die obige Allgemeinheit wird für unsere Ziele völlig ausreichen.
 
 Die Formableitung besitzt zwei äquivalente Formulierungen, die sogenannte \textit{Volumenformulierung}, gekennzeichnet durch $\Omega$, und die \textit{Randformulierung}, gekennzeichnet durch $\Gamma := \partial \Omega$, siehe \cite{bfgs2}:
 
 \begin{equation}
 \label{VolumenRandformulierung}
 \begin{aligned}
-	d\mathcal{J}_\Omega(\Omega)[V] &= \underset{\Omega}{\int}F(x)V(x)dx\\
+	D\mathcal{J}_\Omega(\Omega)[V] &= \underset{\Omega}{\int}F(x)V(x)dx\\
 	\vspace{0.5cm}
-	d\mathcal{J}_\Gamma(\Omega)[V] &= \underset{\Gamma}{\int}f(s)\langle V(s),n(s)\rangle ds,
+	D\mathcal{J}_\Gamma(\Omega)[V] &= \underset{\Gamma}{\int}f(s)\langle V(s),n(s)\rangle ds,
 \end{aligned}
 \end{equation}
 
-wobei $F(x)$ ein (Differential-) Operator ist, welcher linear auf das Richtungsvektorfeld $V$ wirkt, sowie einer Funktion $f: \Gamma \rightarrow \mathbb{R}$. Die Existenz einer zur Volumenform äquivalenten Randformulierung ist gesichert durch den \textit{Hadamard'schen Darstellungssatz}. Dieser liefert im Allgemeinen die Existenz einer Distribution $f$, so dass Volumen- und Randformulierung der  Formableitung äquivalent sind, für die genaue Aussage, siehe \cite{shape_space}, Theorem 4.7. Wir werden in dieser Arbeit stets voraussetzen, dass genügend Regularität vorhanden ist, so dass $d\mathcal{J}$ in der Tat mittels einer Funktion $f$ auf dem Rand darstellbar ist.
+wobei $F(x)$ ein (Differential-) Operator ist, welcher linear auf das Richtungsvektorfeld $V$ wirkt, sowie einer Funktion $f: \Gamma \rightarrow \mathbb{R}$. Die Existenz einer zur Volumenform äquivalenten Randformulierung ist gesichert durch den \textit{Hadamard'schen Darstellungssatz}. Dieser liefert im Allgemeinen die Existenz einer Distribution $f$, so dass Volumen- und Randformulierung der  Formableitung äquivalent sind, für die genaue Aussage, siehe \cite{shape_space}, Theorem 4.7. Wir werden in dieser Arbeit stets voraussetzen, dass genügend Regularität vorhanden ist, so dass $D\mathcal{J}$ in der Tat mittels einer Funktion $f$ auf dem Rand darstellbar ist.
 
 Die hier definierte Formableitung ist im Englischen auch bekannt als \textit{Eulerian Semiderivative} oder \textit{Lie Semiderivative}. Es gibt weitere äquivalente Varianten die Formableitung zu definieren, hierzu siehe \cite{Shape_diff}. Oft von zentraler Schwierigkeit in der theoretischen Behandlung von Formoptimierungsproblemen ist der Nachweis der Formdifferenzierbarkeit eines Formfunktionals. Hierzu gibt es eine Vielzahl von verschiedenen Techniken, beispielsweise der Min-Max Formulierung von Correa und Seeger, Céa's klassischer Lagrange-Methode oder der Methoden mittels Materialableitung. Da wir diese nicht explizit verwenden werden, sondern die Resultate aus entsprechenden Quellen zitieren werden, führen wir nicht in diese ein, und verweisen den interessierten Leser auf \cite{Shape_diff}, wo diese in einheitlicher Notation geordnet zusammengetragen sind.
 
-Wir kommen nun zu einer, zwar immernoch abstrakt gehaltenen, jedoch konkreter anwendungsbezogenen Formulierung von Formoptimierungsproblemen.
+Wir kommen nun zu einer, zwar immernoch abstrakt gehaltenen, jedoch konkreter anwendungsbezogenen Formulierung von Formoptimierungsproblemen, vgl. \cite{LagrangeNewton}, Abschnitt 2.
 
 \begin{defi}[PDE beschränktes Formoptimierungsproblem]\label{Pde constrained shape}
-Sei $\mathcal{J}$ ein Formfunktional, sei $\Omega \in \mathcal{O}$ eine zulässige Form einer hold-all-domain $\mathcal{D}$. Weiterhin sei $y\in H(\Omega)$ eine Funktion aus dem von $\Omega$ abhängigen Hilbertraum $H(\Omega)$. Betrachte eine von $\Omega$ abhängige Bilinearform $a_{\Omega}: H(\Omega) \times H(\Omega) \rightarrow \mathbb{R}$ und eine ebenso von $\Omega$ abhängige Linearform $b_{\Omega}: H(\Omega) \rightarrow \mathbb{R}$. Dann heißt das beschränkte Minimierungsproblem
+Sei $\mathcal{J}$ ein Formfunktional, sei $\Omega \in \mathcal{O}$ eine zulässige Form aus einer hold-all-domain $\mathcal{D}\subset
+\mathbb{R}^n$. Weiterhin sei $y\in H(\Omega)$ eine Funktion aus dem von $\Omega$ abhängigen Hilbertraum $H(\Omega)$. Betrachte eine von $\Omega$ abhängige Bilinearform $a_{\Omega}: H(\Omega) \times H(\Omega) \rightarrow \mathbb{R}$ und eine ebenso von $\Omega$ abhängige Linearform $b_{\Omega}: H(\Omega) \rightarrow \mathbb{R}$. Dann heißt das beschränkte Minimierungsproblem
 \begin{equation}\label{PDE constrained equation}
 	\begin{aligned}
 	&\underset{y,\Omega}{\min}\;\mathcal{J}(y,\Omega) \\
@@ -123,7 +124,7 @@ Sei $\mathcal{J}$ ein Formfunktional, sei $\Omega \in \mathcal{O}$ eine zulässi
 \textit{PDE beschränktes Formoptimierungsproblem} (engl.\textit{PDE-constrained  \newline shape-optimization problem}).
 \end{defi}
 
-Mit der Gleichungsnebenbedingung deuten wir direkt an die Variationsformulierung partieller Differentialgleichungen an. Außerdem haben wir diese Definition aus \cite{LagrangeNewton} etwas abgewandelt, um eine Einführung in Begriffe der Bündeltheorie zu vermeiden. Das wird uns bequemer ermöglichen, weitere Definitionen und Techniken entsprechend anzugeben, womit wir direkt beginnen.
+Mit der Gleichungsnebenbedingung deuten wir direkt an die Variationsformulierung partieller Differentialgleichungen an. Außerdem haben wir diese Definition aus \cite{LagrangeNewton}, Definition 2.1, etwas abgewandelt, um eine Einführung in Begriffe der Bündeltheorie zu vermeiden. Das wird uns bequemer ermöglichen, weitere Definitionen und Techniken entsprechend anzugeben, womit wir direkt beginnen.
 
 \begin{defi}[Lagrangefunktion]\label{lagrangefunction}
 Betrachte ein PDE beschränktes Formoptimierungsproblem. Sei $\Omega \in \mathcal{O}$ eine reguläres Gebiet, $H(\Omega)$ ein von diesem Gebiet abhängiger Hilbertraum. Weiterhin seien $y,p\in H(\Omega)$. Dann heißt die Funktion
@@ -135,18 +136,18 @@ Betrachte ein PDE beschränktes Formoptimierungsproblem. Sei $\Omega \in \mathca
 
 Diese Lagrangefunktion ermöglicht es uns, Optimalitätskriterien für das PDE beschränkte Formoptimierungsproblem aufzustellen. Ein problematischer, und gleichzeitig vorteilhafter Aspekt des rein formalen Lagrangeansatzes ist, dass die Regularität der Funktionen, für welche die Lagrangefunktion definiert ist, im Vorfeld nicht bekannt sein muss oder ist. Aus diesem Grunde ist eine ex-post Analyse der zur konsistenten Beschreibung nötigen Funktionenräume wichtig. 
 
-Wir fahren fort mit notwendigen Optimalitätskriterien für Lösungen, welche gegeben werden in Form von Variationsformulierungen, siehe \cite{LagrangeNewton}
+Wir fahren fort mit notwendigen Optimalitätskriterien für Lösungen, welche gegeben werden in Form von Variationsformulierungen, siehe \cite{LagrangeNewton}, Definition 2.1, wobei dort hinreichend glatte Richtungen $V$ verwendet werden.
 
 \begin{defi}[Adjungierte und Design-Gleichung]
-	Betrachte ein PDE beschränktes Formoptimierungsproblem mit differenzierbarem Formfunktional $\mathcal{J}$. Verwende die Notation von \ref{lagrangefunction} und bezeichne mit $d\mathcal{J}$ die zu $\mathcal{J}$ gehörige Formableitung. Seien $\tilde{y} \in H(\tilde{\Omega})$ und $\tilde{\Omega}\in \mathcal{O}$ optimale Lösungen des Problems \ref{PDE constrained equation}. Dann gilt die Variationsgleichung
+	Betrachte ein PDE beschränktes Formoptimierungsproblem mit differenzierbarem Formfunktional $\mathcal{J}$. Verwende die Notation von \ref{lagrangefunction} und bezeichne mit $D\mathcal{J}$ die zu $\mathcal{J}$ gehörige Formableitung. Seien $\tilde{y} \in H(\tilde{\Omega})$ und $\tilde{\Omega}\in \mathcal{O}$ optimale Lösungen des Problems \ref{PDE constrained equation}. Dann gilt die Variationsgleichung
 \begin{equation}\label{adjointequation}
 	a_{\tilde{\Omega}}(\tilde{y},z) = - \frac{\partial}{\partial y} \mathcal{J}(\tilde{y},\tilde{\Omega})(z) \quad \forall z\in H(\tilde{\Omega}),
 \end{equation}
 welche wir als \textit{adjungierte Gleichung} bezeichnen. Sei $\tilde{p} \in H(\tilde{\Omega})$ die Lösung der adjungierten Gleichung \ref{adjointequation}. Dann gilt weiterhin die Variationsgleichung
 \begin{equation}\label{Design equation}
-	d\mathcal{L}(\tilde{y}, \tilde{\Omega}, \tilde{p})[V] = 0 \quad \forall V \in C^\infty(\tilde{\Omega},\tilde{\Omega}),
+	D\mathcal{L}(\tilde{y}, \tilde{\Omega}, \tilde{p})[V] = 0 \quad \forall V \in C^1(\tilde{\Omega},\mathbb{R}^n),
 \end{equation}
-welche wir als \textit{Design Gleichung} bezeichnen werden, wobei $\mathcal{L}$ die zugehörige Lagrangefunktion wie in \ref{lagrangefunction}, und $d\mathcal{L}$ die zugehörige Formableitung ist. Außerdem gilt
+welche wir als \textit{Design Gleichung} bezeichnen werden, wobei $\mathcal{L}$ die zugehörige Lagrangefunktion wie in \ref{lagrangefunction}, und $D\mathcal{L}$ die zugehörige Formableitung ist. Außerdem gilt
 \begin{equation}
 	a_{\tilde{\Omega}}(\tilde{y},p) = b_{\tilde{\Omega}}(p) \quad \forall p \in H(\tilde{\Omega}),
 \end{equation}
@@ -162,24 +163,22 @@ Wie man unschwer erkennt, entstehen die notwendigen Bedingungen aus den Ableitun
 	h_y \\
 	h_{\Omega} \\
 	h_p
-	\end{matrix}\right)	 = 0 \quad \forall h_{\Omega} \in C^{\infty}(\tilde{\Omega},\tilde{\Omega})\;
+	\end{matrix}\right)	 = 0 \quad \forall h_{\Omega} \in C^{1}(\tilde{\Omega},\mathbb{R}^n)\;
 	\forall h_y, h_p \in H(\tilde{\Omega})
 \end{aligned}
 \end{equation}
 als notwenige Bedingung zur Lösung von \ref{PDE constrained equation}, siehe \cite{LagrangeNewton}, wobei wir die dortige Formulierung mit Hilfe von Vektorbündeln auf die hier angepasste Notation übersetzt haben, was aufgrund der Definition des Tangentialbündels mittels von Formen abhängiger Kreuzprodukte von Hilberträumen  möglich ist. An dieser Stelle wäre es möglich einen Lagrange-Newton Ansatz durchzuführen, und ein Verfahren zur Lösung des Problems \ref{PDE constrained equation} mit quadratischer Konvergenz zu gewinnen, was die Autoren von \cite{LagrangeNewton} getan haben. Diesen führen wir kurz im nächsten Kapitel unter \ref{shapenewtonproblem} auf.
 
-Wir führen jetzt noch eine technische Notation zur Beschreibung von Sprüngen auf Rändern ein, vgl. \cite{LagrangeNewton}, woraufhin wir unser Modellproblem definieren.
+Wir führen jetzt noch eine technische Notation zur Beschreibung von Sprüngen auf Rändern ein, vgl. \cite{LagrangeNewton}, Abschnitt 3, woraufhin wir unser Modellproblem definieren.
 
-\colorbox{red}{ist das technisch überhaupt korrekt? kann ja beides }\newline
-\colorbox{red}{nicht auf dem Rand definiert sein wenn man es auf}\newline
-\colorbox{red}{ offene Gebiete einschränkt, höchsten auf Abschlüssen... oder ecklige Grenzwerte benutzen von innen und außen}\newline
-\colorbox{red}{habe das direkt aus dem stek poincare paper so entnommen}
 \begin{defi}
 	Sei $\Omega \subset \mathcal{D}$ ein reguläres Gebiet einer hold-all-domain $\mathcal{D}$. Dann definieren wir das \textit{Sprungsymbol} $[[\cdot]]$, für eine auf $\mathcal{D}$ definierte Funktion $f$, auf dem Rand $\partial\Omega$ durch
 	\begin{align*}
 		[[f]] = f_{\vert \mathcal{D} \setminus \Omega} - f_{\vert \Omega}.
 	\end{align*}
 \end{defi}
+
+Die obigen Definition ist dabei so zu verstehen, dass jeweils Grenzwerte von innerhalb, und von außerhalb $\Omega$ gebildet werden, und diese dann voneinander abgezogen werden, sofern diese existieren. Die Existenz eines sinnvollen Inneren und Äußeren ist durch die Regularität des Gebietes gewährleistet.
 
 Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehöriger Optimalitätsbedingungen und Ableitungen. Hierzu wählen wir wie vorweggenommen das Poissonproblem \ref{Poissonproblem}, für welches wir ausreichende Theorie in Kapitel \ref{Chapter_grundlagenpde} eingeführt haben. Das Problem findet sich in ähnlicher Art in \cite{shape_space}, 4.2., sowie in \cite{LagrangeNewton}, unter Remark 2.
 
@@ -200,7 +199,7 @@ Wir besitzen nun den Apparat zur Formulierung unseres Modellproblems und zugehö
 	\end{aligned}
 	\end{equation}		
 	
-	Zudem definieren wir für \ref{Modellproblem} explizit eine sogenannte \textit{Interface condition}
+	Zudem definieren wir für \ref{Modellproblem} explizit eine sogenannte \textit{Interface Condition}
 	\begin{equation}\label{Interfacecondition}
 		[[y]] = 0, \quad \Big[\Big[\frac{\partial y}{\partial n}\Big]\Big] = 0 \quad \text{auf } \partial \Omega,
 	\end{equation}
@@ -226,18 +225,18 @@ Wie wir sehen, besteht das Zielfunktional $\mathcal{J}$ aus zwei Komponenten. De
 \end{align*}
 wird gemeinhin als \textit{Perimeter-Regularisierung} bezeichnet, wobei $\nu > 0$. Diese hat den Nutzen, Regularität und somit Existenz und Eindeutigkeit des Modellproblems \ref{Modellproblem} zu gewährleisten. Ohne die Regularisierung wären beispielsweise entartete Formen, deren Rand als Funktion unendlicher Variation darstellbar sind, zugelassen, siehe zum Beispiel die angegebene Quelle bei \cite{LagrangeNewton}, unter Remark 2.
 
-Die Zustandsgleichung ist ein gewöhnliches Poisson-Problem mit Dirichlet-Randwerten, welches wir hier symbolisch in starker Form notiert haben. Die starke Notation repräsentiert hier also die Variationsformulierung des Poisson-Problems mit Dirichlet Randwerten, wobei gleiches für die adjungierte Gleichung gilt. Für die Herleitung der adjungierten Gleichung, welche mittels \ref{adjointequation} erfolgt, verweisen wir auf \cite{shape_space}, 4.2.1. Die Existenz einer Lösung der  Zustands- als auch adjungierten Gleichung sind gesichert durch das in \ref{LaxMilgram} eingeführte Lemma von Lax-milgram.
+Die Zustandsgleichung ist ein gewöhnliches Poisson-Problem mit Dirichlet-Randwerten, welches wir hier symbolisch in starker Form notiert haben. Die starke Notation repräsentiert hier also die Variationsformulierung des Poisson-Problems mit Dirichlet-Randwerten, wobei gleiches für die adjungierte Gleichung gilt. Für die Herleitung der adjungierten Gleichung, welche mittels \ref{adjointequation} erfolgt, verweisen wir auf \cite{shape_space}, 4.2.1. Die Existenz einer Lösung der  Zustands- als auch adjungierten Gleichung sind gesichert durch das in \ref{LaxMilgram} eingeführte Lemma von Lax-Milgram.
 
-Die Interface condition \ref{Interfacecondition} sorgt bei uns dafür, dass der Zustand $y$ stetig vom inneren Gebiet $\Omega$ zum äußeren Gebiet $\mathcal{O} \setminus \Omega$ verläuft, sowie, dass der Fluss $\frac{\partial y }{\partial n}$ auch stetig ist. Ohne die Interface condition wäre dies im Allgemeinen nicht der Fall, da die Funktion $f$ der rechten Seite der Zustandsgleichung auf genau diesen Gebieten jeweils konstant ist, und auf $\partial\Omega$ springt.
+Die Interface Condition \ref{Interfacecondition} sorgt bei uns dafür, dass der Zustand $y$ stetig vom inneren Gebiet $\Omega$ zum äußeren Gebiet $\mathcal{O} \setminus \Omega$ verläuft, sowie, dass der Fluss $\frac{\partial y }{\partial n}$ auch stetig ist. Ohne die Interface Condition wäre dies für allgemeine Probleme nicht der Fall, in unserem Falle wäre jedoch das Weglassen dieser möglich. 
 
 \colorbox{red}{und sorgt doch für existenz einer eindeutigen lösung?! lax-milgram reicht nicht oder?}
 
-Damit wir Wohldefiniertheit von im folgenden Kapitel \ref{Chap_shapespaces} definierten Metriken für Formräume sicherstellen können, benötigen wir, dass $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega)$ ist. Mit unseren Voraussetzungen $f,\bar{y} \in \mathcal{L}^2((0,1)^2)$, sowie einem hinreichend glatten Rand $\partial\Omega$, erhalten wir $y\in H^2((0,1)^2)$ nach dem Satz  \ref{higherregularity} für höhere Regularität der Lösung. Kombiniert man dies mit den auf Sobolev-Slobodeckij-Räumen verallgemeinerten Spursatz \ref{tracetheorem}, so erhalten wir wie gewünscht $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega)$. Ob die hinreichend glatten Ränder in der Theorie und Praxis gerechtfertigt sind, ist eine gänzlich andere wichtige Diskussion, welche wir in dieser Arbeit nicht führen möchten.
+Damit wir Wohldefiniertheit von im folgenden Kapitel \ref{Chap_shapespaces} definierten Metriken für Formräume sicherstellen können, benötigen wir, dass $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega)$ ist. Mit unseren Voraussetzungen $f,\bar{y} \in \mathcal{L}^2((0,1)^2)$, sowie einem hinreichend glatten Rand $\partial\Omega$, erhalten wir $y\in H^2((0,1)^2)$ nach dem Satz  \ref{higherregularity} für höhere Regularität der Lösung. Kombiniert man dies mit den auf Sobolev-Slobodeckij-Räumen verallgemeinerten Spursatz \ref{tracetheorem}, so erhalten wir wie gewünscht $\frac{\partial y}{\partial n} \in H^{1/2}(\partial\Omega)$. Ob die hinreichend glatten Ränder in der Theorie und Praxis gerechtfertigt sind, ist wie schon erwähnt eine gänzlich andere wichtige Diskussion, welche wir in dieser Arbeit nicht führen möchten.
 
-Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung angeben. Die genaue Herleitung, die das Theorem von Correa-Seger verwendet und auf  Materialableitungen aufbaut, findet sich in \cite{shape_space}, die alternative Randformulierung für die Formableitung der Perimeter-Regularisierung findet sich in \cite{multigrid}.
+Wir können nun für unser Modellproblem \ref{Modellproblem} die Formableitung angeben. Die genaue Herleitung, die das Theorem von Correa-Seeger verwendet und auf  Materialableitungen aufbaut, findet sich in \cite{shape_space}, die alternative Randformulierung für die Formableitung der Perimeter-Regularisierung findet sich in \cite{multigrid}.
 
 \begin{theorem}[Formableitung für das Modellproblem]
-	Betrachte das Modellproblem \ref{Modellproblem} mit Interface condition. Sei $y\in H^1_0((0,1)^2)$ Lösung der Zustandsgleichung aus \ref{Modellproblem} und $p\in H^1_0((0,1)^2)$ Lösung der adjungierten Gleichung \ref{Modelladjoint}. Dann hat das Zielfunktional aus \ref{Modellproblem} \textit{ohne} Perimeter-Regularisierung $\mathcal{J}_{target}$ folgende Volumenformulierung für alle $\Omega \in \mathcal{O}$ und Richtungen $V \in C^\infty(\mathcal{D})$:
+	Betrachte das Modellproblem \ref{Modellproblem} mit Interface Condition. Sei $y\in H^1_0((0,1)^2)$ Lösung der Zustandsgleichung aus \ref{Modellproblem} und $p\in H^1_0((0,1)^2)$ Lösung der adjungierten Gleichung \ref{Modelladjoint}. Dann hat das Zielfunktional aus \ref{Modellproblem} \textit{ohne} Perimeter-Regularisierung $\mathcal{J}_{target}$ folgende Volumenformulierung für alle $\Omega \in \mathcal{O}$ und Richtungen $V \in C^1(\mathcal{D}, \mathbb{R}^2)$:
 	\begin{equation}\label{shapederivvolume}
 	\begin{aligned}
 		D\mathcal{J}_{target}(\Omega)[V] = \underset{\mathcal{D}}{\int} -\nabla y^T (\nabla V + \nabla V^T) \nabla p - p V^T \nabla f \\ + \text{div} (V) \left(\frac{1}{2}(y-\bar{y})^2 + \nabla y^T \nabla p - fp\right)\; dx.

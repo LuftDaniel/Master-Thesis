@@ -6,6 +6,24 @@ G.~Geymonat.
   {N}ecessary {C}onditions.
 \newblock 2007.
 
+\bibitem{abstract3}
+{H. Diab, R. Younes, P. Lafon}.
+\newblock {Survey of research on the optimal design of sea harbours}.
+\newblock {\em {International Journal of Naval Architecture and Ocean
+  Engineering, Vol. 9, Issue 4, pp. 460-472}}, 2017.
+
+\bibitem{sokol}
+{J}an {S}okolowski{,} {J}ean-{P}aul {Z}olesio.
+\newblock {\em {I}ntroduction to {S}hape {O}ptimization}, volume~16.
+\newblock {S}pringer-{V}erlag {B}erlin {H}eidelberg, 1992.
+
+\bibitem{abstract2}
+{K. Bandara, F. Cirak, G. Of, O. Steinbach, J. Zapletal}.
+\newblock Boundary element based multiresolution shape optimisation in
+  electrostatics.
+\newblock {\em {Journal of Computational Physics, 297, pp. 584-598,Elsevier}},
+  2015.
+
 \bibitem{multigrid}
 {K. Welker, M. Siebenborn}.
 \newblock {Algorithmic aspects of multigrid methods for optimization in shape
@@ -45,10 +63,23 @@ B.~Zhong P.A. Sherar{,} C.P.Thompson{,} B.~Xu.
   insertion algorithm.
 \newblock {\em Proceedings of the World Congress on Engineering}, II, 2007.
 
+\bibitem{abstract4}
+{Q. Wang, J. Wang, J. Chen, S. Luo, J. Sun}.
+\newblock {Aerodynamic shape optimized design for wind turbine blade using new
+  airfoil series}.
+\newblock {\em {Journal of Mechanical Science and Technology, Vol. 29, Issue 7,
+  pp. 2871-2882}}, 2015.
+
 \bibitem{auto-diff}
 S.~Schmidt.
 \newblock Weak and strong form shape hessians and their automatic generation.
 \newblock 2018{,} SIAM J. Sci. Comput.{,} Vol. 40{,} No.2, pp. C210-C233.
+
+\bibitem{abstract1}
+{S}. {S}chmidt{,} {C. Ilic, V. Schulz, N. R. Gauger}.
+\newblock {Three-dimensional large-scale aerodynamic shape optimization based
+  on shape calculus}.
+\newblock {\em {AIAA J., 51, pp. 2615-2627}}, 2013.
 
 \bibitem{riemann}
 Volker Schulz.

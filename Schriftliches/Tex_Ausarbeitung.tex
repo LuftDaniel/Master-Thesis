@@ -5,6 +5,7 @@
 \usepackage[english, ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{datetime}
 \usepackage[utf8]{inputenc}
 \usepackage{bigdelim}
 \usepackage{multirow}
@@ -66,7 +67,7 @@
   \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
   \end{center}
   \list{}{%
-    \setlength{\leftmargin}{12mm}% <---------- CHANGE HERE
+    \setlength{\leftmargin}{10mm}% <---------- CHANGE HERE
     \setlength{\rightmargin}{\leftmargin}%
   }%
   \item\relax}
@@ -106,7 +107,7 @@
 
 \title{Quasi-Newton Methoden in der Formoptimierung}
 
-\author{Daniel Luft \\ Prof. Dr. V. Schulz}
+\author{Daniel Luft}
 
   \pagestyle{empty}
 
@@ -118,21 +119,67 @@
 
  \begin{center} \large 
     
-    Masterarbeit
     %Titel des Seminars
     \vspace*{2cm}
 
     {\huge Quasi-Newton Methoden in der Formoptimierung}
     \vspace*{2.5cm}
-
-    Daniel Luft
-    \vspace*{6cm}
-
-
-	Universität Trier
+	
   \end{center}
+  
+	Masterarbeit
+	\newline
+
+	zur Erlangung des akademischen Grades eines \newline
+	Master of Science
+	\newline
+	
+	eingereicht am Fachbereich IV \newline
+	der Universität Trier	
+	\newline
+	
+	von	
+	\newline
+	
+    Daniel Luft
+    \newline
+    
+	Erstgutachter:  Prof. Dr. Volker Schulz \newline
+	Zweitgutachter: Dr. Kathrin Welker 
+	\newline
+	
+	Trier, den \today.
+
+	
+	
+	\hspace{10cm}\vspace{-2cm}\includegraphics[scale=0.4]{Logo-Uni-Trier.jpg}
+
 \end{titlepage}
-%\maketitle
+\newpage
+
+\vspace{10cm}
+Universität Trier - Gebäude E \newline
+Fachbereich IV - Mathematik
+
+Universitätsring 19 \newline
+D-54296 Trier
+
+\newpage
+
+
+
+
+\section*{Danksagung}
+
+Ich möchte mich an dieser Stelle bei all denen bedanken, die mir während der Erstellung dieser Masterarbeit zur Seite standen. 
+\newline
+
+Bei Prof. Dr. Volker Schulz möchte ich mich für die unterhaltsamen und aufschlussreichen Gespräche bedanken. 
+\newline 
+
+Meiner Familie und Freunden, vorallem meinen Eltern und Aibi, möchte ich danken, mir bei allen Dingen, ob gut und schlecht, beizuwohnen. 
+
+\newpage
 
   % Inhaltsverzeichnis
   \tableofcontents
@@ -144,15 +191,16 @@
   
 \selectlanguage{ngerman}
 \begin{abstract}
-Abstract
+Die Formoptimierung ist ein für die moderne Industrie immer wichtiger werdendes Teilgebiet der Mathematik. Durch Fortschreiten der technischen Realisierbarkeit und den immer mächtiger werdenden Rechenarchitekturen sind Simulationen, Lösung und Umsetzung von Modellbasierten Ansätzen möglich, die vor einigen Dekaden undenkbar schienen. So wird die Formoptimierung heutzutage beispielsweise zur Optimierung von Bauteilen hinsichtlich ihrer Aerodynamik in \cite{abstract1}, bei Problemen der Magnetostatik in \cite{abstract2}, oder dem Design von Turbinen bei \cite{abstract4}. Aber auch bei weniger bekannten Problemstellungen, etwa dem optimalen Design von Hafenanlagen, wie bei \cite{abstract3}, wo die Form unter anderem bezüglich Kostenintensität, aber auch der auftretenden signifikanten Wellenhöhe, optimiert wird. Ziel dieser Arbeit ist es, das Broyden-Fletcher-Goldstein-Shanno-Verfahren (BFGS-Verfahren), als Beispiel eines Quasi-Newton-Verfahrens, im Kontext der Formoptimierung in einem Programm, welches künftig weiter verwendet werden kann, aufzusetzen und zu analysieren. Hierfür werden wir in 
+Kapitel \ref{Chapter_grundlagenpde} und \ref{Chapter_formopt} die für uns relevanten theoretischen Bausteine aus der Theorie der Differentialgleichungen und der Formoptimierung legen. In Kapitel \ref{Chap_3} bauen wir auf das vorangegangene auf, und führen in die moderne Betrachtung der Formoptimierung auf Basis von Formräumen ein. Wir zeigen, wie man Metriken auf diesem Raum definiert, und so zugehörige Gradienten erzeugen kann. Anschließend geben wir eine kurze Betrachtung von Newton- und Quasi-Newton-Verfahren in Formräumen, woraufhin wir in Kapitel \ref{Chapter_implementation} unsere Implementierung vorstellen werden. Die mit dieser Implementierung erzeugten Datensätze bereiten wir im letzten Kapitel \ref{Chap_results} auf, und geben abschließend einen Ausblick.
 \end{abstract}
 \vspace{1cm}
 
+\colorbox{red}{Verzeichnis der Abbildungen?}
 \colorbox{red}{abstract / Einleitung}
 \colorbox{red}{colon statt :}
 \colorbox{red}{statt Normalenvektorfeld Einheitsnormalenvektorfeld?}
-\colorbox{red}{DJ statt dj}
-\colorbox{red}{vielleicht h = grad J nenne?}
+\colorbox{red}{vielleicht h = grad J nenne? Vorallem bei Hj auf ganzem gebiet}
 \colorbox{red}{hoch T transp ersetzen durch langle rangle?}
 
 \input{Tex_GrundlagenPDE}
@@ -167,7 +215,7 @@ Abstract
 Hiermit erkläre ich, dass ich die Masterarbeit selbständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt und die aus fremden Quellen direkt oder indirekt übernommenen
 Gedanken als solche kenntlich gemacht habe. Die Masterarbeit habe ich bisher keinem anderen Prüfungsamt in gleicher oder vergleichbarer Form vorgelegt. Sie wurde bisher auch nicht veröffentlicht.
 \vspace{1.5cm}
-
+\today \newline
 (Datum) \hspace{9cm} (Daniel Luft)
 
 

@@ -9,45 +9,45 @@ Warning--empty journal in auto-diff
 Warning--empty journal in brokenSobolev
 Warning--empty journal in diffeology
 Warning--empty journal in diffusion
-You've used 24 entries,
+You've used 29 entries,
             2118 wiz_defined-function locations,
-            620 strings with 7378 characters,
-and the built_in function-call counts, 5122 in all, are:
-= -- 485
-> -- 168
-< -- 0
-+ -- 75
-- -- 48
-* -- 214
-:= -- 952
-add.period$ -- 72
-call.type$ -- 24
-change.case$ -- 86
+            643 strings with 8344 characters,
+and the built_in function-call counts, 6164 in all, are:
+= -- 585
+> -- 203
+< -- 1
++ -- 90
+- -- 58
+* -- 257
+:= -- 1147
+add.period$ -- 87
+call.type$ -- 29
+change.case$ -- 105
 chr.to.int$ -- 0
-cite$ -- 30
-duplicate$ -- 255
-empty$ -- 456
-format.name$ -- 48
-if$ -- 1044
+cite$ -- 35
+duplicate$ -- 307
+empty$ -- 546
+format.name$ -- 58
+if$ -- 1256
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 30
-newline$ -- 123
-num.names$ -- 48
-pop$ -- 128
+int.to.str$ -- 29
+missing$ -- 36
+newline$ -- 148
+num.names$ -- 58
+pop$ -- 151
 preamble$ -- 1
-purify$ -- 72
+purify$ -- 87
 quote$ -- 0
-skip$ -- 161
+skip$ -- 196
 stack$ -- 0
-substring$ -- 156
-swap$ -- 18
-text.length$ -- 0
+substring$ -- 181
+swap$ -- 24
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 80
+type$ -- 98
 warning$ -- 6
-while$ -- 49
-width$ -- 26
-write$ -- 243
+while$ -- 59
+width$ -- 31
+write$ -- 294
 (There were 6 warnings)
