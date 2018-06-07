@@ -1,10 +1,8 @@
 
-\section{Grundlagen zu Differentialgleichungen}\label{Chapter_grundlagenpde}
+\section{Grundlagen zur Theorie der Differentialgleichungen}\label{Chapter_grundlagenpde}
 
 %%%%%%%%%%%%%%%%
 
-
-\colorbox{red}{schau nochmal drüber: zu redundant, zu ausführlich, Übergang zum nächsten Kapitel, etc...}
 
 In diesem Abschnitt möchten wir eine kurze Einführung in die für diese Arbeit nötigen Grundlagen zur Theorie und Numerik partieller Differentialgleichungen geben. Im Folgenden werden wir uns an die Werke \cite{PDE1}, \cite{PDE2} und \cite{PDE3} halten, und verweisen für weitere Details und Beweise auch auf diese.
 
@@ -22,8 +20,8 @@ wobei $\Delta$ den Laplace-Operator meint, und $\Omega$ ein offenes, beschränkt
 Sei $\Omega \subseteq \mathbb{R}^n$ ein offenes, beschränktes, zusammenhängendes Gebiet, weiterhin sei $1 \leq p \leq \infty$, $m \in \mathbb{N}$. Wir definieren eine Norm durch
 
 \begin{align*}
-	\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}: C^\infty(\Omega) \rightarrow 
-	\mathbb{R},\; y \rightarrow \underset{\vert \alpha \vert \leq m}{\sum} 						\vert\vert D^\alpha y(x) \vert\vert_{\mathcal{L}^p},
+	\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}\colon C^\infty(\Omega) \rightarrow 
+	\mathbb{R},\; y \mapsto \underset{\vert \alpha \vert \leq m}{\sum} 						\vert\vert D^\alpha y(x) \vert\vert_{\mathcal{L}^p},
 \end{align*}
 genannt \textit{m,p-Sobolev-Norm}, wobei $\alpha$ ein Multiindex ist. Dann heißt die Vervollständigung von $C^\infty(\Omega)$ bezüglich $\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}$ \textit{Sobolev-Raum der Ordnung m}, bezeichnet mit $W^{m,p}(\Omega)$. Die Vervollständigung von $C_0^\infty(\Omega)$ bezüglich $\vert\vert \cdot \vert\vert_{W^{m,p}(\Omega)}$ bezeichnen wir mit $W_0^{m,p}(\Omega)$. Im Falle $p=2$ nennen wir diese Sobolev-Räume $H^m(\Omega)$, beziehungsweise  $H_0^m(\Omega)$.
 \end{defi}
@@ -40,7 +38,7 @@ Dann heißt eine Funktion $u \in \mathcal{L}^1(\Omega)$ \textit{ $\alpha$-te sch
 wobei $C_c^\infty(\Omega)$ der Raum aller $C^\infty(\Omega)$-Funktionen mit kompaktem Träger ist.
 \end{defi}
 
-In Anlehnung an das Fundementallemma der Variationsrechnung verwenden wir nun, ausgehend von \ref{Poissonproblem}, den Green'schen Formeln und Testfunktionen $v\in C_0^\infty(\Omega)$, um die sogenannte \textit{schwache Formulierung} des Poisson-Problems herzuleiten. Es sei $n$ das äußere Normalenvektorfeld von $\Omega$. Dann folgt
+In Anlehnung an das Fundementallemma der Variationsrechnung verwenden wir nun, ausgehend von \ref{Poissonproblem}, den Green'schen Formeln und Testfunktionen $v\in C_0^\infty(\Omega)$, um die sogenannte \textit{schwache Formulierung} des Poisson-Problems herzuleiten. Es sei $n$ das äußere Einheitsnormalenvektorfeld von $\Omega$. Dann folgt
 
 \begin{align*}
 	& \underset{\Omega}{\int}(-\Delta y(x))v(x)dx  \\

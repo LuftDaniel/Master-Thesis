@@ -1,5 +1,5 @@
-\BOOKMARK [1][-]{section.1}{Grundlagen zu Differentialgleichungen}{}% 1
-\BOOKMARK [1][-]{section.2}{Einf\374hrung in die Formoptimierung}{}% 2
+\BOOKMARK [1][-]{section.1}{Grundlagen zur Theorie der Differentialgleichungen}{}% 1
+\BOOKMARK [1][-]{section.2}{Einf\374hrung in die theoretischen Grundlagen der Formoptimierung}{}% 2
 \BOOKMARK [1][-]{section.3}{BFGS-Algorithmus in der Formoptimierung}{}% 3
 \BOOKMARK [2][-]{subsection.3.1}{Shape Spaces und Formgradienten}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Quasi-Newton-Verfahren}{section.3}% 5
@@ -14,5 +14,7 @@
 \BOOKMARK [3][-]{subsubsection.4.3.2}{Die Backtracking-Linesearch}{subsection.4.3}% 14
 \BOOKMARK [3][-]{subsubsection.4.3.3}{Der Output}{subsection.4.3}% 15
 \BOOKMARK [1][-]{section.5}{Resultate}{}% 16
-\BOOKMARK [2][-]{subsection.5.1}{???}{section.5}% 17
-\BOOKMARK [1][-]{section*.15}{Literatur}{}% 18
+\BOOKMARK [2][-]{subsection.5.1}{Problem: kleiner zu gro\337em Kreis}{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.2}{Problem: kleiner Kreis zu 'broken Donut'}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.3}{Ausblick und Schlussbetrachtung}{section.5}% 19
+\BOOKMARK [1][-]{section*.19}{Literatur}{}% 20

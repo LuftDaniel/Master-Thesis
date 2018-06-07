@@ -1,20 +1,12 @@
 
-\section{Implementierung in Python mit FEniCS}
-
-\colorbox{red}{mache 2 große sections bib und main, dann bei bib untersections gitter, lösen von pdes und berechnungen, und bfgs-step} \newline
-\colorbox{red}{InitialData ordner anlegen??} \newline
-\colorbox{red}{Hadamard abstand abwandlung erklären} \newline
-\colorbox{red}{erwähne die Implementierung des Rn tests für die Architektur des BFGS-Verfahrens}\newline
-\colorbox{red}{mathcal J und Omega2 zu Omega}\newline
-\colorbox{red}{denke nach, D und O für hold-all-domain und menge der zulässigen formen zu tauschen (sieht besser bei integralen aus)}\newline
-\colorbox{red}{erwähne lokale lame parameter aus kapitel bfgs-shape bei impl mit ref}
-\colorbox{red}{Quellcode auf CD details angeben}
+\section{Implementierung in Python mit FEniCS}\label{Chapter_implementation}
 
 In diesem Abschnitt möchten wir die Implementierung\footnote{Die Funktionsfähigkeit des Programms ist ausschließlich unter der Version Python 3.5, sowie den zugehörigen $FEniCS$-Packeten gewährleistet.} des Algorithmus \ref{2loopbfgs} in Python 3.5 mit Hilfe des Moduls FEniCS vorstellen. Im Folgenden werden wir die in den Dateien enthaltenen Kommentare nicht oder nicht in voller Länge in den Codeausschnitten aufführen, da wir Redundanz bei den Erklärungen vermeiden möchten. Selbstverständlich sind in den Quellcodes selber ausführliche Kommentierungen vorhanden, weshalb wir gerne auf diese verweisen. Die Implementierung in Python besteht zum Hauptteil aus den beiden Dateien
 \begin{align*}
 \textsf{shape\_main.py} \hspace{0.8cm} \textsf{shape\_bib.py}.
 \end{align*}
-Die Datei \textit{shape\_main.py} enthält hierbei den zusammenhängenden Hauptcode. Die Datei \textit{shape\_bib.py} ist eine Bibliothek, in welcher Funktionen zum Umgang mit Gittern, Berechnungen auf Formen, Löser für PDEs und der 2-Schleifen-L-BFGS-Algorithmus mit den damit verbundenen Objekten gebündelt sind. Die Berechnungen auf den Formen und das Lösen der PDEs wird mittels FEniCS geschehen.
+Die Datei \textit{shape\_main.py} enthält hierbei den zusammenhängenden Hauptcode. Die Datei \textit{shape\_bib.py} ist eine Bibliothek, in welcher Funktionen zum Umgang mit Gittern, Berechnungen auf Formen, Löser für PDEs und der 2-Schleifen-L-BFGS-Algorithmus mit den damit verbundenen Objekten gebündelt sind. 
+Beide Dateien, mit samt den von uns im nächsten Kapitel präsentierten Ergebnissen, sind in der Abgabe mit enthalten. Zusätzlich ist eine Testimplementierung der Objekte für das BFGS-Verfahren zur Lösung eines endlich-dimensionalen Optimierungsproblems beigefügt, der zeigt, dass die Objekte alle das korrekte Verhalten haben. Die Berechnungen auf den Formen und das Lösen der PDEs wird mittels FEniCS geschehen.
 FEniCS\footnote{Weitere Informationen sind unter https://fenicsproject.org/ zu finden.} ist eine frei zugängliches Programmpacket, welches ermöglicht, partielle Differentialgleichungen mit relativ geringem Aufwand zu lösen. Dabei bedient sich FEniCS der sogenannten \textit{Unified Form Language} (UFL), was die Grundlage zur Implementierung der PDE's in schwacher Formulierung darstellt, mehr hierzu bei \cite{Unifiedformlanguage}. 
 Bevor wir uns der Lösung von PDE's und der Implementierung des L-BFGS-Algorithmus zuwenden, müssen wir zunächst klären, wie wir die notwendigen Gitter erzeugen und mit diesen umgehen.
 
@@ -136,8 +128,8 @@ boundaries, interior = True)}
 \end{align*}
 implementiert. Als Input erhält sie die oben gezeigten Objekte, falls \textsf{interior = True} eingestellt ist, so gibt die Funktion die Liste mit Indizes ohne Träger am inneren Rand wieder. Wir möchten an dieser Stelle anmerken, dass Indizes auch mehrfach vorkommen, was für unser Programm kein Problem darstellt und bei Bedarf verbessert werden kann. Ist der Parameter \textsf{interior = False}, so gibt die Funktion eine Liste mit den Indizes der Knotenpunkte genau des inneren Randes wieder. Dies spart uns die Implementierung einer weiteren Funktion. Das erzeugen der Liste basiert auf Iterationen durch Facetten des Randes, deren Knoten und den benachbarten Knoten. Diese aufwändige Iteration ist nötig, da die Indizierung der Facetten in der Meshfunktion des Randes in FEniCS nicht mit den Indizes der Mesh's übereinstimmen. Für die genaue Implementierung verweisen wir auf den von uns beigefügten Code. 
 
-\subsubsection{Berechnungen in der shape\_bib}
- Der Hauptanteil der Berechnungen besteht in dem Lösen von partiellen Differentialgleichungen. Die Gleichungen, welche wir für die Formoptimierung lösen müssen, haben wir in den vorigen Kapiteln eingeführt. Dabei handelt es sich um die Poisson-Zustandsgleichung mit Interface-Condition aus unserem Modellproblem \ref{Modellproblem}, die zugehörige adjungierte Gleichung \ref{Modelladjoint}, und die lineare Elastizitätsgleichung \ref{linelas}, welche uns einen Formgradienten liefern wird. Wir möchten exemplarisch an der implementierten Funktion zur Lösung der linearen Elastizitätsgleichung zeigen, wie dies in FEniCS praktisch passiert. Für die beiden anderen Gleichungen wird analog vorgegangen, hierbei verweisen wir auf unseren Quellcode. Die Lösung der Gleichungen wird über die Funktionen 
+\subsubsection{Berechnungen in der shape\_bib}\label{Berechnung_bib}
+ Der Hauptanteil der Berechnungen besteht in dem Lösen von partiellen Differentialgleichungen. Die Gleichungen, welche wir für die Formoptimierung lösen müssen, haben wir in den vorigen Kapiteln eingeführt. Dabei handelt es sich um die Poisson-Zustandsgleichung mit Interface Condition aus unserem Modellproblem \ref{Modellproblem}, die zugehörige adjungierte Gleichung \ref{Modelladjoint}, und die lineare Elastizitätsgleichung \ref{linelas}, welche uns einen Formgradienten liefern wird. Wir möchten exemplarisch an der implementierten Funktion zur Lösung der linearen Elastizitätsgleichung zeigen, wie dies in FEniCS praktisch passiert. Für die beiden anderen Gleichungen wird analog vorgegangen, hierbei verweisen wir auf unseren Quellcode. Die Lösung der Gleichungen wird über die Funktionen 
 \begin{lstlisting}
 solve_state(meshData, fValues)
 solve_adjoint(meshData, y, z)
@@ -212,9 +204,9 @@ return U, nrm_f_elas
 
 Zu beachten ist, dass wir \textsf{U} als \textsf{.vector()} Objekt übergeben. Diese Objekte lassen Arithmetik, wie beispielsweise das Initialisieren einzelner Werte an Knoten des Gitters für die FEniCS-Funktion, zu. Dies werden wir bei der Implementierung des BFGS-Schrittes maßgeblich verwenden. Das Objekt \textsf{F\_elas} ist bereits von diesem Typ, da wir nicht mit einer bestimmten Richtung, sondern mit einer \textsf{TestFunction} initialisiert haben, weshalb wir hier keinen Befehl benötigen. Das so entstandene Objekt ist also keine skalare Größe, sondern lässt sich als
 \begin{align}\label{felas}
-	D\mathcal{J}(\Omega_2)[\varphi_i] \; \hat{=}\; \textsf{F\_elas.get\_local()[i]}
+	D\mathcal{J}(\Omega)[\varphi_i] \; \hat{=}\; \textsf{F\_elas.get\_local()[i]}
 \end{align}
-interpretieren, wobei $\varphi_i$ polynomielle Basisfunktionen vom Grad 1 auf dem Gitter sind, welches $\Omega_2$ repräsentiert. Auf diese Weise lässt sich $D\mathcal{J}(\Omega_2)[\cdot]$ über \textsf{F\_elas} als skalarwertige Funktion auf dem initialisierten Gitter auffassen, wobei die jeweiligen Werte des Knoten mit Index \textsf{i} genau den Ableitungen $D\mathcal{J}(\Omega_2)[\varphi_i]$ entsprechen. Dies ermöglicht es uns, die $\mathcal{L}^2$-Norm des so zur Formableitung assozierten Objekts zu bilden, welche genau der zweite Return \textsf{nrm\_f\_elas} ist. 
+interpretieren, wobei $\varphi_i$ polynomielle Basisfunktionen vom Grad 1 auf dem Gitter sind, welches $\Omega$ repräsentiert. Auf diese Weise lässt sich $D\mathcal{J}(\Omega)[\cdot]$ über \textsf{F\_elas} als skalarwertige Funktion auf dem initialisierten Gitter auffassen, wobei die jeweiligen Werte des Knoten mit Index \textsf{i} genau den Ableitungen $D\mathcal{J}(\Omega)[\varphi_i]$ entsprechen. Dies ermöglicht es uns, die $\mathcal{L}^2$-Norm des so zur Formableitung assozierten Objekts zu bilden, welche genau der zweite Return \textsf{nrm\_f\_elas} ist. 
 Die Größe dieser Norm wird bei uns als Ausstiegskriterium sowohl bei dem Gradienten-, als auch bei dem L-BFGS-Verfahren Verwendung finden.
 Wir warnen den Leser an dieser Stelle, dass die obige Indizierung der Gitterpunkte $i$ und somit der Basisfunktionen $\varphi_i$ im Allgemeinen nicht mit der Indizierung der Werte der FEniCS-Funktionen auf dem Gitter, welche \textit{Degrees of freedom (DOF)} genannt werden, und somit nicht mit \textsf{F\_elas.get\_local()[i]} übereinstimmen. Dennoch lässt sich eine entsprechende Bijektion finden, welche in \textsf{Dolfin} mit dem Befehl \textsf{Dolfin.vertex\_to\_dof\_map(V)} erzeugt wird. Diese wird bei uns zum berechnen eines nötigen Formabstandes verwendet, auf welchen wir nun zu sprechen kommen.
 
@@ -222,7 +214,7 @@ Die Distanz zweier Formen werden wir mit der Funktion
 \begin{align}\label{distfktdef}
 	d_{shp}(\partial\Omega_1, \partial\Omega_2) := \underset{\partial\Omega_2}{\int} \underset{y\in\partial\Omega_1}{\min} \vert\vert x - y \vert\vert dx
 \end{align}
-messen. Diese Distanzfunktion wird bei uns lediglich als Ersatz für den Abstand zweier Formen im Shape-space verwendet, welchen man mittels Geodätischer definieren kann, und ist eine Abwandlung des Hadamard-Abstandes. Um Geodätische zu bestimmen wäre es nötig eine weitere Differentialgleichung zu lösen, was wir vom Aufwand für nicht vertretbar halten, obwohl dies die korrektere Variante zur Abstandsmessung wäre. Wir bemerken außerdem, dass die oben definierte Abstandfunktion $d_{shp}$ nicht symmetrisch ist, was sich auch anhand der von uns implementierten Beispielformen leicht vorführen lässt. Die Auswertung dieser Distanzfunktion passiert über die von uns implementierte Funktion
+messen. Diese Distanzfunktion wird bei uns lediglich als Ersatz für den Abstand zweier Formen im Formraum verwendet, welchen man mittels Geodätischer definieren kann, und ist eine Abwandlung des Hadamard-Abstandes. Um Geodätische zu bestimmen wäre es nötig eine weitere Differentialgleichung zu lösen, was wir vom Aufwand für nicht vertretbar halten, obwohl dies die korrektere Variante zur Abstandsmessung wäre. Wir bemerken außerdem, dass die oben definierte Abstandfunktion $d_{shp}$ nicht symmetrisch ist, was sich auch anhand der von uns implementierten Beispielformen leicht vorführen lässt. Die Auswertung dieser Distanzfunktion passiert über die von uns implementierte Funktion
 \begin{lstlisting}
 mesh_distance(mesh1, mesh2)
 \end{lstlisting}
@@ -232,10 +224,6 @@ wobei \textsf{mesh1, mesh2} Objekte der \textsf{MeshData}-Klasse sein müssen. D
 \end{center}
 erhalten. Wie bei der linearen Elastizitätsgleichung erwähnt, lässt sich die Liste der Minima der einzelnen Punkte $x$ nicht ohne weiteres als FEniCS-Funktion initialisieren, da der angesprochene Unterschied der Indizierung der Gitterpunkte und DOFs Probleme bereitet. An dieser Stelle kommt die \textsf{vertex\_to\_dof\_map} zum tragen. Abschließend findet eine zu \ref{bilina} ähnliche Assemblierung des Integrals statt, welche uns den Abstandwert als Return liefert. 
 
-\colorbox{red}{vllt noch ein bild mit dem Abstandswerten als Fenics funktion mit Wert drunter}
-
-\colorbox{red}{vllt noch restliche auf gitter rechnende Funktionen nennen}
-\colorbox{red}{neuer abschnitt}
 \subsubsection{Die BFGS-Memory-Klasse}
 
 Die von uns bisher eingeführten Objekte würde schon ausreichen, um ein Verfahren auf Basis des Gradientenabstiegs zu programmieren. Wir möchten jedoch als Ziel dieser Arbeit einen Schritt weiter gehen, und den L-BFGS-Algorithmus implementieren. Das Hauptproblem bei dem Verfahren besteht darin, sich eine Möglichkeit schaffen, mit dessen Hilfe man die Gradienten- und Deformationsfelder bequem speichern und updaten kann, da wir ja nur eine \textit{limited memory} besitzen. Hierzu entwerfen wir die zweite wichtige Klasse in unserem Programm, die sogenannte \textsf{bfgs\_memory}-Klasse. Diese ist wie folgt aufgebaut, wobei wir im Programm selber noch Initialisierungsfehler mit Warnungen an künftige weitere Verwender eingebaut haben, siehe den Quellcode:
@@ -283,8 +271,6 @@ wobei es wichtig ist, ein Objekt der \textsf{MeshData}-Klasse zu übergeben. Es 
 Um die Memory zu updaten, haben wir eine Update-Funktion implementiert, welche 
 den ältesten Wert, sobald die Anzahl \textsf{length} an gespeicherten Einträgen überschritten wird, löscht, und alle anderen dem Index nach um 1 aufrückt. 
 
-\colorbox{red}{ vllt ein einfaches Diagram}
-
 \begin{lstlisting}
 def update_grad(self, upd_grad):
     
@@ -307,7 +293,6 @@ identifiziert werden kann, falls $k>0$. Im Falle, dass die Memory noch leer ist,
 
 \subsection{Das Hauptprogramm shape\_main}
 \subsubsection{Der Hauptalgorithmus und Einstellungen}
-\colorbox{red}{zuerst Einstellbarkeit und Parameter; dann Verfahren und algorithmus}
 
 Die von uns eingeführten Funktionen und Objekte lassen sich nun auf bequeme Weise miteinander in Verbindung bringen. Die Hauptdatei führt, je nach Einstellung der Parameter, eine Formoptimierung mit in der Datei verstellbarem Verfahren und Gittern durch. Zunächst zur Auswahl der Gitter; diese müssen in der Konsole bei Aufruf des Programs als \textsf{integer}-Parameter mit dem Befehl
 \begin{center}
@@ -331,33 +316,63 @@ Als Parameter des Ausgangsproblems lassen sich außerdem noch die Werte $f_1, f_
 
 Weiterhin besitzt das Programm die Möglichkeit auszuwählen, ob ein L-BFGS-Verfahren oder ein Gradientenabstieg zur Optimierung verwendet werden soll. Dies lässt sich mit dem Parameter \textsf{L\_BFGS} steuern, wobei \textsf{L\_BFGS = True} das L-BFGS-Verfahren einschaltet. Wird dieses Verfahren verwendet, so muss man mit \textsf{memory\_length} die Anzahl der gespeicherten und zur Berechnung verwendeten Gradienten und Deformationen einstellen. Weiterhin stellt \textsf{curv\_break}, falls auf \textsf{False} eingstellt, die Möglichkeit zur Verfügung, bei Verletzung der Curvature Condition das Updaten auszulassen, jedoch einen Schritt mit den bisherigen Daten durchzuführen. Bei \textsf{True} wird bei selbiger Verletzung die Optimierung mit einer Fehlermeldung abgebrochen.
 
-Zu den beiden möglichen Optimierungsverfahren lässt sich jeweils eine Linesearch durch Backtracking einschalten, indem man den Parameter \textsf{Linesearch} auf \textsf{True} setzt. Die weiteren Parameter und die Implementierung der Linesearch werden weiter unten bei \ref{backtracking}, und in der folgenden alle Parameter und Einstellungen umfassenden Tabelle, näher erklärt
+Zu den beiden möglichen Optimierungsverfahren lässt sich jeweils eine Linesearch durch Backtracking einschalten, indem man den Parameter \textsf{Linesearch} auf \textsf{True} setzt. Die weiteren Parameter und die Implementierung der Linesearch werden weiter unten bei \ref{backtracking} näher erklärt
 
-\colorbox{red}{mache hier eine Tabelle wie in einem Nutzerhandbuch zu allen Parameten in der Auswahl}
+Im Folgenden möchten wir den genauen Ablauf des Programms in Python erläutern, wobei der schematische Ablauf in Abbildung \ref{Schemaalgo} zu sehen ist.
+\newpage
+\begin{figure}
+\label{Schemaalgo}
+\begin{tikzpicture}
+			\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
+			\tikzstyle{block} = [draw, rectangle, minimum width = 2cm, minimum height = 0.5cm]
+			\node [block, minimum width=1cm] (A) at (-3.5, 3.3) {Parameter- und Problemwahl}; 
+			\node[block, fill=white, text width=4cm, align=center] (E) at (-3.5, -0.3) {Interpolation der Daten \\ auf aktuellem Gitter};
+			\node[block, fill=white, align=center] (I) at (-3.5, 1.8) {Initialisierung des Gitters \\ + \\ Berechnung der Zieldaten};
+			\draw[->,thick] (A) -- (I);
+			\draw[->,thick] (I) -- (E);
+			\node[block, fill=white, text width=4.5cm, align=center] (D) at (-3.5, -3) {L\"{o}sen der PDE's: \\
+ Zustand \\
+ Adjungierte \\
+ Lame-Parameter \\
+ lin. Elastizit\"{a}tsgl.};
+			\draw[->,thick] (E) -- (D);
+			\node[block, fill=white] (F) at (-3.5, -5.4) {Curv.Cond. berechnen \& Printing};
+			\draw[->,thick] (D) -- (F)  node[right, midway] {falls BFGS};
+			\node[block, fill=white, text width=3.75cm] (G) at (-3.5, -9) {Backtracking-Linesearch};
+			\node[block, fill=white] (J) at (-5.8, -7) {Update Step};
+			\node[block, fill=white, align=center] (K) at (-1.2, -7.3) {Non-Update Step \\(Skipping)};
+			\draw[->,thick] (F) -- (J) node [left, midway] {falls erf\"{u}llt\:};
+			\draw[->,thick] (F) -- (K) node [right, midway] {\:falls nicht erf\"{u}llt};
+			\draw[->,thick] (J) -- (G);
+			\draw[->,thick] (K) -- (G);
+			\node[block, fill=white] (H) at (-3.5, -14.25) {Deformiere Gitter};
+			\node[block, fill=white, align=center] (N) at (-1.2, -11.8) {Memory-Reset \\ + \\ Ausstieg falls 2 Mal hintereinander};
+			\node (O) at (-7, -11.8) {falls Abstiegsrichtung};
+			\draw[->,thick] (G) -- (O);
+			\draw[->,thick] (O) -- (H);
+			\draw[->,thick] (N) -- (H) node [right,midway, align=center] {\: verwende max. \\ runterskalierte Deformation};			
+			\draw[->,thick] (G) -- (N) node [right,midway, align=center] {\: falls keine \\ Abstiegsrichtung}; 
+			\draw[->,thick] (H.east) -- (3.6,-14.25) -- (3.6,-0.3) node[right, midway, text width=2.05cm, align=center] {Ausstiegs- \\ bedingung nicht \\ erreicht} -- (E.east);
+			\draw[->,thick] (D.west) -- (-8,-3) -- (-8,-9) node[left, midway, text width=1.55cm, align=center] {falls \\ Gradient} -- (G.west);
+			\node[block, fill=white] (L) at (-3.5, -15.8) {Speichere Daten und Plots};
+			\draw[->,thick] (H) -- (L) node [right, midway, text width=4.5cm] {Ausstiegsbed. erreicht};
+\end{tikzpicture}
+\caption{Schematische Darstellung des Hauptprogramms \newline aus \textsf{shape\_main.py}}
+\end{figure}
+\newpage
 
-
-\colorbox{red}{jetzt abschnitt zur genauen implementierung; Schema des programs; line-search; output}
-
-Im Folgenden möchten wir den genauen Ablauf des Programms in Python erläutern. 
-Das Programm läuft nach dem Schema
-
-\colorbox{red}{mit ktikz ein Flussdiagram wie bei bayesian inference machen}
-
-
-ab. 
-
-Das Programm beginnt mit der in \ref{meshdataclass} erklärten Initialisierung der Meshes. Je nach Einstellung findet die oben erklärte Pertubation des Startgitters statt. Weiterhin werden die lokal variierenden Lamé-Parameter, sowie die Zustandsfunktion im Zielgitter berechnet. Dies findet im Programm unter der Überschrift \textit{Targetdata Calculation} statt. Es folgt der Einstieg in den Formoptimierungsalgorithmus, wobei unter \textit{Interplation} die Daten auf das derzeitige Gitter zu einer FEniCS-Funktion interpoliert werden, für welche wir eine polynomielle Interpolation vom Grad 1 ausgewählt haben. Es werden anschließend die Zustands- und adjungierte Gleichung gelöst, sowie der Formgradient des derzeitigen Schrittes berechnet, was im Programm unter dem Schritt \textit{State, Adjoint \& Gradient Calculation} zu finden ist. Falls das Gradientenverfahren ausgewählt ist, wird zusätzlich als Deformation der negative Gradient initialisiert. 
+Das Programm beginnt nach der Aktivierung über die Konsole mit der in \ref{meshdataclass} erklärten Initialisierung der Meshes. Je nach Einstellung findet die oben erklärte Pertubation des Startgitters statt. Weiterhin werden die lokal variierenden Lamé-Parameter, sowie die Zustandsfunktion im Zielgitter berechnet. Dies findet im Programm unter der Überschrift \textit{Targetdata Calculation} statt. Es folgt der Einstieg in den Formoptimierungsalgorithmus, wobei unter \textit{Interplation} die Daten auf das derzeitige Gitter zu einer FEniCS-Funktion interpoliert werden, für welche wir eine polynomielle Interpolation vom Grad 1 ausgewählt haben. Es werden anschließend die Zustands- und adjungierte Gleichung gelöst, sowie der Formgradient des derzeitigen Schrittes berechnet, was im Programm unter dem Schritt \textit{State, Adjoint \& Gradient Calculation} zu finden ist. Falls das Gradientenverfahren ausgewählt ist, wird zusätzlich als Deformation der negative Gradient initialisiert. 
 
 Nun findet im Programm die Unterscheidung zwischen dem L-BFGS- und dem Gradientenverfahren statt; der folgende Abschnitt ist lediglich für das L-BFGS-Verfahren relevant, im Gradientenverfahren springt der Algorithmus direkt zu der Linesearch \ref{backtracking}.
 
-Ein programmiertechnisch etwas aufwendiger Punkt ist die Berechnung der Curvature Condition. In unserem Setting ist diese errechnet durch \colorbox{red}{transporte richig?}
+Ein programmiertechnisch etwas aufwendiger Punkt ist die Berechnung der Curvature Condition. In unserem Setting ist diese errechnet durch 
 \begin{equation}
 \label{shapecurvcond}
 \begin{aligned}
-	a(S_k, \mathcal{T}_k(\nabla U_{k+1}) - \nabla U_k) = D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{k+1}^{-1}(S_k)] - D\mathcal{J}(\Omega_k)[S_k] > 0.
+	a(S_k, \mathcal{T}_{S_k}^{-1}(\nabla U_{k+1}) - \nabla U_k) = D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{S_k}(S_k)] - D\mathcal{J}(\Omega_k)[S_k] > 0.
 \end{aligned}
 \end{equation}
-Hierbei bedeutet $\mathcal{T}_{k}$ den Rücktransport der Tangentialvektoren nach Deformation $S_k$, ihr Inverses den Vorwärtstransport. Dies vermeidet die Lösung einer weiteren linearen Elastizitätsgleichung, wobei wir wie angesprochen die vereinfachten Transporte aus \cite{diffusion}, Abschnitt 3. Nichtsdestotrotz müssen wir zur Berechnung von $D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{k+1}^{-1}(S_k)]$ eine Gitterverschiebung durchführen. Wir berechnen deshalb die Curvature Condition des $k$'ten Schrittes in Schritt Nummer $k+1$, da wir zuvor sowieso die passende Gitterverschiebung durchführen mussten. Die Deformation $S_k$ aus dem Schritt $k$ wird im Programm unter \textsf{last\_defo} mitgeschleppt, der Wert der Ableitung $D\mathcal{J}(\Omega_k)[S_k]$ als Eintrag \textsf{curv\_cond[1]} gespeichert. Wir wählen diese kompliziert wirkende Iteration, um zu häufiges verschieben der Meshes zu vermeiden, denn FEniCS verschiebt auch das Ausgangsgitter, wenn ein anderes Gitter unter selber Initialisierung verschoben wird. Dies könnte man vermeiden, indem man eine Deep Copy anlegt, was bei großen Gittern speicherintensiv sein kann. Hinzu kommen Rundungsfehler, deren Ausmaß wir jedoch nicht einschätzen können.
+Hierbei bedeutet $\mathcal{T}_{S_k}$ den Transport der Tangentialvektoren über die  Deformation $S_k$, ihr Inverses den Rücktransport, wie in Algorithmus \ref{2loopbfgs}. Dies vermeidet die Lösung einer weiteren linearen Elastizitätsgleichung, wobei wir wie angesprochen die vereinfachten Transporte aus \cite{diffusion}, Abschnitt 3, verwenden. Nichtsdestotrotz müssen wir zur Berechnung von $D\mathcal{J}(\Omega_{k+1})[\mathcal{T}_{S_k}(S_k)]$ eine Gitterverschiebung durchführen. Wir berechnen deshalb die Curvature Condition des $k$'ten Schrittes in Schritt Nummer $k+1$, da wir zuvor sowieso die passende Gitterverschiebung durchführen mussten. Die Deformation $S_k$ aus dem Schritt $k$ wird im Programm unter \textsf{last\_defo} mitgeschleppt, der Wert der Ableitung $D\mathcal{J}(\Omega_k)[S_k]$ als Eintrag \textsf{curv\_cond[1]} gespeichert. Wir wählen diese kompliziert wirkende Iteration, um zu häufiges verschieben der Meshes zu vermeiden, denn FEniCS verschiebt auch das Ausgangsgitter, wenn ein anderes Gitter unter selber Initialisierung verschoben wird. Dies könnte man vermeiden, indem man eine Deep Copy anlegt, was bei großen Gittern speicherintensiv sein kann. Hinzu kommen Rundungsfehler, deren Ausmaß wir jedoch nicht einschätzen können.
 Als Folge der um einen Schritt verschobenen Berechnung printen wir im L-BFGS-Verfahren die Werte der Schleife $k$ in Schleife $k+1$, außerdem wird die Memory aus selbigen Gründen erst dann geupdatet. Bei Einhaltung der Curvature Condition findet der Update unter dem Abschnitt \textit{Update Step} statt, das Printen und die Berechnung der Curvature Condition unter dem Abschnitt \textit{Curvature Condition \& Printing}. 
 
 Im Falle, dass die Curvature Condition \ref{shapecurvcond} nicht erfüllt ist, verwenden wir das Verfahren, die Memory nicht einem Update zu unterziehen, d.h. es wird lediglich ein Schritt mit schon vorhandenen Daten berechnet und angewandt. Dieses Skipping findet im Programm unter dem Abschnitt \textit{Non Update Step} statt. Da der Update sowieso einen Schritt verzögert stattfindet, wird dieser einfach ausgelassen, und das Programm läuft weiter. Diese Strategie lässt sich mit der Einstellung des Parameter \textsf{curv\_break = True} ausschalten, woraufhin der Algorithmus bei Verletzung der Curvature Condition aussteigt.
@@ -430,8 +445,7 @@ Zu Beginn wird bei Aufruf des Programms ein Outputordner im Verzeichnis des Prog
 \begin{center}
 \textsf{20010911\_084600}.
 \end{center}
-\colorbox{red}{Gradientenvektorfeld output ist auskommentiert, weg machen?}
-erhalten. Dadurch wird immer ein eindeutig bestimmter, neuer Outputordner erzeugt. In diesem werden die Gitter der einzelnen Iterationen mit den zugehörigen Formen, sowie die Daten des Zielgitters in \textsf{.pvd}-Dateien gespeichert, welche beipsielsweise mit dem Programm \textit{Paraview}\footnote{Wir verwenden für die Erzeugung der Bilder im nächsten Kapitel Paraview 5.0.1.} visualisiert werden können. Zusätzlich wird bei erfolgreichem Durchlaufen der Optimierung ein Konvergenzplot gespeichert, welcher \colorbox{red}{vllt noch ein bisschen aufschönen} die Abbildungen
+erhalten. Dadurch wird immer ein eindeutig bestimmter, neuer Outputordner erzeugt. In diesem werden die Gitter der einzelnen Iterationen mit den zugehörigen Formen, sowie die Daten des Zielgitters in \textsf{.pvd}-Dateien gespeichert, welche beipsielsweise mit dem Programm \textit{Paraview}\footnote{Wir verwenden für die Erzeugung der Bilder im nächsten Kapitel Paraview 5.0.1.} visualisiert werden können. Zusätzlich wird bei erfolgreichem Durchlaufen der Optimierung ein Konvergenzplot gespeichert, welcher die Abbildungen
 \begin{align*}
 k &\mapsto \log(d_{shopt}(\Omega_k, \Omega_{target}) \\
 k &\mapsto \log(\vert\vert D\mathcal{J}(\Omega_k) \vert\vert)
@@ -444,4 +458,3 @@ zeigt, wobei die Norm wie unter \ref{felas} erklärt berechnet wird. Um eine Ana
 Falls das Gradientenverfahren ausgewählt wurde, so wird die Spalte mit der Curvature Condition weggelassen. Diese Datei lässt sich im Rahmen des Postprocessings bequem mit Programmen wie \textit{Excel} oder \textit{RStudio} bearbeiten. Sollte das Verfahren divergieren, etwa falls die Curvature Condition einige Schritte nicht erfüllt ist, so findet keine Speicherung der Konvergenzgraphen statt. Die \textsf{.pvd}-Dateien werden trotzdem gespeichert, die \textsf{.csv}-Datei ist leer, wobei man dies durch Erstellen und Speicherung einer neuen \textsf{.csv}-Datei in jedem Schritt umgehen könnte. 
 Im nun folgenden und letzten Kapitel werden wir solche Analysen für einige von uns ausgewählte Routinen vorstellen.
 
-\newpage
