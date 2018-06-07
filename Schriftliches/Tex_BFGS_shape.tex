@@ -3,10 +3,6 @@
 \subsection{Shape Spaces und Formgradienten}
 \label{Chap_shapespaces}
 
-\colorbox{red}{habe ich sicher das Kapitel zu Rn BFGS? falls nicht korrigiere text}  \newline
-\colorbox{red}{soll ich 2 dimensional oder beliebig dimensional machen? habe hier bisschen von beidem...} \newline
-\colorbox{red}{ statt jedes mal die voraussetzunge zu überprüfen, also zsmhgd, beschr,... nutze lieber vllt einfach die Definition von regulärem Gebiet aus anderem Chapter?} \newline
-\colorbox{red}{Notation: einmal Gradient H, dann später U... mache das einheitlich!} \newline
 
 Nachdem wir in die Grundlagen der Formoptimierung, möchten wir in diesem Abschnitt weiter auf den Grundlagen aufbauen und Rahmenbedingungen schaffen, unter welchen das endlich-dimensionale BFGS-Verfahren in den Kontext von Formen abstrahiert werden können. Dies ist nicht ohne weiteres möglich, da a priori nicht klar ist, wie Gradienten von Formen definiert werden sollen, insbesondere deshalb, weil wir uns in unendlich-dimensionalen \textit{Formräumen (engl. shape-spaces)} befinden. Erschwert wird dies weiter dadurch, dass, wie eingangs bemerkt, keine natürliche Vektorraumstruktur auf dem betrachteten Formräumen vorhanden ist. Ziel dieses Abschnittes wird es sein zunächst die Wahl einer geeigneten Metrik im Sinne der Riemannschen Geometrie zu treffen, wodurch die Definition eines Gradienten überhaupt erst möglich wird. Im $\mathbb{R}^n$ würden wir zur Darstellung solcher Gradienten stets stillschweigend die euklidische Metrik verwenden, diese lässt sich jedoch offensichtlich nicht einfach im Shape-setting verwenden. Anschließend übertragen wir den BFGS-Algorithmus auf die Formoptimierung. In diesem Abschnitt halten wir uns vorallem an \cite{bfgs2}, sowie an \cite{shape_space} und \cite{bfgs1}.
 
@@ -35,8 +31,6 @@ Sei $B_e(S^1, \mathbb{R}^2)$ der Formraum für den $\mathbb{R}^2$. Betrachte ein
 Diese Darstellung gilt, da die Quotientenstruktur von $B_e$ die Isomorphie der Immersionen von $S^1$ nach $\mathbb{R}^2$ mit den $C^\infty$-Funktionen von $S^1$ nach $\mathbb{R}^2$ vererbt, für Details siehe \cite{shape_space}, Kapitel 3.
 Somit ermöglicht diese isomorphe Darstellung es uns, Tangentialvektoren $v \in T_cB_e$ mit Hilfe von $C^\infty(\Omega, \mathbb{R})$-Funktionen zu beschreiben. Das nutzen wir aus, um auf $B_e$ eine für unsere Zwecke geeignete Riemannsche Metrik zu definieren.
 
-\colorbox{red}{Diagramm ??}
-
 Hierzu gibt es verschiedene Möglichkeiten, je nachdem auf welche künftige Anwendung man abzielt. Nach \cite{shape_space} scheint eine Sobolev-Metrik, definiert mittels des Laplace-Beltrami-Operators, für unser Modellproblem natürlich zu erscheinen. Der Nachteil ist, das erheblicher Rechenaufwand beim Ermitteln des Gradienten aus einer Formableitung entsteht. Aus diesem Grund führen die Autoren von \cite{bfgs2} eine Riemannsche Metrik auf Grundlage der sogenannten Dirichlet-zu-Neumann Abbildung ein, weshalb wir uns Ausführungen zu Sobolev-Metriken an dieser Stelle sparen, und für diese auf \cite{bfgs1} und \cite{shape_space}  verweisen. Im Folgenden führen wir eine sogenannte \textit{Steklov-Poincaré-Metrik} ein, und verweisen für die hierzu nötigen Grundlagen der Differentialgleichungen und Sobolev-Slobodeckij-Räumen auf das Kapitel \ref{Chapter_grundlagenpde}. Zunächst definieren wir die nötigen Abbildungen, vgl. \cite{bfgs2}.
 
 \begin{defi}[Verallgemeinerte Spurabbildung]\label{Sproperatoren}
@@ -56,9 +50,6 @@ Sei $\mathcal{D} \subset \mathbb{R}^n$ eine beschränktes, offenes Gebiet. Sei $
 \end{defi}
 
 Wir erinnern an dieser Stelle, dass diese Abbildung aufgrund der verallgemeinerten Spursätze \ref{tracetheorem} wohldefiniert ist. Nun geben wir uns eine symmetrische, koerzive Bilinearform $a: H^1(\mathcal{D}, \mathbb{R}^n)\times H^1(\mathcal{D}, \mathbb{R}^n) \rightarrow \mathbb{R}$ vor. Diese werden wir später gemeinsam mit der zu definierenden Riemannschen Metrik verwenden, um aus gegebenen Formableitungen Gradienten zu konstruieren. Gegeben einer solchen Bilinearform $a$ definieren wir die zugehörigen Lösungsoperatoren zu folgendem Variationsproblem.
-
-\colorbox{red}{Notation: alpha oder u ???!!! n den folgenden Definitionen} \newline
-\colorbox{red}{da bilinearform koerziv, das existierende inverse stetig}
 
 \begin{defi}[Lösungsoperatoren]\label{Llsgsoperatoren}
 Sei $\mathcal{D}\subset\mathbb{R}^n$ offen, zusammenhängend, beschränkt, und sei $\Omega\subset \mathcal{D}$ offen, zusammenhängend und habe einen $C^\infty$-Rand $\partial\Omega$.
@@ -335,19 +326,16 @@ Wir haben das Lagrange-Newton-Verfahren im Formraum ausformuliert, um auf die of
 
 Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragung der 2-Schleifen-L-BFGS Rekursion auf den Formfall begnügen. Hierzu haben die Autoren von \cite{bfgs1} den Algorithmus aus \cite{Nocedal}, 7.4, unter Verwendung des Zusammenhangs \ref{zentraleDeformation} und der dort vorkommenden Metrik $g^S$, sowie der Bilinearform $a$, angepasst. Zu beachten ist, dass hier die Tangentialvektoren Elemente verschiedener Tangentialräumen sind, weshalb diese noch zuerst in die richtigen Räume transportiert werden müssen, was in unserem Fall der Tangentialraum des aktuellsten Gradienten ist. Für die differentialgeometrische Definition der Transporte $\mathcal{T}$, siehe etwa \cite{LeeDGEO} oder \cite{diffusion} Abschnitt 3. Der klassische Algorithmus entsteht, wenn man statt der Metrik $g^S$ im endlich-dimensionalen Fall das euklidische Skalarprodukt verwendet, wobei keine Transporte von Tangentialvektoren anfallen. Es folgt die Definition nach \cite{bfgs1}, Kapitel 4.
 
-\colorbox{red}{ achtung: länge l oder länge m oder was genau}
-
 \begin{defi}[2-Schleifen-L-BFGS Rekursion im Formfall]
-	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $\text{grad}\mathcal{J}(\Omega_i) \in T_{\partial\Omega_i}B_e$ Formgradienten der in den L-BFGS-Schritten erzeugten Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{\text{grad}\mathcal{J}_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor}. Weiterhin seien $V_{\text{grad}\mathcal{J}_i} \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die zugehörigen Darstellungen auf der Hold-all-Domain $\mathcal{D}$ nach \ref{zentraleDeformation}. Zudem seien $S_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := V_{\text{grad}\mathcal{J}_{i+1}} - \mathcal{T}V_{\text{grad}\mathcal{J}_i} \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die entlang der Deformation $S_i$ transportierte Differenz der Gradienten. Sei $l \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Verwendet man Notation aus \ref{Sproperatoren}, dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
+	Seien die Voraussetzungen wie aus \ref{zentraleDeformation}. Seien $\text{grad}\mathcal{J}(\Omega_i) \in T_{\partial\Omega_i}B_e$ Formgradienten der in den L-BFGS-Schritten erzeugten Formen $\partial\Omega_i$ mit ihren Darstellungen als Koeffizientenvektorfelder $\alpha_{\text{grad}\mathcal{J}_i} \in H^{1/2}(\partial\Omega_i)$ nach \ref{Tangentialvektor}. Weiterhin seien $V_{\text{grad}\mathcal{J}_i} \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die zugehörigen Darstellungen auf der Hold-all-Domain $\mathcal{D}$ nach \ref{zentraleDeformation}. Zudem seien $S_i \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ Deformationsvektorfelder und $Y_i := V_{\text{grad}\mathcal{J}_{i+1}} - \mathcal{T}_{S_i}V_{\text{grad}\mathcal{J}_i} \in H^1_0(\mathcal{D}, \mathbb{R}^2)$ die entlang der Deformation $S_i$ transportierte Differenz der Gradienten. Sei $l \in \mathbb{N}$ die Anzahl der gespeicherten Gradienten und Deformationen. Verwendet man Notation aus \ref{Sproperatoren}, dann ist die \textit{2-Schleifen-L-BFGS Rekursion im Formfall} im Schritt $j$ gegeben durch 
 
-\colorbox{red}{stimmt das mit den Vorzeichen hier: hatt ja den Fehler}
 \begin{equation} 
 \label{2loopbfgs}
 \begin{aligned}
 &	\hspace{-2.3cm}	q \leftarrow V_{\text{grad}\mathcal{J}_j} \\
 &	\hspace{-2.3cm} \textbf{for } i = j - 1, \dots, j - l \textbf{ do} \\
-&	\hspace{-2.3cm} 	S_i \leftarrow \mathcal{T} S_i \\
-&	\hspace{-2.3cm} 	Y_i \leftarrow \mathcal{T} Y_i \\
+&	\hspace{-2.3cm} 	S_i \leftarrow \mathcal{T}_{S_{j-1}} S_i \\
+&	\hspace{-2.3cm} 	Y_i \leftarrow \mathcal{T}_{S_{j-1}} Y_i \\
 &	\hspace{-2.3cm} 	\rho_i \leftarrow g^S((\gamma_0 Y_i)^Tn, (\gamma_0 S_i)^Tn)^{-1} = a(Y_j, S_j)^{-1} \\
 &	\hspace{-2.3cm} 	\alpha_i \leftarrow \rho_i g^S((\gamma_0 S_i)^Tn, (\gamma_0 q)^T n) = \rho_i a(S_i, q) \\
 &	\hspace{-2.3cm}		q \leftarrow q - \alpha_i Y_i \\
@@ -357,11 +345,13 @@ Aufgrund der genannten Schwierigkeiten werden wir uns vorest mit der Übertragun
 &	\hspace{-2.3cm}   	\beta_i \leftarrow \rho_i g^S((\gamma_0 Y_i)^Tn, (\gamma_0 q)^Tn) = \rho_i a(Y_i, q) \\
 &	\hspace{-2.3cm}   	q \;\leftarrow q + (\alpha_i - \beta_i)S_i \\
 &	\hspace{-2.3cm}  	\textbf{end for,}
+& S_j \leftarrow q
 \end{aligned}
 \end{equation}
-	wobei $\mathcal{T}$ der Transport in den Tangentialraum des aktuellen Gitters ist. Dann lässt sich das erzeugte Vektorfeld als Deformation $S_j := q = \tilde{B}_j^{-1}H_j$ verwenden, wobei $\tilde{B}_j$ die L-BFGS-Approximation des Hesseoperators in Schritt $j$ ist. Dieser Algorithmus ist ausgelegt für Maximierungsprobleme, möchte man ein Minimierungsproblem lösen, wie wir es tun, so muss man entweder $q \leftarrow -H_j$ setzen, oder wegen Linearität äquivalent \newline $S_j := -q$ setzen.
+	wobei $\mathcal{T}_{S_{j-1}}$ der Transport in den entsprechenden Tangentialraum des aktuellen Gitters ist, welches durch Deformation $S_{j-1}$ entstanden ist. Dann lässt sich das erzeugte Vektorfeld als Deformation $S_j := q = \tilde{B}_j^{-1}V_{\text{grad}\mathcal{J}_j}$ verwenden, wobei $\tilde{B}_j$ die L-BFGS-Approximation des Hesseoperators in Schritt $j$ ist. Dieser Algorithmus ist ausgelegt für Maximierungsprobleme, möchte man ein Minimierungsproblem lösen, wie wir es tun, so muss man entweder $q \leftarrow -V_{\text{grad}\mathcal{J}_j}$ setzen, oder wegen Linearität äquivalent \newline $S_j := -q$ setzen.
 \end{defi}
 
+Die Transporte und das Speichern der entsprechend transportierten Vektorfelder bewirkt, dass sich die Vektoren der vorherigen Schritt im $j$'ten Schritt im selben Tangentialraum befinden, und somit lediglich den Transport in den aktuellen benötigen.
 Wir möchten den Leser darauf aufmerksam machen, dass mit einfach Indizierten $\alpha_i\in\mathbb{R}$ Skalare und mit $\alpha_{\text{grad}\mathcal{J}_i} \in H^{1/2}(\partial\Omega_i)$ Skalarvektorfelddarstellungen der Gradienten gemeint sind, um Verwechslung zu vermeiden.
 In der praktischen Realisierung werden wir keine exakten Transporte verwenden, da diese den Rechen- und Implementierungsaufwand deutlich steigern, mehr hierzu im nächsten Kapitel. Stattdessen werden wir die Tangentialvektoren als Vektorfelder nicht verschieben, sondern diese lediglich als in den passenden Tangentialraum gebracht erachten, was einer Vereinfachung wie in der oben genannten Quelle entspricht. Somit fällt für die Implementierung kein Transport an, und wir verwenden die Vektorfelder wie diese erzeugt wurden. 
 

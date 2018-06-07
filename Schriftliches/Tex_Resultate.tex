@@ -2,7 +2,7 @@
 \section{Resultate}\label{Chap_results}
 
 \colorbox{red}{ eventuell bei Zeit die Hintergrundeinstellung bei Paraview bei allen Bildern gleich machen, sprich jedes mal X-Ray einstellen} \newline
-\colorbox{red}{graphen Schritte anpassen; statt schritt 1 entwedet schritt 0 oder Form nr}
+
 
 Wie angekündigt möchten wir in diesem abschließenden Abschnitt die Resultate aus unserer Programmierung analysieren. Wir haben mehrere Problemgitter und Kombinationen aus Verfahren getestet, und dabei die Daten aufbereitet. Diese Daten werden samt dem Programm bei der Abgabe zur Verfügung gestellt.
 Wir haben uns für die Analyse der Verfahren für zwei Testprobleme entschieden. Zum einen soll ein kleiner Kreis zu einem großen Kreis deformiert werden, wobei die Kreismittelpunkte jeweils gleich bleiben. Somit handelt es sich bei diesem Problem um eine Deformation einer konvexen Form ohne große Translation. Zum anderen soll ein kleiner Kreis zu einer nierenartigen Form deformiert werden. In diesem Problem findet eine verhältnismäßig starke Translation statt, außerdem ist die Zielform ein nicht konvex, was dieses Problem deutlich schwieriger als das erste macht. In beiden Fällen sind die Formen in dem Einheitsquadrat im $\mathbb{R}^2$ eingebettet. Diese sind zu sehen in Abbildung \ref{Meshes}. 
@@ -47,8 +47,31 @@ Wir werden sowohl das L-BFGS-Verfahren, als auch das Gradientenverfahren verglei
 
 \subsection{Problem: kleiner zu großem Kreis}\label{subsect_circle}
 
-Für das Problem der Deformation zum großen Kreis betrachten wir vor dem BFGS-Verfahren zunächst das Gradientenverfahren. Wir erhalten bei dem groben Gitter 
-bei Verwendung des Gradientenverfahrens ohne Linesearch Konvergenz nach fast 800 Schritten. Schaltet man das Backtracking ein, so erhält man ebenfalls Konvergenz, jedoch schon bei ca. 450 Schritten. Dies legt nahe, das die Schrittweite durch das anfangliche Hochskalieren der Deformation optimaler wird, der Gradient also der Norm nach relativ klein war. Bei Verfeinerung des Gitters um das 4-fache erhalten wir ebenfalls ohne Verwendung der Linesearch beim Gradientenverfahren Konvergenz nach ca. 650 Schritten. Wieder findet durch Verwendung des Backtracking eine Beschleunigung zur Konvergenz statt, diesmal nach 520 Schritten. Die Konvergenzplots finden sich in Abbildung \ref{Konvplots_circle}. Erhöht man das anfängliche Hochskalieren vom Faktor 5 auf 20, so erhält man im feinen Gitter Konvergenz schon nach 120 Schritten. Die Geschwindigkeit zur Konvergenz hat sich also im Vergleich zum Gradientenverfahren ohne Backtracking also um das 5-fache gesteigert, wobei sich die erzeugten Gitter bei Ausstieg des Verfahrens mit oder ohne Linesearch und Veränderung des Hochskalierungsfaktors so gut wie nicht unterscheiden. 
+Für das Problem der Deformation zum großen Kreis betrachten wir vor dem BFGS-Verfahren zunächst das Gradientenverfahren. Alle Zeiten und Anzahlen der benötigten Schritte der Verfahren finden sind in Tabelle \ref{Tabelle}. Wir erhalten bei dem groben Gitter 
+bei Verwendung des Gradientenverfahrens ohne Linesearch Konvergenz nach fast 800 Schritten. Schaltet man das Backtracking ein, so erhält man ebenfalls Konvergenz, jedoch bei gut halber Anzahl der Schritte. Dies legt nahe, das die Schrittweite durch das anfangliche Hochskalieren der Deformation optimaler wird, der Gradient also der Norm nach relativ klein war. Bei Verfeinerung des Gitters um das 4-fache erhalten wir ebenfalls ohne Verwendung der Linesearch beim Gradientenverfahren Konvergenz nach ca. 650 Schritten, wobei wieder durch Verwendung des Backtracking eine Beschleunigung zur Konvergenz stattfindet. Die Konvergenzplots finden sich in Abbildung \ref{Konvplots_circle}. Erhöht man das anfängliche Hochskalieren vom Faktor 5 auf 20, so erhält man im feinen Gitter Konvergenz schon nach 120 Schritten. Die Geschwindigkeit zur Konvergenz hat sich also im Vergleich zum Gradientenverfahren ohne Backtracking also um das 5-fache gesteigert, wobei sich die erzeugten Gitter bei Ausstieg des Verfahrens mit oder ohne Linesearch und Veränderung des Hochskalierungsfaktors so gut wie nicht unterscheiden. 
+
+\begin{table}[h]
+\label{Tabelle}
+\caption{Rechendauern und Schritte der Verfahren (mit Backtracking-Linesearch)}
+\centering
+\begin{tabular}{c rrrr}
+\hline\\[-2.5ex]
+ & \hspace{1cm} Zeit & & \hspace{1cm} Schritte \\
+Problem &Gradientenv. &BFGS-Verf. &Gradientenv. &BFGS-Verf.  \\[0.2ex]
+\hline \hline
+
+%erste Zeile
+großer Kreis (grob) & 13,7s      & 4,8s       & 33      & 6 \\
+großer Kreis (fein) & 1min 31,3s & 17,2s      & 52      & 7 \\
+broken Donut (grob) & 43,3s$^*$  & 6,6s       & 109$^*$ & 9 \\
+broken Donut (fein) & 27min 4,6s & 1min 25,4s & 910     & 27 \\
+\hline
+\end{tabular} 
+
+\vspace{0.2cm}$^*$ \textit{Gradientenverfahren steigt bei Genauigkeit 0.0033 aus, weil \newline \hspace{-3.2cm}Linesearch keine Abstiegsrichtung findet}
+ 
+\end{table}
+
 
 Findet das BFGS-Verfahren ohne Linesearch Anwendung, so erhält man auf dem groben Gitter keine Konvergenz. Das Verfahren updatet die BFGS-Memory nach mehreren Verletzungen der Curvature Condition nicht, und deformiert das Gebiet schließlich bei Schritt 26 bis zur Unbrauchbarkeit, was in Abbildung \ref{Destroyedbfgs_grob} zu sehen ist. Man beachte die starke Entartung der kaum sichtbaren Zellen kurz vor der Zerstörung des Gitters, welche man im Zoom gut erkennt.
 
@@ -195,12 +218,10 @@ Bei der Berechnung des Formgradienten, wie im Unterabschnitt \ref{Berechnung_bib
 
 \subsection{Problem: kleiner Kreis zu 'broken Donut'}\label{subsect_donut}
 
-\colorbox{red}{Zeiten eintragen}
-
 Wir haben die oben genannten Beobachtungen auch für das schwierigere Problem der nierenförmigen, nicht konvexen Form gesammelt. Die Ausgangsform, welcher den kleinen Kreis in Abbildung \ref{Meshes} (a) und (b) darstellt, bleibt gleich, wir wechseln also nur die Zielform, die auch in Abbildung \ref{Meshes} (d) zu sehen ist. 
 
-Anders als bei dem einfacheren ersten Problem, erhalten wir für ein Gradientenverfahren ohne Backtracking-Linesearch, in den Fällen sowohl des groben, als auch des feinen Gitters, nach ca. 1200, respektive ca. 600 Schritten zwar Konvergenz, jedoch nicht zum globalen Optimum des Zielgitters. Wir vermuten, dass es sich hierbei um lokale Minima handelt, die resultierende optimale Form bleibt konvex, trotz des nicht konvexen Zielgitters, siehe Abbildung
-\ref{brokendonutgradient}.
+Anders als bei dem einfacheren ersten Problem, erhalten wir für ein Gradientenverfahren ohne Backtracking-Linesearch, in den Fällen sowohl des groben, als auch des feinen Gitters, nach ca. 1200, respektive ca. 600 Schritten zwar Konvergenz, jedoch nicht zum globalen Optimum des Zielgitters. Wir vermuten, dass es sich hierbei um lokale Minima handelt, weil die Norm der Formableitung \textsf{nrm\_f\_elas} gegen $0$ geht, wobei wir auf die Daten verweisen. Die resultierende optimale Form bleibt konvex, trotz des nicht konvexen Zielgitters, siehe Abbildung
+\ref{brokendonutgradient}. 
 
 \begin{figure}
 	\begin{subfigure}{0.5\textwidth}
@@ -217,7 +238,7 @@ Anders als bei dem einfacheren ersten Problem, erhalten wir für ein Gradientenv
 \label{brokendonutgradient}
 \end{figure}
 
-Durch das Verwenden der Backtracking-Linesearch schafft es der Algorithmus näher an das globale Optimum zu gelangen. Dies gelingt jedoch ausschließlich bei dem feinen Gitter. Im Falle des groben Gitters erreichen wir auch mit Linesearch die selbe nicht konvexe Form, siehe Abbildung \ref{brokendonutgradient_linesearch}, wobei eine leichte Verbesserung zu sehen ist. Dies zeigt, dass das Verfahren abhängig von der Gitterfeinheit ist, wobei Verfeinerungen Verbesserungen liefern.
+Durch das Verwenden der Backtracking-Linesearch schafft es der Algorithmus näher an das globale Optimum zu gelangen. Dies gelingt jedoch ausschließlich bei dem feinen Gitter. Im Falle des groben Gitters erreichen wir auch mit Linesearch die selbe nicht konvexe Form, siehe Abbildung \ref{brokendonutgradient_linesearch}, wobei eine leichte Verbesserung zu sehen ist. Dies zeigt, dass das Verfahren abhängig von der Gitterfeinheit ist, wobei Verfeinerungen Verbesserungen liefern. Für die Zeiten und Schritte verweisen wir auf Tabelle \ref{Tabelle}.
 
 Außerdem beobachten wir für das Gradientenverfahren, wie im ersten Problem, ein Skalieren der Konvergenzgeschwindigkeit durch das Hochskalieren der Suchrichtung bei der Backtracking-Linesearch. Wir sparen uns an dieser Stelle die Angabe eines Plots, da dieses Phänomen bekannt ist.
 Zudem haben wir in diesem Problem die gleichen Feststellungen bei Verwendung der Armijo-Bedingung bei der Linesearch gemacht, wie bei dem ersten Problem zuvor.
@@ -276,8 +297,8 @@ Interessanterweise verbessert sich das Verhalten des L-BFGS-Verfahrens ohne Line
 \label{brokendonut_bfgs_konstlame}
 \end{figure}
 
-Verwendet man zusammen mit dem L-BFGS-Verfahren die Backtracking-Linesearch, so erhalten wir ähnliche Ergebnisse wie in dem ersten Problem. Eine deutliche Erhöhung der Konvergenzgeschwindigkeit im Vergleich zum Gradientenverfahren, von ca. 900 Schritten des Gradientenverfahrens mit Linesearch und Startskalierung 5, auf 26 Schritte im Falle des L-BFGS mit Linesearch auf dem feinen Gitter. Auch auf dem groben Gitter ist eine erhebliche Erhöhung der Konvergenzgeschwindigkeit zu beobachten, wobei auch hier lediglich das lokale Minimum des Gradientenverfahrens erreicht wird. Auf dem feinen Gitter wird, ähnlich dem Gradientenverfahren mit Linesearch, eine sehr gute Lösung erreicht, nahe des globalen Optimums. Zu sehen sind die Ergebnisse des BFGS-Verfahrens mit Linesearch in Abbildung \ref{brokendonut_bfgs_linesearch}. Bei dem Gradientenverfahren ist bei beiden untersuchten Problemen zu erkennen, dass eine deutliche Verfeinerung des Gitters keine Verlangsamung der Konvergenz mit sich bringt, was ein Indiz für gitterunabhängige Konvergenz ist, siehe Abbildung \ref{plot_konvergenzdonut} und \ref{Konvplots_circle}. Das BFGS-Verfahren weist zu schnelle Konvergenz auf, so dass wir hier keine Aussage über die gitterunabhängige Konvergenz machen können. 
-\colorbox{red}{checke, ob konvergenz bei ausstieg, wenn curv. cond. nicht erfüllt ist, auch vorliegt.}
+Verwendet man zusammen mit dem L-BFGS-Verfahren die Backtracking-Linesearch, so erhalten wir ähnliche Ergebnisse wie in dem ersten Problem, nähmlich eine deutliche Erhöhung der Konvergenzgeschwindigkeit im Vergleich zum Gradientenverfahren auf dem feinen Gitter. Auch auf dem groben Gitter ist eine erhebliche Erhöhung der Konvergenzgeschwindigkeit zu beobachten, wobei auch hier lediglich das lokale Minimum des Gradientenverfahrens erreicht wird. Auf dem feinen Gitter wird, ähnlich dem Gradientenverfahren mit Linesearch, eine sehr gute Lösung erreicht, nahe des globalen Optimums. Zu sehen sind die Ergebnisse des BFGS-Verfahrens mit Linesearch in Abbildung \ref{brokendonut_bfgs_linesearch}, für die Zeiten und Schritte verweisen wir erneut auf Tabelle \ref{Tabelle}. Bei dem Gradientenverfahren ist bei beiden untersuchten Problemen zu erkennen, dass eine deutliche Verfeinerung des Gitters keine Verlangsamung der Konvergenz mit sich bringt, was ein Indiz für gitterunabhängige Konvergenz ist, siehe Abbildung \ref{plot_konvergenzdonut} und \ref{Konvplots_circle}. Das BFGS-Verfahren weist zu schnelle Konvergenz auf, so dass wir hier keine Aussage über die gitterunabhängige Konvergenz machen können. 
+
 Die Curvature Condition wird ab Schritt 17 verletzt, wobei schon in diesem Schritt eine fast vom Ergebniss kaum zu unterscheidbare Lösung erzeugt wird. Die Ausstiegsbedingung war somit lediglich zu stark gewählt, was man auch deutlich an dem Graphen aus Abbildung \ref{plot_konvergenzdonut} des feinen Gitters sehen kann. 
 
 \begin{figure}
@@ -304,25 +325,9 @@ Zuletzt möchten wir anmerken, dass bei Betrachtung aller Konvergenzgraphen des 
 
 Wir beenden nun die Analyse der von uns erzeugten Daten, und laden die Leser dieser Arbeit gerne dazu ein, dass beiliegende Programm bei Interesse selber einigen Tests zu unterziehen. Abschließend möchten wir einen kleinen Ausblick auf mögliche weiterführende Themen und einige Probleme geben.
 
-\colorbox{red}{Wie schon bei dem ersten Problem erwähnt, beobachten wir keine gitterunabhängige Konvergenz. (Ordnung des Operators? Bilinearform?)}
-\colorbox{red}{Außerdem ist es auch nicht zu erwarten, dass trotz dem Fehlen eines Term für den korrekten L-BFGS-Update asymptotisch superlineare Konvergenz beobachtet wird.}
-\colorbox{red}{was ist die zugehörige Interpretation?} 
-\colorbox{red}{bleibt der Graph ähnlich? wenn ja auf den ersten verweisen}
-
-
-
-\colorbox{red}{plot von verschiedenen lame parametern}
-
-\colorbox{red}{skalierungsunabhängigkeit?}
-
-\colorbox{red}{konvergenzplot von gradient und bfgs bei linesearch}
-
-\colorbox{red}{plot von bfgs und gradienten im vergleich bei linesearch; Kommentar, das bei guter Linesearch vllt beide Verfahren kompetitiv? boosting des Gradienten; erwähne  sqp für globale optima oder wie das heißt}
-
-
 \subsection{Ausblick und Schlussbetrachtung}
 Wir haben mit der in Kapitel \ref{Chapter_implementation} vorgestellten Implementierung, und den Ergebnissen aus den Abschnitten \ref{subsect_circle} und \ref{subsect_donut}, ein durchaus effektives Quasi-Newton-Verfahren in der Formoptimierung demonstriert. 
-Die Konvergenzgeschwindigkeit im Vergleich zum Gradientenverfahren ist deutlich erhöht. Wir haben gesehen, dass eine Art der Schrittweitensteuerung, etwa dem bei uns implementierten Backtracking-Linesearch, für die Konvergenz des L-BFGS-Verfahrens nötig ist. An dieser Stelle gibt es Bedarf für weitere Entwicklungen; so wäre entweder eine im vorigen Kapitel angesprochene Verbesserung des Kriteriums für hinreichend gute Abstiege, die ein aus dem Formkalkül legitimes Modell für das Zielfunktional verwenden, denkbar. Diese könnte im Falle eines linearen Modells das Armijo-Kriterium auf Formräume verallgemeinern. Eine andere Variante wäre die Verwendung einer Art Trust-Region-Methode, mit dessen Hilfe auch eine globale Konvergenz erreicht werden könnte. Zudem kann sich mit diesem Ansatz die Möglichkeit bieten, durch das Vermeiden der Indefinitheit der Quasi-Newton-Approximation andere Verfahren, etwa den Broyden-SR1-Update, anwenden zu können. In den Konvergenzgraphen sind außerdem deutliche Verbesserungen nach nur wenigen Schritten zu erkennen, welche zuvor versucht haben zu erklären, und eine Ähnlichkeit zum CG-Verfahren ausweisen. Eine Limited-Memory-Variante des CG-Verfahrens für die Formoptimierung wäre eine weitere Möglichkeit dem zuvor genannten Problemen zu begegnen. Außerdem haben wir keine asymptotisch superlineare Konvergenz beobachten oder zuverlässig widerlegen können. Um dies anzugehen, wäre eine Anpassung der BFGS-Updates wichtig. Wie sich diese konkret im Formraum realisieren lassen, ist jedoch bis dato unklar. Wir haben weiterhin Indizien für gitterunabhängige Konvergenz bei Untersuchung des Gradientenverfahrens bemerkt, so dass es sich lohnenswert erscheint, das Verhalten der Verfahren bei anderen Problemen und anderer Wahl der Bilinearform $a$ und der damit erhaltenen Metrik $g^S$ zu analysieren. Eine Möglichkeit hierfür würde die biharmonische Gleichung bieten. Abschließend bleibt noch das etwas ominöse Problem bei Erzeugung der Formgradienten, bei dem ohne Nullsetzen der Punkte ohne Träger am inneren Rand zur Lösung der linearen Elastizitätsgleichung die verheerenden Effekte auftreten, welche das Gitter zerstören und wir nicht befriedigend erklären können. Dies sind viele mögliche Ansätze für kommende  Fortschritte im Bereich der Formoptimierung. Wir hoffen, mit dieser Arbeit einen kleinen Beitrag in die richtige Richtung geben zu haben, und bedanken uns vielmals bei Prof. Volker Schulz für die anregenden Gespräche die wir führen konnten, und für die Möglichkeit diese Masterarbeit anzufertigen.
+Die Konvergenzgeschwindigkeit im Vergleich zum Gradientenverfahren ist deutlich erhöht. Wir haben gesehen, dass eine Art der Schrittweitensteuerung, etwa dem bei uns implementierten Backtracking-Linesearch, für die Konvergenz des L-BFGS-Verfahrens nötig ist. An dieser Stelle gibt es Bedarf für weitere Entwicklungen; so wäre entweder eine im vorigen Kapitel angesprochene Verbesserung des Kriteriums für hinreichend gute Abstiege, die ein aus dem Formkalkül legitimes Modell für das Zielfunktional verwenden, denkbar. Diese könnte im Falle eines linearen Modells das Armijo-Kriterium auf Formräume verallgemeinern. Eine andere Variante wäre die Verwendung einer Art Trust-Region-Methode, mit dessen Hilfe auch eine globale Konvergenz erreicht werden könnte. Zudem kann sich mit diesem Ansatz die Möglichkeit bieten, durch das Vermeiden der Indefinitheit der Quasi-Newton-Approximation andere Verfahren, etwa den Broyden-SR1-Update, anwenden zu können. In den Konvergenzgraphen sind außerdem deutliche Verbesserungen nach nur wenigen Schritten zu erkennen, welche zuvor versucht haben zu erklären, und eine Ähnlichkeit zum CG-Verfahren ausweisen. Eine Limited-Memory-Variante des CG-Verfahrens für die Formoptimierung wäre eine weitere Möglichkeit dem zuvor genannten Problemen zu begegnen. Außerdem haben wir keine asymptotisch superlineare Konvergenz beobachten oder zuverlässig widerlegen können. Um dies anzugehen, wäre eine Anpassung der BFGS-Updates wichtig. Wie sich diese konkret im Formraum realisieren lassen, ist jedoch bis dato unklar. Wir haben weiterhin Indizien für gitterunabhängige Konvergenz bei Untersuchung des Gradientenverfahrens bemerkt, so dass es sich lohnenswert erscheint, das Verhalten der Verfahren bei anderen Problemen und anderer Wahl der Bilinearform $a$ und der damit erhaltenen Metrik $g^S$ zu analysieren. Eine Möglichkeit hierfür würde die biharmonische Gleichung bieten. Abschließend bleibt noch das etwas ominöse Problem bei Erzeugung der Formgradienten, bei dem ohne Nullsetzen der Punkte ohne Träger am inneren Rand zur Lösung der linearen Elastizitätsgleichung die verheerenden Effekte auftreten, welche das Gitter zerstören und wir nicht befriedigend erklären können. Dies sind viele mögliche Ansätze für kommende  Fortschritte im Bereich der Formoptimierung. Wir hoffen, mit dieser Arbeit einen kleinen Beitrag in die richtige Richtung geben zu haben, und bedanken uns bei Prof. Volker Schulz für die Möglichkeit diese Masterarbeit anzufertigen.
 \newpage
 \nocite{*}
 \bibliographystyle{plain}
