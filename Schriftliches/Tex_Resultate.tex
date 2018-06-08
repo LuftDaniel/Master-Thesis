@@ -47,7 +47,6 @@ Für das Problem der Deformation zum großen Kreis betrachten wir vor dem BFGS-V
 bei Verwendung des Gradientenverfahrens ohne Linesearch Konvergenz nach fast 800 Schritten. Schaltet man das Backtracking ein, so erhält man ebenfalls Konvergenz, jedoch bei gut halber Anzahl der Schritte. Dies legt nahe, das die Schrittweite durch das anfangliche Hochskalieren der Deformation optimaler wird, der Gradient also der Norm nach relativ klein war. Bei Verfeinerung des Gitters um das 4-fache erhalten wir ebenfalls ohne Verwendung der Linesearch beim Gradientenverfahren Konvergenz nach ca. 650 Schritten, wobei wieder durch Verwendung des Backtracking eine Beschleunigung zur Konvergenz stattfindet. Die Konvergenzplots finden sich in Abbildung \ref{Konvplots_circle}. Erhöht man das anfängliche Hochskalieren vom Faktor 5 auf 20, so erhält man im feinen Gitter Konvergenz schon nach 120 Schritten. Die Geschwindigkeit zur Konvergenz hat sich also im Vergleich zum Gradientenverfahren ohne Backtracking also um das 5-fache gesteigert, wobei sich die erzeugten Gitter bei Ausstieg des Verfahrens mit oder ohne Linesearch und Veränderung des Hochskalierungsfaktors so gut wie nicht unterscheiden. 
 
 \begin{table}[h]
-\label{Tabelle}
 \centering
 \begin{tabular}{c rrrr}
 \hline\\[-2.5ex]
@@ -64,10 +63,10 @@ broken Donut (fein) & 27min 4,6s & 1min 25,4s & 910     & 27 \\
 
 \vspace{0.2cm}$^*$ \textit{Gradientenverfahren steigt bei Genauigkeit 0.0033 aus, weil \newline \hspace{-3.2cm}Linesearch keine Abstiegsrichtung findet}
  
- \caption{Rechendauern und Schritte der Verfahren (mit Backtracking-Linesearch)}
+\caption{Rechendauern und Schritte der Verfahren (mit Backtracking-Linesearch)}
+\label{Tabelle}
 
 \end{table}
-
 
 Findet das BFGS-Verfahren ohne Linesearch Anwendung, so erhält man auf dem groben Gitter keine Konvergenz. Das Verfahren updatet die BFGS-Memory nach mehreren Verletzungen der Curvature Condition nicht, und deformiert das Gebiet schließlich bei Schritt 26 bis zur Unbrauchbarkeit, was in Abbildung \ref{Destroyedbfgs_grob} zu sehen ist. Man beachte die starke Entartung der kaum sichtbaren Zellen kurz vor der Zerstörung des Gitters, welche man im Zoom gut erkennt.
 
@@ -170,7 +169,7 @@ Die bei dem groben Gitter erzeugte optimale Form besitzt noch einen mit bloßem 
 \label{Konvergenzbfgscircle}
 \end{figure}
 
-Wir haben durch Veränderung der Perimeter-Regularisierung untersucht, ob sich durch diese der Abstand zur Zielform erklären lässt. Die Vermutung ist, dass die optimale Form etwas kleiner als die Zielform ist, da die Perimeter-Regularisierung kleinere Formen favorisiert. Die in diesem Fall entstehende optimale Lösung ist in diesem Fall symmetrisch mit gleichem Mittelpunkt wie die Zielform, jedoch besitzt sie fast den selben Abstand wie die optimale Form mit der Perimeterregularisierung aus Abbildung \ref{Konvergenzbfgscircle} (a). Für die exakten Bilder verweisen wir auf die mitgelieferten \textsf{.pvd}-Dateien auf der CD.
+Wir haben durch Veränderung der Perimeter-Regularisierung untersucht, ob sich durch diese der Abstand zur Zielform erklären lässt. Die Vermutung ist, dass die optimale Form etwas kleiner als die Zielform ist, da die Perimeter-Regularisierung kleinere Formen favorisiert. Die in diesem Fall entstehende optimale Lösung ist in diesem Fall symmetrisch mit gleichem Mittelpunkt wie die Zielform, jedoch besitzt sie fast den selben Abstand wie die optimale Form mit der Perimeterregularisierung aus Abbildung \ref{Konvergenzbfgscircle} (a). Für die exakten Bilder verweisen wir auf die mitgelieferten \textsf{.pvd}-Dateien.
 
 Kontrollieren wir im Falle des BFGS-Algorithmus auf Veränderung bei Erhöhung des Hochskalierungsfaktors \textsf{starscale} des Backtracking, so stellen wir fest, dass die ersten Schritte stärkere Verbesserungen bringen. Sobald sich jedoch eine gewisse Memorygröße, und damit eine Hesseapproximation, aufgebaut haben, verschwinden diese Effekte wieder, siehe Abbildung \ref{plot_startscales}. Dieses Verhalten sollte auftreten, da BFGS-Schritte mit aufgebauter Hesseapproximation skalierungsinvariant sind.
 
