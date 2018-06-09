@@ -14,7 +14,7 @@ Da wir in dieser Arbeit Formoptimierung bei Differentialgleichungen betreiben m�
 	-\Delta y &=  f  \text{ in } \Omega \; \\ y &= 0 \text{ auf } \partial \Omega,
 	\end{aligned}
 \end{equation}
-wobei $\Delta$ den Laplace-Operator meint, und $\Omega$ ein offenes, beschränktes, zusammenhängendes Gebiet des $\mathbb{R}^n$ ist. Funktionen $y\in C^2(\Omega)$, welche die obigen Gleichungen erfüllen, werden klassische oder auch \textit{starke Lösungen} des Poissonproblems genannt. Betrachtet man das Poisson-Problem für kompliziertere Gebiete $\Omega$ und Funktionen $f$ auf $\Omega$, so ist im Allgemeinen nicht klar, ob eine Lösung existiert und welche Regularität diese besitzt. Aus diesem Grund führen wir die bekannten Sobolev-Räume und exemplarische Elemente der schwachen Lösungstheorie des Poisson-Problems ein. Wir beginnen mit der Definition von Sobolev-Räumen nach \cite{PDE3}.
+wobei $\Delta$ den Laplace-Operator meint, und $\Omega$ ein offenes, beschränktes, zusammenhängendes Gebiet des $\mathbb{R}^n$ ist. Funktionen $y\in C^2(\Omega)$, welche die obigen Gleichungen erfüllen, werden klassische oder auch \textit{starke Lösungen} des Poisson-Problems genannt. Betrachtet man das Poisson-Problem für kompliziertere Gebiete $\Omega$ und Funktionen $f$ auf $\Omega$, so ist im Allgemeinen nicht klar, ob eine Lösung existiert und welche Regularität diese besitzt. Aus diesem Grund führen wir die bekannten Sobolev-Räume und exemplarische Elemente der schwachen Lösungstheorie des Poisson-Problems ein. Wir beginnen mit der Definition von Sobolev-Räumen nach \cite{PDE3}.
 
 \begin{defi}[Sobolev-Räume]\label{Sobolevspace}
 Sei $\Omega \subseteq \mathbb{R}^n$ ein offenes, beschränktes, zusammenhängendes Gebiet, weiterhin sei $1 \leq p \leq \infty$, $m \in \mathbb{N}$. Wir definieren eine Norm durch
@@ -38,7 +38,7 @@ Dann heißt eine Funktion $u \in \mathcal{L}^1(\Omega)$ \textit{ $\alpha$-te sch
 wobei $C_c^\infty(\Omega)$ der Raum aller $C^\infty(\Omega)$-Funktionen mit kompaktem Träger ist.
 \end{defi}
 
-In Anlehnung an das Fundementallemma der Variationsrechnung verwenden wir nun, ausgehend von \ref{Poissonproblem}, den Green'schen Formeln und Testfunktionen $v\in C_0^\infty(\Omega)$, um die sogenannte \textit{schwache Formulierung} des Poisson-Problems herzuleiten. Es sei $n$ das äußere Einheitsnormalenvektorfeld von $\Omega$. Dann folgt
+In Anlehnung an das Fundementallemma der Variationsrechnung verwenden wir nun, ausgehend von \ref{Poissonproblem}, die Green'schen Formeln und Testfunktionen $v\in C_0^\infty(\Omega)$, um die sogenannte \textit{schwache Formulierung} des Poisson-Problems herzuleiten. Es sei $n$ das äußere Einheitsnormalenvektorfeld von $\Omega$. Dann folgt
 
 \begin{align*}
 	& \underset{\Omega}{\int}(-\Delta y(x))v(x)dx  \\
@@ -145,6 +145,6 @@ Zuletzt werden wir im Laufe der Arbeit noch hinreichend starke Regularität für
 
 Im allgemeineren Fall elliptischer Probleme gilt der Satz weiterhin, falls die Koeffizientenfunktionen $a^{i,j}, b^j, c\in C^{m+1}(\bar{\Omega})$ sind, vgl. die oben genannte Quelle, wobei $\bar{\Omega}$ wie üblich der Abschluss von $\Omega$ bezüglich der euklidischen Metrik ist. Fordert man keine Regularität des Randes $\partial\Omega$, so gilt die obige Aussage zwar nicht bis zum Rand, jedoch lokal im Sinne $y\in H^{m+2}_{loc}(\Omega)$. 
 
-Die von uns nun eingeführten Grundlagen der schwachen Lösungstheorie für die Poissongleichung reichen aus, um diese gewinnbringend in der Formoptimierung anzuwenden. Vorallem im dritten Kapitel, wo wir Formgradienten konstruieren, wird die Theorie starken Anklang finden. Zuvor werden wir im nächsten Kapitel eine Einführung in die Grundlagen der Formoptimierung geben.
+Die von uns nun eingeführten Grundlagen der schwachen Lösungstheorie für die Poissongleichung reichen aus, um diese gewinnbringend in der Formoptimierung anzuwenden. Vor allem im dritten Kapitel, wo wir Formgradienten konstruieren, wird die Theorie starken Anklang finden. Zuvor werden wir im nächsten Kapitel eine Einführung in die Grundlagen der Formoptimierung geben.
 
 
